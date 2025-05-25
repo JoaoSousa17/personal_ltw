@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formulário</title>
+    </head>
+    <body>
+        <form action="get">
+            <fieldset>
+                <label for="name">Name: </label>
+                <input type="text" name="name" id="name" required><br>
+
+                <h4>Indicate your age, please!</h4>
+                <input type="radio" name="idade" id="18">
+                <label for="18"> &lt; 18 </label><br>
+
+                <input type="radio" name="idade" id="19">
+                <label for="19"> 19 - 35 </label><br>
+
+                <input type="radio" name="idade" id="36">
+                <label for="36"> 36 - 48 </label><br>
+
+                <input type="radio" name="idade" id="49">
+                <label for="49"> &gt; 49 </label><br><br>
+
+                <label for="pro">Profession: </label>
+                <input list="professions" id="pro" name="profession_select"><br><br>
+                <datalist id="professions">
+                    <option value="Bancário"></option>
+                    <option value="Professor"></option>
+                    <option value="Construtor"></option>
+                    <option value="Engenheiro"></option>
+                    <option value="Treinador"></option>
+                    <option value="Médico"></option>
+                    <option value="Atleta"></option>
+                    <option value="Político"></option>
+                </datalist>
+
+                <label for="country">Country:</label>
+                <select id="country" name="country" required>
+                    <option value="">-</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="pt">Portugal</option>
+                    <option value="br">Brazil</option>
+                    <option value="fr">France</option>
+                    <option value="de">Germany</option>
+                </select><br><br>
+
+                <h4>Select your interests, please!</h4>
+                <input type="checkbox" name="interest" id="futebol">
+                <label for="futebol">Football</label><br>
+
+                <input type="checkbox" name="interest" id="basket">
+                <label for="basket">Basket</label><br>
+
+                <input type="checkbox" name="interest" id="tennis">
+                <label for="tennis">Tennis</label><br>
+
+                <input type="checkbox" name="interest" id="voley">
+                <label for="voley">Voley</label><br><br>
+
+                <label for="how_find">How did you find about us? </label><br>
+                <textarea name="how_find" id="how_find"></textarea><br><br>
+
+                <button type="submit">Submit yout Data</button>
+            </fieldset>
+        </form>
+    </body>
+</html>

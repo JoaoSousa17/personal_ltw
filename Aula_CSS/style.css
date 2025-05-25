@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&family=Ruda:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Imperial+Script&family=Ruda:wght@400..900&display=swap');
+
+body{
+    width: 60em;
+    margin: 0 auto;
+    font-size: 1.2em;
+    text-align: justify;
+}
+
+h1{
+    text-align: center;
+    font-family: Imperial Script;
+    font-size: 10em;
+    margin: 0;
+}
+
+h2{
+    text-align: right;
+    font-family: Ruda;
+}
+
+main{
+    background-color: #f5ede3;
+    padding: 20px 20px;
+}
+
+#card{
+    background-color: #eecbc4;
+    border-radius: 10px 0 0 10px;
+    border: 2px dashed #e38985;
+    border-right: 10px solid #e38985;
+
+}
+
+p{
+    font-family: Crimson Pro;
+}
+
+img{
+    width: 100%;
+}
+
+.green{
+    color: #85a19a;
+}
+
+dt{
+    text-transform: capitalize;
+    font-variant-caps: small-caps;
+    margin-left: 20px;
+}
+dd{
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+
+/*
+Falta tratar da dl;
+Acertar as dimensões da borda
+*/

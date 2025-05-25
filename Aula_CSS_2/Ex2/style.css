@@ -1,0 +1,25 @@
+header, nav {
+    width: 100%;
+}
+  
+main {
+    width: 70%;
+    float: left;
+}
+  
+section article {
+    width: 90%;
+    margin: auto;
+}
+
+aside {
+    width: 30%;
+    float: right;
+    height: auto;
+    margin-right: -2em;
+}
+  
+footer {
+    clear: both;
+    width: 100%;
+}
