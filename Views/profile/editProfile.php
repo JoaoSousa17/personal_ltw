@@ -45,6 +45,9 @@ if (!$userData) {
 // Obter moedas disponíveis
 $availableCurrencies = getAvailableCurrencies();
 
+// Obter URL da foto de perfil atual
+$currentPhotoUrl = getProfilePhotoUrl($editUserId);
+
 // Processar mensagens de sessão
 $error = $_SESSION['error'] ?? '';
 $success = $_SESSION['success'] ?? '';
@@ -79,6 +82,56 @@ drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
                         <strong>Modo Administrador:</strong> Está a editar o perfil de outro utilizador.
                     </div>
                 <?php endif; ?>
+                
+                <!-- Seção de Foto de Perfil -->
+                <div class="photo-section" style="text-align: center; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+                    <h3>Foto de Perfil</h3>
+                    <div class="current-photo" style="margin: 20px 0;">
+                        <?php if ($currentPhotoUrl): ?>
+                            <img id="profile-photo-preview" src="<?php echo htmlspecialchars($currentPhotoUrl); ?>" 
+                                 alt="Foto de perfil atual" 
+                                 style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #4a90e2;"
+                                 title="Clique para alterar ou arraste uma nova imagem">
+                        <?php else: ?>
+                            <img id="profile-photo-preview" src="/Images/site/header/genericProfile.png" 
+                                 alt="Foto de perfil padrão" 
+                                 style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ccc;"
+                                 title="Clique para adicionar uma foto ou arraste uma imagem">
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="photo-actions" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <label for="photo-upload" class="btn-photo" 
+                               style="background-color: #4a90e2; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block; transition: background-color 0.3s;">
+                            <i class="fas fa-camera" style="margin-right: 5px;"></i>
+                            Escolher Nova Foto
+                        </label>
+                        <input type="file" id="photo-upload" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
+                        
+                        <?php if ($currentPhotoUrl): ?>
+                            <button type="button" id="delete-photo-btn" class="btn-delete" 
+                                    style="background-color: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                                <i class="fas fa-trash" style="margin-right: 5px;"></i>
+                                Eliminar Foto
+                            </button>
+                        <?php else: ?>
+                            <button type="button" id="delete-photo-btn" class="btn-delete" 
+                                    style="background-color: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; display: none;">
+                                <i class="fas fa-trash" style="margin-right: 5px;"></i>
+                                Eliminar Foto
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+                        Formatos aceites: JPEG, PNG, GIF, WebP. Tamanho máximo: 5MB.<br>
+                        Dica: Clique na foto ou arraste uma imagem para fazer upload.
+                    </p>
+                    
+                    <!-- Área para mensagens da foto -->
+                    <div id="photo-message" style="margin-top: 15px;"></div>
+                </div>
                 
                 <form method="post" action="/Controllers/userController.php" class="edit-form">
                     <input type="hidden" name="action" value="update_profile">
@@ -163,6 +216,13 @@ drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
 </main>
 
 <script>
+// Definir dados para o script da foto
+window.profilePageData = {
+    isOwnProfile: <?php echo $isOwnProfile ? 'true' : 'false'; ?>,
+    targetUserId: <?php echo $editUserId; ?>,
+    currentPhotoUrl: '<?php echo $currentPhotoUrl ?: "/Images/site/header/genericProfile.png"; ?>'
+};
+
 // Validar confirmação de password
 document.addEventListener('DOMContentLoaded', function() {
     const passwordField = document.getElementById('password');
@@ -191,7 +251,36 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Por favor, corrija os erros no formulário antes de submeter.');
         }
     });
+    
+    // Adicionar efeitos visuais aos botões de foto
+    const btnPhoto = document.querySelector('.btn-photo');
+    const btnDelete = document.querySelector('.btn-delete');
+    
+    if (btnPhoto) {
+        btnPhoto.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#3a7bc8';
+        });
+        btnPhoto.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#4a90e2';
+        });
+    }
+    
+    if (btnDelete) {
+        btnDelete.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#c82333';
+        });
+        btnDelete.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#dc3545';
+        });
+    }
 });
 </script>
 
+<!-- Incluir Font Awesome para ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Script para gestão de fotos -->
+<script src="/Scripts/profilePhoto.js"></script>
+
 <?php drawFooter(); ?>
+            

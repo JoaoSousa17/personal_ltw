@@ -496,6 +496,319 @@ function updateUserCurrency($userId, $currency) {
     }
 }
 
+// ===== FUNÇÕES DE GESTÃO DE FOTOS DE PERFIL =====
+
+/**
+ * Faz upload de uma nova foto de perfil para um utilizador
+ * 
+ * @param int $userId ID do utilizador
+ * @param array $file Array do $_FILES['photo']
+ * @return array Resultado da operação
+ */
+function uploadProfilePhoto($userId, $file) {
+    try {
+        $db = getDatabaseConnection();
+        
+        // Validar se o utilizador existe
+        $stmt = $db->prepare("SELECT id, profile_photo FROM User_ WHERE id = :id");
+        $stmt->execute([':id' => $userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$user) {
+            return ['success' => false, 'message' => 'Utilizador não encontrado.'];
+        }
+        
+        // Validar o ficheiro
+        $validation = validateProfileImage($file);
+        if (!$validation['success']) {
+            return $validation;
+        }
+        
+        // Eliminar foto anterior se existir
+        if ($user['profile_photo']) {
+            deleteProfilePhoto($userId);
+        }
+        
+        // Processar upload
+        $uploadResult = processPhotoUpload($userId, $file);
+        if (!$uploadResult['success']) {
+            return $uploadResult;
+        }
+        
+        // Guardar na tabela Media
+        $stmt = $db->prepare("INSERT INTO Media (path_, title) VALUES (:path, :title)");
+        $stmt->execute([
+            ':path' => $uploadResult['path'],
+            ':title' => 'Foto de perfil - User ' . $userId
+        ]);
+        
+        $mediaId = $db->lastInsertId();
+        
+        // Atualizar tabela User_
+        $stmt = $db->prepare("UPDATE User_ SET profile_photo = :photo_id WHERE id = :id");
+        $stmt->execute([
+            ':photo_id' => $mediaId,
+            ':id' => $userId
+        ]);
+        
+        return [
+            'success' => true, 
+            'message' => 'Foto de perfil atualizada com sucesso!',
+            'media_id' => $mediaId,
+            'path' => $uploadResult['path']
+        ];
+        
+    } catch (Exception $e) {
+        error_log("Erro no upload da foto: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro interno do sistema.'];
+    }
+}
+
+/**
+ * Elimina a foto de perfil atual de um utilizador
+ * 
+ * @param int $userId ID do utilizador
+ * @return array Resultado da operação
+ */
+function deleteProfilePhoto($userId) {
+    try {
+        $db = getDatabaseConnection();
+        
+        // Obter dados da foto atual
+        $stmt = $db->prepare("
+            SELECT u.profile_photo, m.path_ 
+            FROM User_ u 
+            LEFT JOIN Media m ON u.profile_photo = m.id 
+            WHERE u.id = :id
+        ");
+        $stmt->execute([':id' => $userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$user || !$user['profile_photo']) {
+            return ['success' => true, 'message' => 'Não há foto para eliminar.'];
+        }
+        
+        // Eliminar ficheiro físico
+        if ($user['path_']) {
+            $fullPath = dirname(__DIR__) . '/' . $user['path_'];
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+        }
+        
+        // Remover da tabela Media
+        $stmt = $db->prepare("DELETE FROM Media WHERE id = :id");
+        $stmt->execute([':id' => $user['profile_photo']]);
+        
+        // Atualizar tabela User_
+        $stmt = $db->prepare("UPDATE User_ SET profile_photo = NULL WHERE id = :id");
+        $stmt->execute([':id' => $userId]);
+        
+        return ['success' => true, 'message' => 'Foto eliminada com sucesso.'];
+        
+    } catch (Exception $e) {
+        error_log("Erro ao eliminar foto: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro ao eliminar a foto.'];
+    }
+}
+
+/**
+ * Valida se o ficheiro é uma imagem válida
+ * 
+ * @param array $file Array do $_FILES
+ * @return array Resultado da validação
+ */
+function validateProfileImage($file) {
+    // Verificar se há erro no upload
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        switch ($file['error']) {
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                return ['success' => false, 'message' => 'Ficheiro muito grande.'];
+            case UPLOAD_ERR_PARTIAL:
+                return ['success' => false, 'message' => 'Upload incompleto.'];
+            case UPLOAD_ERR_NO_FILE:
+                return ['success' => false, 'message' => 'Nenhum ficheiro selecionado.'];
+            default:
+                return ['success' => false, 'message' => 'Erro no upload.'];
+        }
+    }
+    
+    // Verificar tamanho (máximo 5MB)
+    if ($file['size'] > 5 * 1024 * 1024) {
+        return ['success' => false, 'message' => 'Ficheiro muito grande. Máximo 5MB.'];
+    }
+    
+    // Verificar tipo MIME
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!in_array($file['type'], $allowedTypes)) {
+        return ['success' => false, 'message' => 'Tipo de ficheiro não permitido. Use JPEG, PNG, GIF ou WebP.'];
+    }
+    
+    // Verificar se é realmente uma imagem
+    $imageInfo = getimagesize($file['tmp_name']);
+    if ($imageInfo === false) {
+        return ['success' => false, 'message' => 'Ficheiro não é uma imagem válida.'];
+    }
+    
+    return ['success' => true];
+}
+
+/**
+ * Processa o upload e move o ficheiro para o destino
+ * 
+ * @param int $userId ID do utilizador
+ * @param array $file Array do $_FILES
+ * @return array Resultado do processamento
+ */
+function processPhotoUpload($userId, $file) {
+    try {
+        // Criar diretório se não existir
+        $uploadDir = dirname(__DIR__) . '/Images/profile/';
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                return ['success' => false, 'message' => 'Erro ao criar diretório.'];
+            }
+        }
+        
+        // Gerar nome do ficheiro
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $fileName = 'user_' . $userId . '.' . strtolower($extension);
+        $filePath = $uploadDir . $fileName;
+        $relativePath = 'Images/profile/' . $fileName;
+        
+        // Mover ficheiro
+        if (!move_uploaded_file($file['tmp_name'], $filePath)) {
+            return ['success' => false, 'message' => 'Erro ao guardar o ficheiro.'];
+        }
+        
+        // Redimensionar imagem se necessário
+        resizeProfileImage($filePath, 400, 400);
+        
+        return [
+            'success' => true,
+            'path' => $relativePath,
+            'full_path' => $filePath
+        ];
+        
+    } catch (Exception $e) {
+        error_log("Erro no processamento do upload: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro ao processar o ficheiro.'];
+    }
+}
+
+/**
+ * Redimensiona uma imagem mantendo a proporção
+ * 
+ * @param string $filePath Caminho do ficheiro
+ * @param int $maxWidth Largura máxima
+ * @param int $maxHeight Altura máxima
+ */
+function resizeProfileImage($filePath, $maxWidth, $maxHeight) {
+    try {
+        $imageInfo = getimagesize($filePath);
+        if (!$imageInfo) return;
+        
+        $width = $imageInfo[0];
+        $height = $imageInfo[1];
+        $type = $imageInfo[2];
+        
+        // Se a imagem já é pequena, não redimensionar
+        if ($width <= $maxWidth && $height <= $maxHeight) {
+            return;
+        }
+        
+        // Calcular novas dimensões mantendo proporção
+        $ratio = min($maxWidth / $width, $maxHeight / $height);
+        $newWidth = (int)($width * $ratio);
+        $newHeight = (int)($height * $ratio);
+        
+        // Criar imagem de origem
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $source = imagecreatefromjpeg($filePath);
+                break;
+            case IMAGETYPE_PNG:
+                $source = imagecreatefrompng($filePath);
+                break;
+            case IMAGETYPE_GIF:
+                $source = imagecreatefromgif($filePath);
+                break;
+            case IMAGETYPE_WEBP:
+                $source = imagecreatefromwebp($filePath);
+                break;
+            default:
+                return;
+        }
+        
+        if (!$source) return;
+        
+        // Criar imagem de destino
+        $destination = imagecreatetruecolor($newWidth, $newHeight);
+        
+        // Preservar transparência para PNG e GIF
+        if ($type == IMAGETYPE_PNG || $type == IMAGETYPE_GIF) {
+            imagealphablending($destination, false);
+            imagesavealpha($destination, true);
+            $transparent = imagecolorallocatealpha($destination, 255, 255, 255, 127);
+            imagefilledrectangle($destination, 0, 0, $newWidth, $newHeight, $transparent);
+        }
+        
+        // Redimensionar
+        imagecopyresampled($destination, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        
+        // Guardar imagem redimensionada
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($destination, $filePath, 85);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($destination, $filePath, 6);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($destination, $filePath);
+                break;
+            case IMAGETYPE_WEBP:
+                imagewebp($destination, $filePath, 85);
+                break;
+        }
+        
+        // Libertar memória
+        imagedestroy($source);
+        imagedestroy($destination);
+        
+    } catch (Exception $e) {
+        error_log("Erro ao redimensionar imagem: " . $e->getMessage());
+    }
+}
+
+/**
+ * Obtém o URL da foto de perfil de um utilizador
+ * 
+ * @param int $userId ID do utilizador
+ * @return string|null URL da foto ou null se não existir
+ */
+function getProfilePhotoUrl($userId) {
+    try {
+        $db = getDatabaseConnection();
+        
+        $stmt = $db->prepare("
+            SELECT m.path_ 
+            FROM User_ u 
+            LEFT JOIN Media m ON u.profile_photo = m.id 
+            WHERE u.id = :id
+        ");
+        $stmt->execute([':id' => $userId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result && $result['path_'] ? '/' . $result['path_'] : null;
+        
+    } catch (Exception $e) {
+        error_log("Erro ao obter URL da foto: " . $e->getMessage());
+        return null;
+    }
+}
+
 /**
  * Processamento de requisições HTTP para atualizações de perfil.
  */
@@ -557,5 +870,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     
     header("Location: " . $redirectUrl);
     exit;
+}
+
+// Processamento de requisições AJAX para fotos
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar se é uma requisição para gestão de fotos
+    if (isset($_POST['action']) && in_array($_POST['action'], ['upload_photo', 'delete_photo'])) {
+        session_start();
+        
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'Não autenticado.']);
+            exit;
+        }
+        
+        $currentUserId = $_SESSION['user_id'];
+        $isAdmin = $_SESSION['is_admin'] ?? false;
+        $targetUserId = isset($_POST['target_user_id']) ? intval($_POST['target_user_id']) : $currentUserId;
+        
+        // Verificar permissões
+        if (!canEditProfile($currentUserId, $targetUserId, $isAdmin)) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Sem permissão.']);
+            exit;
+        }
+        
+        $action = $_POST['action'];
+        
+        switch ($action) {
+            case 'upload_photo':
+                if (!isset($_FILES['photo'])) {
+                    echo json_encode(['success' => false, 'message' => 'Nenhum ficheiro enviado.']);
+                    exit;
+                }
+                
+                $result = uploadProfilePhoto($targetUserId, $_FILES['photo']);
+                echo json_encode($result);
+                break;
+                
+            case 'delete_photo':
+                $result = deleteProfilePhoto($targetUserId);
+                echo json_encode($result);
+                break;
+                
+            default:
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Ação inválida.']);
+        }
+        exit;
+    }
 }
 ?>
