@@ -18,10 +18,10 @@ if (!$profileUserId) {
     $profileUserId = getCurrentUserId();
 }
 
-// Obter os dados do utilizador a visualizar
-$profileUser = getUserById($profileUserId);
+// Obter os dados completos do utilizador a visualizar
+$userData = getUserCompleteData($profileUserId);
 
-if (!$profileUser) {
+if (!$userData) {
     $_SESSION['error'] = 'Utilizador não encontrado.';
     header("Location: /Views/mainPage.php");
     exit();
@@ -30,7 +30,6 @@ if (!$profileUser) {
 // Verificar se é o próprio perfil
 $isOwnProfile = (getCurrentUserId() == $profileUserId);
 $isAdmin = isUserAdmin();
-$isLoggedIn = isUserLoggedIn();
 
 // Processar logout se solicitado (apenas no próprio perfil)
 if ($isOwnProfile && isset($_POST['logout'])) {
@@ -46,10 +45,14 @@ if ($isAdmin && !$isOwnProfile && isset($_POST['admin_action'])) {
         unblockUser($profileUserId);
     }
     // Recarregar os dados do utilizador
-    $profileUser = getUserById($profileUserId);
+    $userData = getUserCompleteData($profileUserId);
 }
 
-drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["/Styles/profile.css"]);
+// Obter moedas disponíveis para mostrar o nome completo
+$availableCurrencies = getAvailableCurrencies();
+$currencyName = $availableCurrencies[$userData['currency']] ?? 'Euro (€)';
+
+drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styles/profile.css"]);
 ?>
 
 <main>
@@ -75,19 +78,19 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                 </div>
 
                 <div class="profile-info">
-                    <h1><?php echo htmlspecialchars($profileUser->getName()); ?></h1>
-                    <p class="profile-username">@<?php echo htmlspecialchars($profileUser->getUsername()); ?></p>
+                    <h1><?php echo htmlspecialchars($userData['name_']); ?></h1>
+                    <p class="profile-username">@<?php echo htmlspecialchars($userData['username']); ?></p>
                     
                     <div class="profile-badges">
-                        <?php if ($profileUser->getIsAdmin()): ?>
+                        <?php if ($userData['is_admin']): ?>
                             <span class="badge badge-admin">Administrador</span>
                         <?php endif; ?>
                         
-                        <?php if ($profileUser->getIsFreelancer()): ?>
+                        <?php if ($userData['is_freelancer']): ?>
                             <span class="badge badge-freelancer">Freelancer</span>
                         <?php endif; ?>
                         
-                        <?php if ($profileUser->getIsBlocked()): ?>
+                        <?php if ($userData['is_blocked']): ?>
                             <span class="badge badge-blocked">Bloqueado</span>
                         <?php endif; ?>
                     </div>
@@ -103,7 +106,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                     <?php elseif ($isAdmin && !$isOwnProfile): ?>
                         <!-- Ações de administrador -->
                         <form method="post" style="display: inline;">
-                            <?php if ($profileUser->getIsBlocked()): ?>
+                            <?php if ($userData['is_blocked']): ?>
                                 <input type="hidden" name="admin_action" value="unblock">
                                 <button type="submit" class="edit-profile-btn">Desbloquear</button>
                             <?php else: ?>
@@ -126,16 +129,27 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                         <!-- Mostrar email apenas no próprio perfil -->
                         <div class="contact-item">
                             <div class="contact-icon">
-                                <img src="/Images/site/footer/icon-email.png" alt="Email">
+                                <img src="/Images/site/footer/mail.png" alt="Email">
                             </div>
                             <div class="contact-text">
                                 <p class="contact-label">Email</p>
-                                <p class="contact-value"><?php echo htmlspecialchars($profileUser->getEmail()); ?></p>
+                                <p class="contact-value"><?php echo htmlspecialchars($userData['email']); ?></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Mostrar moeda preferida apenas no próprio perfil -->
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <img src="/Images/site/header/search-icon.png" alt="Moeda">
+                            </div>
+                            <div class="contact-text">
+                                <p class="contact-label">Moeda Preferida</p>
+                                <p class="contact-value"><?php echo htmlspecialchars($currencyName); ?></p>
                             </div>
                         </div>
                         <?php endif; ?>
 
-                        <?php if ($profileUser->getWebLink()): ?>
+                        <?php if ($userData['web_link']): ?>
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <img src="/Images/site/header/search-icon.png" alt="Website">
@@ -143,15 +157,15 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                             <div class="contact-text">
                                 <p class="contact-label">Website</p>
                                 <p class="contact-value">
-                                    <a href="<?php echo htmlspecialchars($profileUser->getWebLink()); ?>" target="_blank">
-                                        <?php echo htmlspecialchars($profileUser->getWebLink()); ?>
+                                    <a href="<?php echo htmlspecialchars($userData['web_link']); ?>" target="_blank">
+                                        <?php echo htmlspecialchars($userData['web_link']); ?>
                                     </a>
                                 </p>
                             </div>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if (!$isOwnProfile && !$profileUser->getWebLink()): ?>
+                        <?php if (!$isOwnProfile && !$userData['web_link']): ?>
                         <p class="bio-empty">Não existem informações públicas disponíveis.</p>
                         <?php endif; ?>
                     </div>
@@ -163,8 +177,8 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                         <div class="bio-section">
                             <h3>Biografia</h3>
                             <div class="bio-content">
-                                <?php if ($profileUser->getBio()): ?>
-                                    <?php echo nl2br(htmlspecialchars($profileUser->getBio())); ?>
+                                <?php if ($userData['bio']): ?>
+                                    <?php echo nl2br(htmlspecialchars($userData['bio'])); ?>
                                 <?php else: ?>
                                     <p class="bio-empty">
                                         <?php echo $isOwnProfile ? 
@@ -175,10 +189,10 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                             </div>
                         </div>
 
-                        <?php if ($profileUser->getWebLink()): ?>
+                        <?php if ($userData['web_link']): ?>
                         <div class="website-section">
                             <h3><?php echo $isOwnProfile ? 'O meu website' : 'Website'; ?></h3>
-                            <a href="<?php echo htmlspecialchars($profileUser->getWebLink()); ?>" target="_blank" class="website-link">
+                            <a href="<?php echo htmlspecialchars($userData['web_link']); ?>" target="_blank" class="website-link">
                                 <img src="/Images/site/header/search-icon.png" alt="Website">
                                 Visitar website
                             </a>
@@ -186,7 +200,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                         <?php endif; ?>
 
                         <div class="register-info">
-                            <p>Membro desde <?php echo date('d/m/Y', strtotime($profileUser->getRegisterDate())); ?></p>
+                            <p>Membro desde <?php echo date('d/m/Y', strtotime($userData['creation_date'])); ?></p>
                         </div>
                     </div>
                 </div>

@@ -19,104 +19,30 @@ $isAdmin = isUserAdmin();
 $isOwnProfile = ($currentUserId == $editUserId);
 
 // Só pode editar se for o próprio perfil OU se for admin
-if (!$isOwnProfile && !$isAdmin) {
+if (!canEditProfile($currentUserId, $editUserId, $isAdmin)) {
     $_SESSION['error'] = 'Não tem permissão para editar este perfil.';
     header("Location: /Views/profile/profile.php");
     exit();
 }
 
-// Obter os dados do utilizador a editar
-$user = getUserById($editUserId);
+// Obter os dados completos do utilizador a editar
+$userData = getUserCompleteData($editUserId);
 
-if (!$user) {
+if (!$userData) {
     $_SESSION['error'] = 'Utilizador não encontrado.';
     header("Location: /Views/mainPage.php");
     exit();
 }
 
-// Processar formulário de edição
-$error = '';
-$success = '';
+// Obter moedas disponíveis
+$availableCurrencies = getAvailableCurrencies();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [];
-    
-    // Verificar o que foi alterado
-    if (!empty($_POST['name']) && $_POST['name'] !== $user->getName()) {
-        $data['name'] = $_POST['name'];
-    }
-    
-    if (!empty($_POST['email']) && $_POST['email'] !== $user->getEmail()) {
-        // Verificar se o email já existe
-        $existingUser = getUserByEmail($_POST['email']);
-        if ($existingUser && $existingUser->getId() !== $editUserId) {
-            $error = 'Este email já está em uso.';
-        } else {
-            $data['email'] = $_POST['email'];
-        }
-    }
-    
-    if (!empty($_POST['username']) && $_POST['username'] !== $user->getUsername()) {
-        // Verificar se o username já existe
-        $existingUser = getUserByUsername($_POST['username']);
-        if ($existingUser && $existingUser->getId() !== $editUserId) {
-            $error = 'Este username já está em uso.';
-        } else {
-            $data['username'] = $_POST['username'];
-        }
-    }
-    
-    // Só atualizar a password se for fornecida
-    if (!empty($_POST['password'])) {
-        $data['password'] = $_POST['password'];
-    }
-    
-    // Se não houver erros, atualizar o utilizador
-    if (empty($error) && !empty($data)) {
-        if (updateUser($editUserId, $data)) {
-            $success = 'Perfil atualizado com sucesso!';
-            // Atualizar os dados do utilizador para refletir as mudanças
-            $user = getUserById($editUserId);
-            
-            // Atualizar a sessão se for o próprio perfil e o username foi alterado
-            if ($isOwnProfile && isset($data['username'])) {
-                setCurrentUser($data['username']);
-            }
-        } else {
-            $error = 'Erro ao atualizar o perfil.';
-        }
-    }
-    
-    // Processar biografia e link
-    if (isset($_POST['bio']) || isset($_POST['webLink'])) {
-        $db = getDatabaseConnection();
-        $updateFields = [];
-        $params = [':id' => $editUserId];
-        
-        if (isset($_POST['bio'])) {
-            $updateFields[] = "bio = :bio";
-            $params[':bio'] = $_POST['bio'];
-        }
-        
-        if (isset($_POST['webLink'])) {
-            $updateFields[] = "web_link = :webLink";
-            $params[':webLink'] = $_POST['webLink'];
-        }
-        
-        if (!empty($updateFields)) {
-            $query = "UPDATE User_ SET " . implode(', ', $updateFields) . " WHERE id = :id";
-            $stmt = $db->prepare($query);
-            if ($stmt->execute($params)) {
-                $success = 'Perfil atualizado com sucesso!';
-                $user = getUserById($editUserId);
-            } else {
-                $error = 'Erro ao atualizar o perfil.';
-            }
-        }
-    }
-}
+// Processar mensagens de sessão
+$error = $_SESSION['error'] ?? '';
+$success = $_SESSION['success'] ?? '';
+unset($_SESSION['error'], $_SESSION['success']);
 
-$pageTitle = $isOwnProfile ? "Editar o Meu Perfil" : "Editar Perfil de " . htmlspecialchars($user->getName());
+$pageTitle = $isOwnProfile ? "Editar o Meu Perfil" : "Editar Perfil de " . htmlspecialchars($userData['name_']);
 drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
 ?>
 
@@ -146,21 +72,39 @@ drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
                     </div>
                 <?php endif; ?>
                 
-                <form method="post" class="edit-form">
+                <form method="post" action="/Controllers/userController.php" class="edit-form">
+                    <input type="hidden" name="action" value="update_profile">
+                    <?php if (!$isOwnProfile): ?>
+                        <input type="hidden" name="target_user_id" value="<?php echo $editUserId; ?>">
+                    <?php endif; ?>
+                    
                     <div class="form-group">
                         <label for="name">Nome</label>
-                        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user->getName()); ?>" required>
+                        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($userData['name_']); ?>" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user->getUsername()); ?>" required>
+                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
                         <p class="form-hint">Este será o identificador único no site</p>
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user->getEmail()); ?>" required>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currency">Moeda Preferida</label>
+                        <select id="currency" name="currency">
+                            <?php foreach ($availableCurrencies as $code => $name): ?>
+                                <option value="<?php echo $code; ?>" 
+                                        <?php echo ($userData['currency'] === $code) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($name); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="form-hint">Moeda utilizada para exibir preços e valores</p>
                     </div>
                     
                     <div class="form-group">
@@ -171,13 +115,13 @@ drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
                     
                     <div class="form-group">
                         <label for="bio">Biografia</label>
-                        <textarea id="bio" name="bio" rows="5"><?php echo htmlspecialchars($user->getBio() ?? ''); ?></textarea>
+                        <textarea id="bio" name="bio" rows="5"><?php echo htmlspecialchars($userData['bio'] ?? ''); ?></textarea>
                         <p class="form-hint"><?php echo $isOwnProfile ? 'Conte-nos um pouco sobre si' : 'Biografia do utilizador'; ?></p>
                     </div>
                     
                     <div class="form-group">
-                        <label for="webLink">Website</label>
-                        <input type="url" id="webLink" name="webLink" value="<?php echo htmlspecialchars($user->getWebLink() ?? ''); ?>" placeholder="https://exemplo.com">
+                        <label for="web_link">Website</label>
+                        <input type="url" id="web_link" name="web_link" value="<?php echo htmlspecialchars($userData['web_link'] ?? ''); ?>" placeholder="https://exemplo.com">
                         <p class="form-hint">Link para website pessoal ou portfolio</p>
                     </div>
                     

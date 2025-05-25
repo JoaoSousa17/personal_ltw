@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/../Models/User.php');
+require_once(dirname(__FILE__) . '/../Database/connection.php');
 
 /**
  * Regista um novo utilizador no sistema.
@@ -109,6 +110,17 @@ function getUserByUsername($username) {
 }
 
 /**
+ * Obtém um utilizador através do seu email.
+ *
+ * @param string $email Email do utilizador.
+ * @return User|null Objeto User se encontrado, null caso contrário.
+ */
+function getUserByEmail($email) {
+    $db = getDatabaseConnection();
+    return User::findByEmail($db, $email);
+}
+
+/**
  * Atualiza os dados de um utilizador.
  *
  * @param int $id ID do utilizador.
@@ -196,3 +208,315 @@ function searchUsers($term) {
 
     return $users;
 }
+
+/**
+ * Atualiza o perfil completo de um utilizador.
+ *
+ * @param int $userId ID do utilizador
+ * @param array $data Dados a serem atualizados
+ * @return array Resultado da operação com status e mensagem
+ */
+function updateUserProfile($userId, $data) {
+    try {
+        $db = getDatabaseConnection();
+        $user = User::findById($db, $userId);
+        if (!$user) {
+            return ['success' => false, 'message' => 'Utilizador não encontrado.'];
+        }
+
+        // Validar dados
+        $validationResult = validateProfileData($data, $userId);
+        if (!$validationResult['success']) {
+            return $validationResult;
+        }
+
+        // Preparar query de atualização
+        $updateFields = [];
+        $params = [':id' => $userId];
+
+        // Campos básicos
+        if (isset($data['name']) && !empty($data['name'])) {
+            $updateFields[] = "name_ = :name";
+            $params[':name'] = trim($data['name']);
+        }
+
+        if (isset($data['username']) && !empty($data['username'])) {
+            $updateFields[] = "username = :username";
+            $params[':username'] = trim($data['username']);
+        }
+
+        if (isset($data['email']) && !empty($data['email'])) {
+            $updateFields[] = "email = :email";
+            $params[':email'] = trim($data['email']);
+        }
+
+        // Campos opcionais
+        if (isset($data['bio'])) {
+            $updateFields[] = "bio = :bio";
+            $params[':bio'] = trim($data['bio']);
+        }
+
+        if (isset($data['web_link'])) {
+            $updateFields[] = "web_link = :web_link";
+            $params[':web_link'] = trim($data['web_link']);
+        }
+
+        if (isset($data['currency']) && !empty($data['currency'])) {
+            $updateFields[] = "currency = :currency";
+            $params[':currency'] = trim($data['currency']);
+        }
+
+        // Password (se fornecida)
+        if (isset($data['password']) && !empty($data['password'])) {
+            $updateFields[] = "password_ = :password";
+            $params[':password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+
+        if (empty($updateFields)) {
+            return ['success' => false, 'message' => 'Nenhum dado para atualizar.'];
+        }
+
+        // Executar atualização
+        $query = "UPDATE User_ SET " . implode(', ', $updateFields) . " WHERE id = :id";
+        $stmt = $db->prepare($query);
+        
+        if ($stmt->execute($params)) {
+            return ['success' => true, 'message' => 'Perfil atualizado com sucesso!'];
+        } else {
+            return ['success' => false, 'message' => 'Erro ao atualizar o perfil.'];
+        }
+
+    } catch (PDOException $e) {
+        error_log("Erro ao atualizar perfil: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro interno do sistema.'];
+    }
+}
+
+/**
+ * Valida os dados do perfil antes da atualização.
+ *
+ * @param array $data Dados a serem validados
+ * @param int $userId ID do utilizador atual
+ * @return array Resultado da validação
+ */
+function validateProfileData($data, $userId) {
+    $db = getDatabaseConnection();
+
+    // Validar email se fornecido
+    if (isset($data['email']) && !empty($data['email'])) {
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'message' => 'Email inválido.'];
+        }
+
+        // Verificar se email já existe (excluindo o utilizador atual)
+        $stmt = $db->prepare("SELECT id FROM User_ WHERE email = :email AND id != :user_id");
+        $stmt->execute([':email' => $data['email'], ':user_id' => $userId]);
+        if ($stmt->fetch()) {
+            return ['success' => false, 'message' => 'Este email já está em uso.'];
+        }
+    }
+
+    // Validar username se fornecido
+    if (isset($data['username']) && !empty($data['username'])) {
+        if (strlen($data['username']) < 3) {
+            return ['success' => false, 'message' => 'Username deve ter pelo menos 3 caracteres.'];
+        }
+
+        // Verificar se username já existe (excluindo o utilizador atual)
+        $stmt = $db->prepare("SELECT id FROM User_ WHERE username = :username AND id != :user_id");
+        $stmt->execute([':username' => $data['username'], ':user_id' => $userId]);
+        if ($stmt->fetch()) {
+            return ['success' => false, 'message' => 'Este username já está em uso.'];
+        }
+    }
+
+    // Validar nome se fornecido
+    if (isset($data['name']) && !empty($data['name'])) {
+        if (strlen($data['name']) < 2) {
+            return ['success' => false, 'message' => 'Nome deve ter pelo menos 2 caracteres.'];
+        }
+    }
+
+    // Validar password se fornecida
+    if (isset($data['password']) && !empty($data['password'])) {
+        if (strlen($data['password']) < 6) {
+            return ['success' => false, 'message' => 'Password deve ter pelo menos 6 caracteres.'];
+        }
+    }
+
+    // Validar web_link se fornecido
+    if (isset($data['web_link']) && !empty($data['web_link'])) {
+        if (!filter_var($data['web_link'], FILTER_VALIDATE_URL)) {
+            return ['success' => false, 'message' => 'URL do website inválida.'];
+        }
+    }
+
+    // Validar moeda se fornecida
+    if (isset($data['currency']) && !empty($data['currency'])) {
+        $validCurrencies = getAvailableCurrencies();
+        if (!in_array($data['currency'], array_keys($validCurrencies))) {
+            return ['success' => false, 'message' => 'Moeda selecionada inválida.'];
+        }
+    }
+
+    return ['success' => true, 'message' => 'Dados válidos.'];
+}
+
+/**
+ * Obtém as moedas disponíveis no sistema.
+ *
+ * @return array Array associativo com código e nome das moedas
+ */
+function getAvailableCurrencies() {
+    return [
+        'eur' => 'Euro (€)',
+        'usd' => 'Dólar Americano ($)',
+        'gbp' => 'Libra Esterlina (£)',
+        'brl' => 'Real Brasileiro (R$)'
+    ];
+}
+
+/**
+ * Obtém dados completos do utilizador incluindo campos extras.
+ *
+ * @param int $userId ID do utilizador
+ * @return array|null Dados do utilizador ou null se não encontrado
+ */
+function getUserCompleteData($userId) {
+    try {
+        $db = getDatabaseConnection();
+        $stmt = $db->prepare("
+            SELECT id, username, email, name_, bio, web_link, currency, 
+                   creation_date, is_admin, is_blocked, is_freelancer, profile_photo
+            FROM User_ 
+            WHERE id = :id
+        ");
+        $stmt->execute([':id' => $userId]);
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$userData) {
+            return null;
+        }
+
+        return $userData;
+    } catch (PDOException $e) {
+        error_log("Erro ao obter dados completos do utilizador: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Verifica se o utilizador tem permissão para editar um perfil.
+ *
+ * @param int $currentUserId ID do utilizador atual
+ * @param int $targetUserId ID do utilizador a ser editado
+ * @param bool $isAdmin Se o utilizador atual é admin
+ * @return bool True se tem permissão, false caso contrário
+ */
+function canEditProfile($currentUserId, $targetUserId, $isAdmin = false) {
+    // Pode editar o próprio perfil ou se for admin
+    return ($currentUserId == $targetUserId) || $isAdmin;
+}
+
+/**
+ * Obtém o símbolo da moeda baseado no código.
+ *
+ * @param string $currencyCode Código da moeda
+ * @return string Símbolo da moeda
+ */
+function getCurrencySymbol($currencyCode) {
+    $symbols = [
+        'eur' => '€',
+        'usd' => '$',
+        'gbp' => '£',
+        'brl' => 'R$'
+    ];
+
+    return $symbols[$currencyCode] ?? '€';
+}
+
+/**
+ * Atualiza apenas a moeda do utilizador.
+ *
+ * @param int $userId ID do utilizador
+ * @param string $currency Código da moeda
+ * @return array Resultado da operação
+ */
+function updateUserCurrency($userId, $currency) {
+    try {
+        $db = getDatabaseConnection();
+        $validCurrencies = getAvailableCurrencies();
+        if (!array_key_exists($currency, $validCurrencies)) {
+            return ['success' => false, 'message' => 'Moeda inválida.'];
+        }
+
+        $stmt = $db->prepare("UPDATE User_ SET currency = :currency WHERE id = :id");
+        $result = $stmt->execute([':currency' => $currency, ':id' => $userId]);
+
+        if ($result) {
+            return ['success' => true, 'message' => 'Moeda atualizada com sucesso!'];
+        } else {
+            return ['success' => false, 'message' => 'Erro ao atualizar a moeda.'];
+        }
+    } catch (PDOException $e) {
+        error_log("Erro ao atualizar moeda: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro interno do sistema.'];
+    }
+}
+
+/**
+ * Processamento de requisições HTTP para atualizações de perfil.
+ */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
+    session_start();
+    
+    if (!isset($_SESSION['user_id'])) {
+        $_SESSION['error'] = 'Utilizador não autenticado.';
+        header("Location: /Views/auth.php");
+        exit;
+    }
+
+    $currentUserId = $_SESSION['user_id'];
+    $isAdmin = $_SESSION['is_admin'] ?? false;
+    $targetUserId = isset($_POST['target_user_id']) ? intval($_POST['target_user_id']) : $currentUserId;
+
+    if (!canEditProfile($currentUserId, $targetUserId, $isAdmin)) {
+        $_SESSION['error'] = 'Não tem permissão para editar este perfil.';
+        header("Location: /Views/profile/profile.php");
+        exit;
+    }
+
+    $data = [
+        'name' => $_POST['name'] ?? '',
+        'username' => $_POST['username'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'bio' => $_POST['bio'] ?? '',
+        'web_link' => $_POST['web_link'] ?? '',
+        'currency' => $_POST['currency'] ?? '',
+        'password' => $_POST['password'] ?? ''
+    ];
+
+    $data = array_filter($data, function($value, $key) {
+        return $key === 'bio' || !empty($value);
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = updateUserProfile($targetUserId, $data);
+
+    if ($result['success']) {
+        $_SESSION['success'] = $result['message'];
+        if ($targetUserId == $currentUserId && isset($data['username'])) {
+            $_SESSION['username'] = $data['username'];
+        }
+    } else {
+        $_SESSION['error'] = $result['message'];
+    }
+
+    $redirectUrl = "/Views/profile/editProfile.php";
+    if ($targetUserId != $currentUserId) {
+        $redirectUrl .= "?id=" . $targetUserId;
+    }
+    
+    header("Location: " . $redirectUrl);
+    exit;
+}
+?>

@@ -18,6 +18,8 @@ class User {
     private $bio;
     private $webLink;
     private $isFreelancer;
+    private $currency;
+    private $profilePhoto;
 
     /**
      * Construtor da classe.
@@ -26,6 +28,7 @@ class User {
      */
     public function __construct($db) {
         $this->db = $db;
+        $this->currency = 'eur'; // Moeda padrão
     }
 
     /********
@@ -122,6 +125,24 @@ class User {
         return $this->isFreelancer;
     }
 
+    /** 
+     * Getter para a moeda preferida do User.
+     * 
+     * @return string Código da moeda preferida.
+     */
+    public function getCurrency() {
+        return $this->currency;
+    }
+
+    /** 
+     * Getter para o ID da foto de perfil do User.
+     * 
+     * @return int|null ID da foto de perfil.
+     */
+    public function getProfilePhoto() {
+        return $this->profilePhoto;
+    }
+
     /********
      Setters
     ********/
@@ -212,7 +233,6 @@ class User {
      * 
      * @param string $webLink Novo link externo disponibilizado.
      */
-    /**  */
     public function setWebLink($webLink) {
         $this->webLink = $webLink;
     }
@@ -224,6 +244,24 @@ class User {
      */
     public function setIsFreelancer($isFreelancer) {
         $this->isFreelancer = $isFreelancer;
+    }
+
+    /** 
+     * Setter para a moeda preferida do User.
+     * 
+     * @param string $currency Código da nova moeda preferida.
+     */
+    public function setCurrency($currency) {
+        $this->currency = $currency;
+    }
+
+    /** 
+     * Setter para o ID da foto de perfil do User.
+     * 
+     * @param int|null $profilePhoto ID da nova foto de perfil.
+     */
+    public function setProfilePhoto($profilePhoto) {
+        $this->profilePhoto = $profilePhoto;
     }
 
     /**********
@@ -545,6 +583,12 @@ class User {
         }
         if (isset($array['bio'])) {
             $user->bio = $array['bio'];
+        }
+        if (isset($array['currency'])) {
+            $user->currency = $array['currency'];
+        }
+        if (isset($array['profile_photo'])) {
+            $user->profilePhoto = $array['profile_photo'];
         }
 
         return $user;
