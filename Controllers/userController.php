@@ -198,7 +198,6 @@ function searchUsers($term) {
         $user->setEmail($row['email']);
         $user->setName($row['name_']);
         if (isset($row['creation_date'])) $user->setRegisterDate($row['creation_date']);
-        if (isset($row['bio'])) $user->setBio($row['bio']);
         if (isset($row['web_link'])) $user->setWebLink($row['web_link']);
         if (isset($row['is_freelancer'])) $user->setIsFreelancer($row['is_freelancer']);
         $user->setIsAdmin($row['is_admin']);
@@ -207,6 +206,74 @@ function searchUsers($term) {
     }
 
     return $users;
+}
+
+/**
+ * Obtém dados completos do utilizador incluindo todos os campos da tabela User_.
+ *
+ * @param int $userId ID do utilizador
+ * @return array|null Dados do utilizador ou null se não encontrado
+ */
+function getUserCompleteData($userId) {
+    try {
+        $db = getDatabaseConnection();
+        $stmt = $db->prepare("
+            SELECT id, name_, password_, email, username, web_link, 
+                   phone_number, profile_photo, is_admin, creation_date, 
+                   is_freelancer, currency, is_blocked, night_mode
+            FROM User_ 
+            WHERE id = :id
+        ");
+        $stmt->execute([':id' => $userId]);
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$userData) {
+            return null;
+        }
+
+        // Garantir que campos opcionais têm valores padrão
+        $userData['web_link'] = $userData['web_link'] ?? '';
+        $userData['phone_number'] = $userData['phone_number'] ?? '';
+        $userData['profile_photo'] = $userData['profile_photo'] ?? null;
+        
+        // Converter valores booleanos
+        $userData['is_admin'] = (bool)$userData['is_admin'];
+        $userData['is_blocked'] = (bool)$userData['is_blocked'];
+        $userData['is_freelancer'] = (bool)$userData['is_freelancer'];
+        $userData['night_mode'] = (bool)$userData['night_mode'];
+
+        return $userData;
+    } catch (PDOException $e) {
+        error_log("Erro ao obter dados completos do utilizador: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Verifica se o utilizador tem permissão para editar um perfil.
+ *
+ * @param int $currentUserId ID do utilizador atual
+ * @param int $targetUserId ID do utilizador a ser editado
+ * @param bool $isAdmin Se o utilizador atual é admin
+ * @return bool True se tem permissão, false caso contrário
+ */
+function canEditProfile($currentUserId, $targetUserId, $isAdmin = false) {
+    // Pode editar o próprio perfil ou se for admin
+    return ($currentUserId == $targetUserId) || $isAdmin;
+}
+
+/**
+ * Obtém as moedas disponíveis no sistema.
+ *
+ * @return array Array associativo com código e nome das moedas
+ */
+function getAvailableCurrencies() {
+    return [
+        'eur' => 'Euro (€)',
+        'usd' => 'Dólar Americano ($)',
+        'gbp' => 'Libra Esterlina (£)',
+        'brl' => 'Real Brasileiro (R$)'
+    ];
 }
 
 /**
@@ -219,8 +286,11 @@ function searchUsers($term) {
 function updateUserProfile($userId, $data) {
     try {
         $db = getDatabaseConnection();
-        $user = User::findById($db, $userId);
-        if (!$user) {
+        
+        // Verificar se o utilizador existe
+        $stmt = $db->prepare("SELECT id FROM User_ WHERE id = :id");
+        $stmt->execute([':id' => $userId]);
+        if (!$stmt->fetch()) {
             return ['success' => false, 'message' => 'Utilizador não encontrado.'];
         }
 
@@ -234,7 +304,7 @@ function updateUserProfile($userId, $data) {
         $updateFields = [];
         $params = [':id' => $userId];
 
-        // Campos básicos
+        // Campos que podem ser atualizados
         if (isset($data['name']) && !empty($data['name'])) {
             $updateFields[] = "name_ = :name";
             $params[':name'] = trim($data['name']);
@@ -250,15 +320,14 @@ function updateUserProfile($userId, $data) {
             $params[':email'] = trim($data['email']);
         }
 
-        // Campos opcionais
-        if (isset($data['bio'])) {
-            $updateFields[] = "bio = :bio";
-            $params[':bio'] = trim($data['bio']);
-        }
-
         if (isset($data['web_link'])) {
             $updateFields[] = "web_link = :web_link";
-            $params[':web_link'] = trim($data['web_link']);
+            $params[':web_link'] = !empty(trim($data['web_link'])) ? trim($data['web_link']) : null;
+        }
+
+        if (isset($data['phone_number'])) {
+            $updateFields[] = "phone_number = :phone_number";
+            $params[':phone_number'] = !empty(trim($data['phone_number'])) ? trim($data['phone_number']) : null;
         }
 
         if (isset($data['currency']) && !empty($data['currency'])) {
@@ -266,7 +335,12 @@ function updateUserProfile($userId, $data) {
             $params[':currency'] = trim($data['currency']);
         }
 
-        // Password (se fornecida)
+        if (isset($data['night_mode'])) {
+            $updateFields[] = "night_mode = :night_mode";
+            $params[':night_mode'] = (bool)$data['night_mode'] ? 1 : 0;
+        }
+
+        // Password (se fornecida e confirmada)
         if (isset($data['password']) && !empty($data['password'])) {
             $updateFields[] = "password_ = :password";
             $params[':password'] = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -342,12 +416,26 @@ function validateProfileData($data, $userId) {
         if (strlen($data['password']) < 6) {
             return ['success' => false, 'message' => 'Password deve ter pelo menos 6 caracteres.'];
         }
+
+        // Validar confirmação de password
+        if (isset($data['password_confirm'])) {
+            if ($data['password'] !== $data['password_confirm']) {
+                return ['success' => false, 'message' => 'As passwords não coincidem.'];
+            }
+        }
     }
 
     // Validar web_link se fornecido
     if (isset($data['web_link']) && !empty($data['web_link'])) {
         if (!filter_var($data['web_link'], FILTER_VALIDATE_URL)) {
             return ['success' => false, 'message' => 'URL do website inválida.'];
+        }
+    }
+
+    // Validar telefone se fornecido
+    if (isset($data['phone_number']) && !empty($data['phone_number'])) {
+        if (strlen($data['phone_number']) < 9) {
+            return ['success' => false, 'message' => 'Número de telefone deve ter pelo menos 9 dígitos.'];
         }
     }
 
@@ -360,62 +448,6 @@ function validateProfileData($data, $userId) {
     }
 
     return ['success' => true, 'message' => 'Dados válidos.'];
-}
-
-/**
- * Obtém as moedas disponíveis no sistema.
- *
- * @return array Array associativo com código e nome das moedas
- */
-function getAvailableCurrencies() {
-    return [
-        'eur' => 'Euro (€)',
-        'usd' => 'Dólar Americano ($)',
-        'gbp' => 'Libra Esterlina (£)',
-        'brl' => 'Real Brasileiro (R$)'
-    ];
-}
-
-/**
- * Obtém dados completos do utilizador incluindo campos extras.
- *
- * @param int $userId ID do utilizador
- * @return array|null Dados do utilizador ou null se não encontrado
- */
-function getUserCompleteData($userId) {
-    try {
-        $db = getDatabaseConnection();
-        $stmt = $db->prepare("
-            SELECT id, username, email, name_, bio, web_link, currency, 
-                   creation_date, is_admin, is_blocked, is_freelancer, profile_photo
-            FROM User_ 
-            WHERE id = :id
-        ");
-        $stmt->execute([':id' => $userId]);
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$userData) {
-            return null;
-        }
-
-        return $userData;
-    } catch (PDOException $e) {
-        error_log("Erro ao obter dados completos do utilizador: " . $e->getMessage());
-        return null;
-    }
-}
-
-/**
- * Verifica se o utilizador tem permissão para editar um perfil.
- *
- * @param int $currentUserId ID do utilizador atual
- * @param int $targetUserId ID do utilizador a ser editado
- * @param bool $isAdmin Se o utilizador atual é admin
- * @return bool True se tem permissão, false caso contrário
- */
-function canEditProfile($currentUserId, $targetUserId, $isAdmin = false) {
-    // Pode editar o próprio perfil ou se for admin
-    return ($currentUserId == $targetUserId) || $isAdmin;
 }
 
 /**
@@ -490,14 +522,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         'name' => $_POST['name'] ?? '',
         'username' => $_POST['username'] ?? '',
         'email' => $_POST['email'] ?? '',
-        'bio' => $_POST['bio'] ?? '',
         'web_link' => $_POST['web_link'] ?? '',
+        'phone_number' => $_POST['phone_number'] ?? '',
         'currency' => $_POST['currency'] ?? '',
-        'password' => $_POST['password'] ?? ''
+        'password' => $_POST['password'] ?? '',
+        'password_confirm' => $_POST['password_confirm'] ?? ''
     ];
 
+    // Adicionar night_mode apenas se for o próprio perfil
+    if ($targetUserId == $currentUserId) {
+        $data['night_mode'] = $_POST['night_mode'] ?? 0;
+    }
+
+    // Filtrar campos vazios (exceto night_mode e campos opcionais)
     $data = array_filter($data, function($value, $key) {
-        return $key === 'bio' || !empty($value);
+        return $key === 'night_mode' || $key === 'web_link' || $key === 'phone_number' || !empty($value);
     }, ARRAY_FILTER_USE_BOTH);
 
     $result = updateUserProfile($targetUserId, $data);

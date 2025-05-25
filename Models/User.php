@@ -3,23 +3,24 @@ require_once(dirname(__FILE__) . '/../Database/connection.php');
 
 /**
  * Classe responsável pela representação e gestão de utilizadores no sistema.
- * Inclui operações de base de dados, autenticação, e controlo de estado (admin/bloqueado).
+ * Baseada na estrutura real da tabela User_ da base de dados.
  */
 class User {
     private $id;
-    private $username;
-    private $email;
-    private $password;
     private $name;
-    private $isAdmin;
-    private $isBlocked;
-    private $db;
-    private $registerDate;
-    private $bio;
+    private $password;
+    private $email;
+    private $username;
     private $webLink;
+    private $phoneNumber;
+    private $profilePhoto;
+    private $isAdmin;
+    private $creationDate;
     private $isFreelancer;
     private $currency;
-    private $profilePhoto;
+    private $isBlocked;
+    private $nightMode;
+    private $db;
 
     /**
      * Construtor da classe.
@@ -29,239 +30,142 @@ class User {
     public function __construct($db) {
         $this->db = $db;
         $this->currency = 'eur'; // Moeda padrão
+        $this->isAdmin = false;
+        $this->isBlocked = false;
+        $this->isFreelancer = false;
+        $this->nightMode = false;
     }
 
     /********
      Getters
     ********/
 
-    /** 
-     * Getter para o id do User.
-     * 
-     * @return int ID do utilizador.
-     */
     public function getId() {
         return $this->id;
     }
 
-    /** 
-     * Getter para o username do User.
-     * 
-     * @return string Username do utilizador.
-     */
-    public function getUsername() {
-        return $this->username;
-    }
-
-    /** 
-     * Getter para o email do User.
-     * 
-     * @return string Email do utilizador.
-     */
-    public function getEmail() {
-        return $this->email;
-    }
-
-    /** 
-     * Getter para o nome do User.
-     * 
-     * @return string Nome do utilizador.
-     */
     public function getName() {
         return $this->name;
     }
 
-    /** 
-     * Getter para o bolleen isAdmin do User (ativo, caso o utilizador seja administrador).
-     * 
-     * @return bool Indica se o utilizador é administrador.
-     */
-    public function getIsAdmin() {
-        return $this->isAdmin;
+    public function getPassword() {
+        return $this->password;
     }
 
-    /** 
-     * Getter para o bolleen isBlocked do User (ativo, caso o utilizador se encontre bloqueado).
-     * 
-     * @return bool Indica se o utilizador está bloqueado.
-     */
-    public function getIsBlocked() {
-        return $this->isBlocked;
+    public function getEmail() {
+        return $this->email;
     }
 
-    /** 
-     * Getter para a data de criação da conta do User.
-     * 
-     * @return string Data de registo do utilizador.
-     */
-    public function getRegisterDate() {
-        return $this->registerDate;
+    public function getUsername() {
+        return $this->username;
     }
 
-    /** 
-     * Getter para a biografia do User.
-     * 
-     * @return string|null Biografia do utilizador.
-     */
-    public function getBio() {
-        return $this->bio;
-    }
-
-    /** 
-     * Getter para o link disponibilizado pelo User.
-     * 
-     * @return string|null Link externo associado ao perfil.
-     */
     public function getWebLink() {
         return $this->webLink;
     }
 
-    /** 
-     * Getter para o bolleen isFreelancer do User (ativo, caso o utilizador tenha anúncios publicados).
-     * 
-     * @return bool Indica se o utilizador é freelancer.
-     */
+    public function getPhoneNumber() {
+        return $this->phoneNumber;
+    }
+
+    public function getProfilePhoto() {
+        return $this->profilePhoto;
+    }
+
+    public function getIsAdmin() {
+        return $this->isAdmin;
+    }
+
+    public function getCreationDate() {
+        return $this->creationDate;
+    }
+
+    public function getRegisterDate() {
+        return $this->creationDate;
+    }
+
     public function getIsFreelancer() {
         return $this->isFreelancer;
     }
 
-    /** 
-     * Getter para a moeda preferida do User.
-     * 
-     * @return string Código da moeda preferida.
-     */
     public function getCurrency() {
         return $this->currency;
     }
 
-    /** 
-     * Getter para o ID da foto de perfil do User.
-     * 
-     * @return int|null ID da foto de perfil.
-     */
-    public function getProfilePhoto() {
-        return $this->profilePhoto;
+    public function getIsBlocked() {
+        return $this->isBlocked;
+    }
+
+    public function getNightMode() {
+        return $this->nightMode;
     }
 
     /********
      Setters
     ********/
 
-    /** 
-     * Setter para o id do User.
-     * 
-     * @param int $id Novo ID do utilizador.
-     */
     public function setId($id) {
         $this->id = $id;
     }
 
-    /** 
-     * Setter para o username do User.
-     * 
-     * @param string $username Novo username.
-     */
-    public function setUsername($username) {
-        $this->username = $username;
-    }
-
-    /** 
-     * Setter para o email do User.
-     * 
-     * @param string $email Novo email.
-     */
-    public function setEmail($email) {
-        $this->email = $email;
-    }
-
-    /** 
-     * Setter para a password, definindo-a, após fazer o hash com algoritmo seguro.
-     * 
-     * @param string $password Palavra-passe em texto simples.
-     */
-    public function setPassword($password) {
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    /** 
-     * Setter para o nome do User.
-     * 
-     * @param string $name Novo nome do utilizador (!=username ).
-     */
     public function setName($name) {
         $this->name = $name;
     }
 
-    /** 
-     * Setter para o bollean isAdmin do User (ativo, caso o utilizador seja administrador).
-     * 
-     * @param bool $isAdmin Novo estado do boleano isAdmin.
-     */
-    public function setIsAdmin($isAdmin) {
-        $this->isAdmin = $isAdmin;
+    public function setPassword($password) {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    /** 
-     * Setter para o bolleen isBlocked do User (ativo, caso o utilizador se encontre bloqueado).
-     * 
-     * @param bool $isBlocked Novo estado do boleano isBlocked.
-     */
-    public function setIsBlocked($isBlocked) {
-        $this->isBlocked = $isBlocked;
+    public function setPasswordHash($passwordHash) {
+        $this->password = $passwordHash;
     }
 
-    /** 
-     * Setter para a data de criação da conta do User.
-     * 
-     * @param string $registerDate Nova data de registo.
-     */
-    public function setRegisterDate($registerDate) {
-        $this->registerDate = $registerDate;
+    public function setEmail($email) {
+        $this->email = $email;
     }
 
-    /** 
-     * Setter para a biografia do User.
-     * 
-     * @param string $bio Nova biografia.
-     */
-    public function setBio($bio) {
-        $this->bio = $bio;
+    public function setUsername($username) {
+        $this->username = $username;
     }
 
-    /** 
-     * Setter para o link disponibilizado pelo User.
-     * 
-     * @param string $webLink Novo link externo disponibilizado.
-     */
     public function setWebLink($webLink) {
         $this->webLink = $webLink;
     }
 
-    /** 
-     * Setter para o bolleen isFreelancer do User (ativo, caso o utilizador tenha anúncios publicados).
-     * 
-     * @param bool $isFreelancer Novo estado do boleano isFreelancer.
-     */
-    public function setIsFreelancer($isFreelancer) {
-        $this->isFreelancer = $isFreelancer;
+    public function setPhoneNumber($phoneNumber) {
+        $this->phoneNumber = $phoneNumber;
     }
 
-    /** 
-     * Setter para a moeda preferida do User.
-     * 
-     * @param string $currency Código da nova moeda preferida.
-     */
+    public function setProfilePhoto($profilePhoto) {
+        $this->profilePhoto = $profilePhoto;
+    }
+
+    public function setIsAdmin($isAdmin) {
+        $this->isAdmin = (bool)$isAdmin;
+    }
+
+    public function setCreationDate($creationDate) {
+        $this->creationDate = $creationDate;
+    }
+
+    public function setRegisterDate($registerDate) {
+        $this->creationDate = $registerDate;
+    }
+
+    public function setIsFreelancer($isFreelancer) {
+        $this->isFreelancer = (bool)$isFreelancer;
+    }
+
     public function setCurrency($currency) {
         $this->currency = $currency;
     }
 
-    /** 
-     * Setter para o ID da foto de perfil do User.
-     * 
-     * @param int|null $profilePhoto ID da nova foto de perfil.
-     */
-    public function setProfilePhoto($profilePhoto) {
-        $this->profilePhoto = $profilePhoto;
+    public function setIsBlocked($isBlocked) {
+        $this->isBlocked = (bool)$isBlocked;
+    }
+
+    public function setNightMode($nightMode) {
+        $this->nightMode = (bool)$nightMode;
     }
 
     /**********
@@ -274,82 +178,100 @@ class User {
      * @return bool Verdadeiro se a operação for bem-sucedida.
      */
     public function save() {
-        // Operação falhará caso o username e o email não estiverem definidos (necessário para identificação)
         if (!$this->username || !$this->email) {
             return false;
         }
 
         try {
-            // Caso id esteja definido (Atualização de dados da conta)
             if ($this->id) {
-                //Preparação do SQL Statement
+                // Atualização de utilizador existente
                 $stmt = $this->db->prepare("
                     UPDATE User_ 
-                    SET username = :username, 
+                    SET name_ = :name, 
                         email = :email, 
-                        name_ = :name, 
+                        username = :username,
+                        web_link = :web_link,
+                        phone_number = :phone_number,
+                        profile_photo = :profile_photo,
                         is_admin = :is_admin, 
-                        is_blocked = :is_blocked
+                        is_freelancer = :is_freelancer,
+                        currency = :currency,
+                        is_blocked = :is_blocked,
+                        night_mode = :night_mode
                     WHERE id = :id
                 ");
 
-                // Preparação dos Parâmetros do SQL Statement
                 $params = [
-                    ':username' => $this->username,
-                    ':email' => $this->email,
                     ':name' => $this->name,
+                    ':email' => $this->email,
+                    ':username' => $this->username,
+                    ':web_link' => $this->webLink,
+                    ':phone_number' => $this->phoneNumber,
+                    ':profile_photo' => $this->profilePhoto,
                     ':is_admin' => $this->isAdmin ? 1 : 0,
+                    ':is_freelancer' => $this->isFreelancer ? 1 : 0,
+                    ':currency' => $this->currency,
                     ':is_blocked' => $this->isBlocked ? 1 : 0,
+                    ':night_mode' => $this->nightMode ? 1 : 0,
                     ':id' => $this->id
                 ];
 
-                // Permitirá atualizar também a password, caso esta esteja definida (caso genérico)
+                // Incluir password apenas se foi alterada
                 if (!empty($this->password)) {
                     $stmt = $this->db->prepare("
                         UPDATE User_ 
-                        SET username = :username, 
+                        SET name_ = :name, 
                             email = :email, 
-                            password_ = :password, 
-                            name_ = :name, 
+                            username = :username,
+                            password_ = :password,
+                            web_link = :web_link,
+                            phone_number = :phone_number,
+                            profile_photo = :profile_photo,
                             is_admin = :is_admin, 
-                            is_blocked = :is_blocked
+                            is_freelancer = :is_freelancer,
+                            currency = :currency,
+                            is_blocked = :is_blocked,
+                            night_mode = :night_mode
                         WHERE id = :id
                     ");
                     $params[':password'] = $this->password;
                 }
 
-                return $stmt->execute($params); // Execução SQL Statement
-            } 
-            
-            // Caso id não esteja definido (criação de Conta Nova)
-            else {
-                // Preparação do SQL Statement
+                return $stmt->execute($params);
+            } else {
+                // Criação de novo utilizador
                 $stmt = $this->db->prepare("
-                    INSERT INTO User_ (username, email, password_, name_, is_admin, is_blocked) 
-                    VALUES (:username, :email, :password, :name, :is_admin, :is_blocked)
+                    INSERT INTO User_ (name_, password_, email, username, web_link, 
+                                     phone_number, profile_photo, is_admin, is_freelancer, 
+                                     currency, is_blocked, night_mode) 
+                    VALUES (:name, :password, :email, :username, :web_link, 
+                           :phone_number, :profile_photo, :is_admin, :is_freelancer, 
+                           :currency, :is_blocked, :night_mode)
                 ");
 
-                // Execução SQL Statement, com respetivos parâmetros
                 $result = $stmt->execute([
-                    ':username' => $this->username,
-                    ':email' => $this->email,
-                    ':password' => $this->password,
                     ':name' => $this->name,
+                    ':password' => $this->password,
+                    ':email' => $this->email,
+                    ':username' => $this->username,
+                    ':web_link' => $this->webLink,
+                    ':phone_number' => $this->phoneNumber,
+                    ':profile_photo' => $this->profilePhoto,
                     ':is_admin' => $this->isAdmin ? 1 : 0,
-                    ':is_blocked' => $this->isBlocked ? 1 : 0
+                    ':is_freelancer' => $this->isFreelancer ? 1 : 0,
+                    ':currency' => $this->currency,
+                    ':is_blocked' => $this->isBlocked ? 1 : 0,
+                    ':night_mode' => $this->nightMode ? 1 : 0
                 ]);
 
-                // Atualiza a instância do Model, em caso de sucesso da operação anterior.
                 if ($result) {
                     $this->id = $this->db->lastInsertId();
                     return true;
                 }
                 return false;
             }
-        }
-
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao guardar utilizador: " . $e->getMessage());
             return false;
         }
     }
@@ -360,19 +282,15 @@ class User {
      * @return bool Verdadeiro se a operação for bem-sucedida.
      */
     public function delete() {
-        // Verifica se o id está definido na instância do Model
         if (!$this->id) {
             return false;
         }
 
-        // Prepara e Executa o SQl Statement para a eliminação
         try {
             $stmt = $this->db->prepare("DELETE FROM User_ WHERE id = :id");
             return $stmt->execute([':id' => $this->id]);
-        }
-
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao eliminar utilizador: " . $e->getMessage());
             return false;
         }
     }
@@ -398,6 +316,56 @@ class User {
     }
 
     /**
+     * Promove o utilizador a administrador.
+     * 
+     * @return bool Verdadeiro se a operação for bem-sucedida.
+     */
+    public function promoteToAdmin() {
+        $this->isAdmin = true;
+        return $this->save();
+    }
+
+    /**
+     * Remove privilégios de administrador do utilizador.
+     * 
+     * @return bool Verdadeiro se a operação for bem-sucedida.
+     */
+    public function demoteFromAdmin() {
+        $this->isAdmin = false;
+        return $this->save();
+    }
+
+    /**
+     * Define o utilizador como freelancer.
+     * 
+     * @return bool Verdadeiro se a operação for bem-sucedida.
+     */
+    public function setAsFreelancer() {
+        $this->isFreelancer = true;
+        return $this->save();
+    }
+
+    /**
+     * Remove o status de freelancer do utilizador.
+     * 
+     * @return bool Verdadeiro se a operação for bem-sucedida.
+     */
+    public function removeFreelancerStatus() {
+        $this->isFreelancer = false;
+        return $this->save();
+    }
+
+    /**
+     * Verifica se a password fornecida está correta.
+     * 
+     * @param string $password Password a verificar
+     * @return bool True se a password estiver correta
+     */
+    public function verifyPassword($password) {
+        return password_verify($password, $this->password);
+    }
+
+    /**
      * Procura um utilizador pelo ID.
      * 
      * @param PDO $db Instância da base de dados.
@@ -406,20 +374,16 @@ class User {
      */
     public static function findById($db, $id) {
         try {
-            // Preparação e Execução do SQL Statement.
             $stmt = $db->prepare("SELECT * FROM User_ WHERE id = :id");
             $stmt->execute([':id' => $id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Caso o resultado não seja null, cria a instânvia de User.
             if ($result) {
                 return self::createFromArray($db, $result);
             }
             return null;
-        } 
-        
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao procurar utilizador por ID: " . $e->getMessage());
             return null;
         }
     }
@@ -433,20 +397,16 @@ class User {
      */
     public static function findByUsername($db, $username) {
         try {
-            // Preparação e Execução do SQL Statement.
             $stmt = $db->prepare("SELECT * FROM User_ WHERE username = :username");
             $stmt->execute([':username' => $username]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Caso o resultado não seja null, cria a instância de User.
             if ($result) {
                 return self::createFromArray($db, $result);
             }
             return null;
-        }
-        
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao procurar utilizador por username: " . $e->getMessage());
             return null;
         }
     }
@@ -460,20 +420,16 @@ class User {
      */
     public static function findByEmail($db, $email) {
         try {
-            // Preparação e Execução do SQL Statement.
             $stmt = $db->prepare("SELECT * FROM User_ WHERE email = :email");
             $stmt->execute([':email' => $email]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Caso o resultado não seja null, cria a instância de User.
             if ($result) {
                 return self::createFromArray($db, $result);
             }
             return null;
-        } 
-        
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao procurar utilizador por email: " . $e->getMessage());
             return null;
         }
     }
@@ -486,21 +442,17 @@ class User {
      */
     public static function getAllUsers($db) {
         try {
-            // Preparação e Execução do SQL Statement.
-            $stmt = $db->prepare("SELECT * FROM User_");
+            $stmt = $db->prepare("SELECT * FROM User_ ORDER BY creation_date DESC");
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Para cada linha retornada, cria a instância de User adiciona ao array $users.
             $users = [];
             foreach ($results as $result) {
                 $users[] = self::createFromArray($db, $result);
             }
             return $users;
-        } 
-        
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao obter todos os utilizadores: " . $e->getMessage());
             return [];
         }
     }
@@ -513,38 +465,83 @@ class User {
      */
     public static function getAllBlockedUsers($db) {
         try {
-            // Preparação e Execução do SQL Statement.
-            $stmt = $db->prepare("SELECT * FROM User_ WHERE is_blocked = 1");
+            $stmt = $db->prepare("SELECT * FROM User_ WHERE is_blocked = 1 ORDER BY creation_date DESC");
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Para cada linha retornada, cria a instância de User adiciona ao array $users.
             $users = [];
             foreach ($results as $result) {
                 $users[] = self::createFromArray($db, $result);
             }
             return $users;
-        } 
-        
-        // Gestão de falhas na operação.
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
+            error_log("Erro ao obter utilizadores bloqueados: " . $e->getMessage());
             return [];
         }
     }
 
     /**
-     * Autentica um utilizador com username e password.
+     * Obtém todos os utilizadores administradores.
      * 
      * @param PDO $db Instância da base de dados.
-     * @param string $username username a ser utilizado para tentar a autenticação.
+     * @return array Lista de utilizadores administradores.
+     */
+    public static function getAllAdmins($db) {
+        try {
+            $stmt = $db->prepare("SELECT * FROM User_ WHERE is_admin = 1 ORDER BY creation_date DESC");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $users = [];
+            foreach ($results as $result) {
+                $users[] = self::createFromArray($db, $result);
+            }
+            return $users;
+        } catch (PDOException $e) {
+            error_log("Erro ao obter administradores: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Obtém todos os freelancers.
+     * 
+     * @param PDO $db Instância da base de dados.
+     * @return array Lista de freelancers.
+     */
+    public static function getAllFreelancers($db) {
+        try {
+            $stmt = $db->prepare("SELECT * FROM User_ WHERE is_freelancer = 1 ORDER BY creation_date DESC");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $users = [];
+            foreach ($results as $result) {
+                $users[] = self::createFromArray($db, $result);
+            }
+            return $users;
+        } catch (PDOException $e) {
+            error_log("Erro ao obter freelancers: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Autentica um utilizador com username/email e password.
+     * 
+     * @param PDO $db Instância da base de dados.
+     * @param string $login username ou email a ser utilizado para tentar a autenticação.
      * @param string $password password a ser utilizada para tentar a autenticação.
      * @return User|null Instância do User (autenticação teve sucesso) ou null (caso contrário).
      */
-    public static function authenticate($db, $username, $password) {
-        //Confirma que existe um User com o username fornecido.
-        $user = self::findByUsername($db, $username);
+    public static function authenticate($db, $login, $password) {
+        // Tentar encontrar por username ou email
+        $user = self::findByUsername($db, $login);
+        if (!$user) {
+            $user = self::findByEmail($db, $login);
+        }
 
-        //Confirma que a password fornecida, corresponde à guardada na DB (hashed).
+        // Verificar password
         if ($user && password_verify($password, $user->password)) {
             return $user;
         }
@@ -553,45 +550,101 @@ class User {
     }
 
     /**
+     * Conta o número total de utilizadores.
+     * 
+     * @param PDO $db Instância da base de dados.
+     * @return int Número total de utilizadores.
+     */
+    public static function countUsers($db) {
+        try {
+            $stmt = $db->prepare("SELECT COUNT(*) as count FROM User_");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)$result['count'];
+        } catch (PDOException $e) {
+            error_log("Erro ao contar utilizadores: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Conta o número de utilizadores registados hoje.
+     * 
+     * @param PDO $db Instância da base de dados.
+     * @return int Número de utilizadores registados hoje.
+     */
+    public static function countTodayRegistrations($db) {
+        try {
+            $stmt = $db->prepare("SELECT COUNT(*) as count FROM User_ WHERE DATE(creation_date) = DATE('now')");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)$result['count'];
+        } catch (PDOException $e) {
+            error_log("Erro ao contar registos de hoje: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    /**
      * Cria uma instância da classe User a partir de um array associativo.
      * 
      * @param PDO $db Instância da base de dados.
-     * @param array $array Array associativo com os dados do utilizador (fetch(PDO::FETCH_ASSOC)).
+     * @param array $array Array associativo com os dados do utilizador.
      * @return User Objeto User populado com os dados fornecidos.
      */
     private static function createFromArray($db, $array) {
         $user = new self($db);
 
-        // Atribuição dos dados principais obrigatórios
+        // Dados obrigatórios
         $user->setId($array['id']);
-        $user->username = $array['username'];
-        $user->email = $array['email'];
-        $user->password = $array['password_'];
-        $user->name = $array['name_'];
-        $user->isAdmin = (bool)$array['is_admin'];
-        $user->isBlocked = (bool)$array['is_blocked'];
+        $user->setName($array['name_']);
+        $user->setPasswordHash($array['password_']); // Usar hash direto, não re-hash
+        $user->setEmail($array['email']);
+        $user->setUsername($array['username']);
+        $user->setIsAdmin((bool)$array['is_admin']);
+        $user->setIsBlocked((bool)$array['is_blocked']);
+        $user->setIsFreelancer((bool)$array['is_freelancer']);
+        $user->setCurrency($array['currency']);
+        $user->setNightMode((bool)$array['night_mode']);
 
-        // Atribuição de campos opcionais, se existirem no resultado
-        if (isset($array['creation_date'])) {
-            $user->registerDate = $array['creation_date'];
-        }
+        // Dados opcionais
         if (isset($array['web_link'])) {
-            $user->webLink = $array['web_link'];
+            $user->setWebLink($array['web_link']);
         }
-        if (isset($array['is_freelancer'])) {
-            $user->isFreelancer = (bool)$array['is_freelancer'];
-        }
-        if (isset($array['bio'])) {
-            $user->bio = $array['bio'];
-        }
-        if (isset($array['currency'])) {
-            $user->currency = $array['currency'];
+        if (isset($array['phone_number'])) {
+            $user->setPhoneNumber($array['phone_number']);
         }
         if (isset($array['profile_photo'])) {
-            $user->profilePhoto = $array['profile_photo'];
+            $user->setProfilePhoto($array['profile_photo']);
+        }
+        if (isset($array['creation_date'])) {
+            $user->setCreationDate($array['creation_date']);
         }
 
         return $user;
+    }
+
+    /**
+     * Converte o objeto User num array associativo.
+     * 
+     * @return array Representação do utilizador em array.
+     */
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'name_' => $this->name,
+            'email' => $this->email,
+            'username' => $this->username,
+            'web_link' => $this->webLink,
+            'phone_number' => $this->phoneNumber,
+            'profile_photo' => $this->profilePhoto,
+            'is_admin' => $this->isAdmin,
+            'creation_date' => $this->creationDate,
+            'is_freelancer' => $this->isFreelancer,
+            'currency' => $this->currency,
+            'is_blocked' => $this->isBlocked,
+            'night_mode' => $this->nightMode
+        ];
     }
 }
 ?>

@@ -1,7 +1,15 @@
 <?php
-require_once(dirname(__FILE__)."/../../Utils/session.php");
-require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
-require_once(dirname(__FILE__)."/../../Controllers/userController.php");
+// Definir o caminho base absoluto
+define('BASE_PATH', dirname(dirname(__DIR__)));
+
+require_once(BASE_PATH . "/Utils/session.php");
+require_once(BASE_PATH . "/Templates/common_elems.php");
+require_once(BASE_PATH . "/Controllers/userController.php");
+
+// Iniciar sessão se não estiver iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Verificar se o utilizador está autenticado
 if (!isUserLoggedIn()) {
@@ -114,6 +122,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                                 <button type="submit" class="logout-btn">Bloquear</button>
                             <?php endif; ?>
                         </form>
+                        <a href="/Views/profile/editProfile.php?id=<?php echo $profileUserId; ?>" class="edit-profile-btn">Editar Perfil</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -136,6 +145,19 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                                 <p class="contact-value"><?php echo htmlspecialchars($userData['email']); ?></p>
                             </div>
                         </div>
+                        
+                        <!-- Mostrar telefone se disponível -->
+                        <?php if (!empty($userData['phone_number'])): ?>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <img src="/Images/site/footer/phone.png" alt="Telefone">
+                            </div>
+                            <div class="contact-text">
+                                <p class="contact-label">Telefone</p>
+                                <p class="contact-value"><?php echo htmlspecialchars($userData['phone_number']); ?></p>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                         
                         <!-- Mostrar moeda preferida apenas no próprio perfil -->
                         <div class="contact-item">
@@ -165,26 +187,37 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                         </div>
                         <?php endif; ?>
                         
-                        <?php if (!$isOwnProfile && !$userData['web_link']): ?>
+                        <?php if (!$isOwnProfile && !$userData['web_link'] && empty($userData['phone_number'])): ?>
                         <p class="bio-empty">Não existem informações públicas disponíveis.</p>
                         <?php endif; ?>
                     </div>
 
-                    <!-- Biografia e detalhes -->
+                    <!-- Informações adicionais -->
                     <div class="profile-details">
-                        <h2>Sobre <?php echo $isOwnProfile ? 'Mim' : ''; ?></h2>
+                        <h2>Informações Adicionais</h2>
                         
                         <div class="bio-section">
-                            <h3>Biografia</h3>
+                            <h3>Detalhes da Conta</h3>
                             <div class="bio-content">
-                                <?php if ($userData['bio']): ?>
-                                    <?php echo nl2br(htmlspecialchars($userData['bio'])); ?>
-                                <?php else: ?>
-                                    <p class="bio-empty">
-                                        <?php echo $isOwnProfile ? 
-                                            'Ainda não adicionou uma biografia...' : 
-                                            'Este utilizador ainda não adicionou uma biografia...'; ?>
-                                    </p>
+                                <p><strong>Membro desde:</strong> <?php echo date('d/m/Y', strtotime($userData['creation_date'])); ?></p>
+                                
+                                <?php if (!empty($userData['phone_number']) && !$isOwnProfile): ?>
+                                <p><strong>Telefone:</strong> <?php echo htmlspecialchars($userData['phone_number']); ?></p>
+                                <?php endif; ?>
+                                
+                                <p><strong>Tipo de conta:</strong> 
+                                    <?php 
+                                    $accountTypes = [];
+                                    if ($userData['is_admin']) $accountTypes[] = 'Administrador';
+                                    if ($userData['is_freelancer']) $accountTypes[] = 'Freelancer';
+                                    if (empty($accountTypes)) $accountTypes[] = 'Utilizador Regular';
+                                    echo implode(', ', $accountTypes);
+                                    ?>
+                                </p>
+                                
+                                <?php if ($isOwnProfile): ?>
+                                <p><strong>Moeda preferida:</strong> <?php echo htmlspecialchars($currencyName); ?></p>
+                                <p><strong>Modo noturno:</strong> <?php echo $userData['night_mode'] ? 'Ativado' : 'Desativado'; ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -198,10 +231,6 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                             </a>
                         </div>
                         <?php endif; ?>
-
-                        <div class="register-info">
-                            <p>Membro desde <?php echo date('d/m/Y', strtotime($userData['creation_date'])); ?></p>
-                        </div>
                     </div>
                 </div>
             </div>
