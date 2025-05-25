@@ -1,0 +1,453 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+  font-family: 'Montserrat', sans-serif;
+  color: #121638;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Container Principal */
+.product-container {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1800px;
+  height: 400px;
+  padding: 30px;
+  gap: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+  .product-container {
+    flex-direction: column;
+    height: auto;
+    padding: 20px 50px 20px 20px;
+    box-sizing: border-box;
+  }
+
+  .product-image-side,
+  .product-info-side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-image,
+  .product-info {
+    width: 100%;
+    height: auto;
+    flex: none;
+  }
+
+  .image-box,
+  .product-info > div {
+    height: auto;
+    width: 100%;
+  }
+
+  .product-info-side > div,
+  .product-description,
+  .product-advertiser,
+  .Report {
+    width: 100%;
+  }
+
+  .product-image {
+    min-height: 200px;
+  }
+
+  .image-box {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-image-side > div {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+/* Imagem do Produto */
+.product-image {
+  flex: 0 0 70%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+  height: 500px;
+  overflow: hidden;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  width: 800px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 8px
+}
+
+
+.image-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 15px;
+  margin: 5px;
+  font-size: 20px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.left-btn {
+  left: 10px;
+}
+
+.right-btn {
+  right: 10px;
+}
+
+.image-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Informações do Produto */
+.product-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-info button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+  width: 100%;
+  white-space: nowrap;
+  height: 70%;
+}
+
+.product-info button:hover {
+  background-color: #3a7bc8;;
+  transform: scale(1.05);
+}
+
+.product-info button:active {
+  transform: scale(0.98);
+}
+
+/* Estrutura dos Blocos */
+.product-image-side > div + div,
+.product-info-side > div + div {
+  margin-top: 20px;
+}
+
+.product-image-side > div,
+.product-info-side > div {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.13);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Categorias */
+.categories {
+  display: flex;
+  gap: 10px;
+}
+
+.categories > div {
+  font-size: x-small;
+  border: 1px solid black;
+  padding: 6px 12px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  user-select: none;
+}
+
+/* Texto e Descrição */
+.product-description {
+  font-size: small;
+}
+
+h2 {
+  max-width: 320px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  color: #4a90e2
+}
+
+h6 {
+  font-size: xx-small;
+  color: gray;
+  margin: 0;
+}
+
+/* Anunciante e Reportar */
+.product-advertiser {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  padding: 8px 0;
+  gap: 8px;
+}
+
+.product-advertiser p {
+  margin: 0;
+}
+
+.user-icon {
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ebebeb;
+}
+
+.Report {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.flag-image {
+  width: 30px;
+  height: auto;
+}
+
+/*---------------------- Popup de mensagens ----------------------*/
+
+.message-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  height: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.popup-header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+#minimizeBtn,
+.popup-close-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.popup-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.message-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  gap: 10px;
+  padding-right: 4px;
+}
+
+.message-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  flex-shrink: 0;
+  border-top: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.message-input textarea {
+  flex: 1;
+  height: 40px;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  transition: border 0.2s ease;
+  box-sizing: border-box;
+}
+
+.message-input textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.message-input button {
+  padding: 6px 12px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.message-input button:hover {
+  background-color: #357ac9;
+}
+
+.popup-close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.message-bubble {
+  padding: 10px 12px;
+  margin: 6px;
+  border-radius: 12px;
+  max-width: 75%;
+  font-size: 14px;
+  position: relative;
+  word-wrap: break-word;
+  background-color: #e1f0ff;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message-popup.minimized {
+  width: 250px;
+  height: 40px;
+  overflow: visible;
+  border-radius: 12px 12px 12px 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+.message-popup.minimized .popup-body,
+.message-popup.minimized .message-input {
+  display: none;
+}
+
+.message-popup.minimized .popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.message-popup.minimized #minimizeBtn {
+  display: none;
+}
+
+#minimizeBtn,
+.popup-close-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#minimizeBtn:hover,
+.popup-close-btn:hover {
+  color: #757575;
+  transform: scale(1.3);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.mensagem-enviada, .mensagem-recebida {
+  padding: 10px 12px;
+  margin: 6px;
+  border-radius: 12px;
+  max-width: 75%;
+  font-size: 14px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.mensagem-enviada {
+  background-color: #e1f0ff;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.mensagem-recebida {
+  background-color: #b1d7fc;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.message-time {
+  display: block;
+  font-size: 9px;
+  color: #767676;
+  margin-top: 5px;
+  text-align: right;
+}

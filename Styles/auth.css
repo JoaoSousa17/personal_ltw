@@ -1,0 +1,113 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #7ee7a1, #1257cf);
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    box-sizing: border-box;
+}
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.tab {
+    position: relative;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: normal;
+    flex: 1;
+}
+
+.tab.active {
+    font-weight: bold;
+}
+
+.tab-underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    width: 30%;
+    background-color: #007bff;
+    transition: left 0.3s ease;
+    left: 0;
+    transform: translateX(0%);
+    pointer-events: none;
+}
+
+.input-box {
+    width: 85%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.pass-box {
+    width: 78%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.btn {
+    width: 90%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--hover-color, #0056b3);
+    transform: translateY(-3px);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+.hidden {
+    display: none;
+}
+p{
+    font-size: 12px;
+    display: flex;
+    justify-content: right;
+    padding-right: 20px;
+}
+
+.fa-eye, .fa-eye-slash {
+    cursor: pointer;
+    transition: color 0.4s ease, transform 0.3s ease;
+    color: #333;
+}
+
+.fa-eye:hover,
+.fa-eye-slash:hover {
+    color: #888;
+}
+
+.fa-eye:active,
+.fa-eye-slash:active {
+    transform: scale(1.3);
+}

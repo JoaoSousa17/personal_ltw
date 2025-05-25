@@ -1,0 +1,62 @@
+<?php
+require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
+require_once(dirname(__FILE__)."/../../Templates/adminPages_elems.php");
+
+// Processar promoção de usuário para admin
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promote_id'])) {
+    $userId = $_POST['promote_id'];
+    $user = getUserById($userId);
+    
+    if ($user) {
+        // Atualizar o usuário para administrador
+        $updateData = ['is_admin' => true];
+        $result = updateUser($userId, $updateData);
+        
+        // Redirecionar para evitar reenvio do formulário
+        header("Location: " . $_SERVER['PHP_SELF'] . "?promoted=1");
+        exit;
+    }
+}
+
+// Obter todos os usuários administradores
+$admins = [];
+$allUsers = getAllUsers();
+foreach ($allUsers as $user) {
+    if ($user->getIsAdmin()) {
+        $admins[] = $user;
+    }
+}
+
+// Verificar se há uma busca
+$searchTerm = '';
+$searchResults = [];
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $searchResults = searchUsers($searchTerm);
+}
+
+drawHeader("Handee - Controle de Administradores", ["/Styles/admin.css", "/Styles/users.css", "/Styles/admin_control.css"]);
+?>
+<main class="admin-control-container">
+    <?php drawSectionHeader("Controle de Administradores", "Gerencie os usuários administradores do sistema", true); ?>
+    
+    <?php if (isset($_GET['promoted'])): ?>
+    <div class="alert alert-success">
+        Usuário promovido a administrador com sucesso!
+    </div>
+    <?php endif; ?>
+
+    <!-- Tabela de administradores -->
+    <?php drawSectionTitle('Administradores Atuais') ?>
+    <?php drawAdminTable($admins) ?>
+
+    <!-- Seção para adicionar novos administradores -->
+    <?php drawSectionTitle('Promover Usuário a Administrador') ?>
+
+    <!-- Barra de pesquisa -->
+    <?php drawSearchBar($searchTerm) ?>
+
+    <!-- Resultados da pesquisa -->
+    <?php drawSearchResultTable($searchTerm, $searchResults) ?>
+</main>
+<?php drawFooter(); ?>

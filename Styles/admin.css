@@ -1,0 +1,1558 @@
+/* 
+* Admin Panel - Master CSS File
+* Organized by component type for better maintainability
+*/
+
+/* ===== VARIABLES ===== */
+:root {
+    /* Colors */
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --text-color: #333;
+    --hover-color: #3a7bc8;
+    --detail-color: #97AED4;
+    --boxShadow-color: rgba(0, 0, 0, 0.1);
+    
+    /* Status Colors */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --inactive-color: #9e9e9e;
+    
+    /* Specific Status */
+    --blocked-color: #ff6b6b;
+    --active-color: #28a745;
+    --pending-color: #ffc107;
+    --approved-color: #28a745;
+    --rejected-color: #dc3545;
+    
+    /* Background Colors */
+    --reason-bg-color: rgba(220, 53, 69, 0.05);
+    --message-bg-color: rgba(74, 144, 226, 0.05);
+  }
+  
+  /* ===== LAYOUT COMPONENTS ===== */
+  /* Main Container */
+  .admin-container, .adminGeneral-container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .adminGeneral-container{
+    max-width: 1400px;
+    width: 90%;
+  }
+
+  /* Panels & Row Layout */
+  .admin-panels-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .admin-row {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  .admin-row.main-row {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* ===== CARD COMPONENTS ===== */
+  /* Admin Card - Base */
+  .admin-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--boxShadow-color);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex: 1;
+    min-height: 150px;
+    display: flex;
+  }
+  
+  .admin-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Card Size Variations */
+  .admin-card.wide-card {
+    flex: 2;
+  }
+  
+  .admin-card.narrow-card, 
+  .admin-card {
+    flex: 1;
+  }
+  
+  .admin-card.full-width {
+    width: 100%;
+  }
+  
+  /* Card Content */
+  .admin-card a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    color: var(--text-color);
+    text-decoration: none;
+  }
+  
+  .admin-card .card-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .admin-card .card-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
+  
+  .admin-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+  
+  /* ===== TABLE COMPONENTS ===== */
+  /* Base Table Styles */
+  .newsletter-table-container,
+  .blocked-users-table-container,
+  .users-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px var(--boxShadow-color);
+    border-radius: 10px;
+  }
+  
+  .newsletter-table-container,
+  .blocked-users-table-container {
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 100px;
+  }
+  
+  .newsletter-table,
+  .blocked-users-table,
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Table Headers */
+  .newsletter-table thead,
+  .blocked-users-table thead,
+  .users-table thead {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .newsletter-table th,
+  .blocked-users-table th,
+  .users-table th {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+  }
+  
+  /* Table Cells */
+  .newsletter-table td,
+  .blocked-users-table td,
+  .users-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* Table Row Effects */
+  .newsletter-table tbody tr:hover,
+  .blocked-users-table tbody tr:hover,
+  .users-table tbody tr:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  .newsletter-table tbody tr:last-child td,
+  .blocked-users-table tbody tr:last-child td,
+  .users-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Status & Empty Field Styling */
+  .status-blocked {
+    display: inline-block;
+    background-color: var(--blocked-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  
+  .empty-field {
+    color: var(--inactive-color);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  
+  /* No Content Messages */
+  .no-subscriptions,
+  .no-blocked-users,
+  .no-appeals,
+  .no-users {
+    text-align: center;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    color: var(--text-color);
+  }
+  
+  /* ===== APPEALS COMPONENTS ===== */
+  /* Appeals Grid */
+  .appeals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+  }
+  
+  /* Appeal Card */
+  .appeal-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--boxShadow-color);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .appeal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Appeal Card Header */
+  .appeal-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid #eee;
+  }
+  
+  .appeal-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    flex: 1;
+  }
+  
+  /* Appeal Status Badge */
+  .appeal-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .appeal-status.pending {
+    background-color: var(--pending-color);
+    color: #212529;
+  }
+  
+  .appeal-status.approved {
+    background-color: var(--approved-color);
+    color: white;
+  }
+  
+  .appeal-status.rejected {
+    background-color: var(--rejected-color);
+    color: white;
+  }
+  
+  /* Appeal Card Content */
+  .appeal-card-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .user-info {
+    background-color: var(--message-bg-color);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .block-reason {
+    background-color: var(--reason-bg-color);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .reason-label, .message-label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 5px;
+  }
+  
+  .reason-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .reason-main {
+    font-weight: 500;
+  }
+  
+  .reason-extra {
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+  
+  .reason-none {
+    color: #6c757d;
+    font-style: italic;
+  }
+  
+  .appeal-message {
+    background-color: var(--message-bg-color);
+    padding: 12px;
+    border-radius: 8px;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .appeal-message p {
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  .appeal-date {
+    color: #6c757d;
+    font-size: 0.85rem;
+    text-align: right;
+    margin-top: 5px;
+  }
+  
+  /* Appeal Card Footer & Buttons */
+  .appeal-card-footer {
+    padding: 15px 20px;
+    background-color: var(--secondary-color);
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .appeal-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .appeal-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  .appeal-btn.approve {
+    background-color: var(--approved-color);
+    color: white;
+  }
+  
+  .appeal-btn.approve:hover {
+    background-color: #218838;
+  }
+  
+  .appeal-btn.reject {
+    background-color: var(--rejected-color);
+    color: white;
+  }
+  
+  .appeal-btn.reject:hover {
+    background-color: #c82333;
+  }
+  
+  /* Appeal Filters */
+  .appeal-filter-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .appeal-filter-btn {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+  }
+  
+  .appeal-filter-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .appeal-filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* ===== SEARCH COMPONENTS ===== */
+  /* Search Container */
+  .search-container {
+    margin: 1.5rem auto 2rem;
+    max-width: 600px;
+  }
+  
+  .search-form {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 12px 20px;
+    padding-right: 50px;
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  
+  .search-input:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+  }
+  
+  .search-button {
+    position: absolute;
+    right: -72px;
+    top: 0;
+    height: 100%;
+    width: 50px;
+    background-color: var(--primary-color);
+    border: none;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-button:hover {
+    background-color: var(--hover-color);
+  }
+  
+  .search-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+  
+  /* Search Results Info */
+  .search-results-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  
+  .clear-search {
+    margin-left: 10px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .clear-search:hover {
+    text-decoration: underline;
+  }
+  
+  /* ===== BUTTON & LINK STYLES ===== */
+  /* Delete Button */
+  .delete-button {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-button:hover {
+    background-color: #e74c3c;
+  }
+  
+  /* Service Button */
+  .service-button {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .service-button:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Back Link */
+  .back-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Web Links & Icons */
+  .web-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: lightgray;
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .web-link:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+  }
+  
+  .link-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+  
+  /* Status Icons */
+  .icon-yes, 
+  .icon-no, 
+  .icon-blocked, 
+  .icon-active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  
+  .icon-yes {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: var(--success-color);
+  }
+  
+  .icon-no {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: var(--danger-color);
+  }
+  
+  .icon-blocked {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: var(--blocked-color);
+  }
+  
+  .icon-active {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: var(--active-color);
+  }
+  
+  .status-icon {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+  
+  /* ===== ALERTS ===== */
+  .alert-success,
+  .alert-error {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .alert-success {
+    background-color: rgba(40, 167, 69, 0.2);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+  }
+  
+  .alert-error {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+  }
+  
+  /* ===== RESPONSIVE DESIGN ===== */
+  /* Large Screens (992px - 1200px) */
+  @media (max-width: 1200px) {
+    .users-table th,
+    .users-table td {
+      padding: 12px 10px;
+      font-size: 0.95rem;
+    }
+    
+    .status-icon, .link-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  /* Medium Screens (768px - 992px) */
+  @media (max-width: 992px) {
+    .admin-row {
+      flex-wrap: wrap;
+    }
+    
+    .admin-card {
+      min-width: 250px;
+      flex: 1 1 45%;
+    }
+    
+    .admin-card.wide-card,
+    .admin-card.narrow-card {
+      flex: 1 1 100%;
+    }
+    
+    .appeals-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .users-table th,
+    .users-table td {
+      padding: 10px 8px;
+      font-size: 0.9rem;
+    }
+    
+    .search-container {
+      max-width: 500px;
+    }
+  }
+  
+  /* Small Screens (480px - 768px) */
+  @media (max-width: 768px) {
+    .admin-card {
+      flex: 1 1 100%;
+    }
+    
+    .admin-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .newsletter-table-container,
+    .blocked-users-table-container {
+      width: 90%;
+    }
+    
+    .newsletter-table th,
+    .newsletter-table td,
+    .blocked-users-table th,
+    .blocked-users-table td {
+      padding: 10px;
+    }
+    
+    .delete-button {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    
+    .appeals-container {
+      width: 95%;
+    }
+    
+    .appeals-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .appeal-filter-container {
+      flex-wrap: wrap;
+    }
+    
+    .appeal-filter-btn {
+      margin-bottom: 10px;
+    }
+    
+    .appeal-card-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .appeal-status {
+      margin-top: 10px;
+    }
+    
+    .users-container {
+      width: 95%;
+    }
+    
+    .users-table {
+      font-size: 0.85rem;
+    }
+    
+    .users-table th {
+      font-size: 0.75rem;
+    }
+    
+    .search-input {
+      padding: 10px 40px 10px 15px;
+      font-size: 14px;
+    }
+    
+    .search-container {
+      max-width: 100%;
+    }
+    
+    .users-table th,
+    .users-table td {
+      padding: 8px 6px;
+      font-size: 0.85rem;
+    }
+  }
+  
+  /* Extra Small Screens (Under 480px) */
+  @media (max-width: 480px) {
+    .newsletter-table,
+    .blocked-users-table {
+      font-size: 0.9rem;
+    }
+    
+    .newsletter-table th,
+    .newsletter-table td,
+    .blocked-users-table th,
+    .blocked-users-table td {
+      padding: 8px;
+    }
+    
+    .appeal-card-footer {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .appeal-btn {
+      width: 100%;
+    }
+  }
+  
+  /* Special for very small screens */
+  @media (max-width: 600px) {
+    .users-table-container::after {
+      content: "≪ Deslize para ver mais ≫";
+      display: block;
+      text-align: center;
+      padding: 10px;
+      color: #666;
+      font-size: 0.8rem;
+      background-color: #f8f9fa;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
+
+  /* Estilos para a página de controle de administradores */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --text-color: #333;
+    --hover-color: #3a7bc8;
+    --detail-color: #97AED4;
+    --boxShadow-color: #EEEEEE;
+    --danger-color: #ff6b6b;
+    --success-color: #4CAF50;
+    --warning-color: #FFC107;
+    --inactive-color: #9e9e9e;
+  }
+  
+  .admin-control-container {
+    width: 90%;
+    margin: 40px auto;
+  }
+  
+  /* Estilos para os títulos de seção */
+  .section-title {
+    margin: 40px 0 20px;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 15px;
+  }
+  
+  .section-title h3 {
+    font-size: 1.4rem;
+    color: var(--text-color);
+    margin: 0;
+  }
+  
+  /* Botão de promover a admin */
+  .promote-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .promote-button:hover {
+    background-color: var(--hover-color);
+  }
+  
+  .already-admin {
+    color: var(--inactive-color);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  
+  /* Alerta de sucesso */
+  .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+  
+  /* Tabela de usuários (específica para esta página) */
+  .users-table-container {
+    margin-bottom: 40px;
+  }
+  
+  .users-table th:last-child,
+  .users-table td:last-child {
+    text-align: center;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .admin-control-container {
+      width: 95%;
+    }
+    
+    .section-title h3 {
+      font-size: 1.2rem;
+    }
+    
+    .promote-button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .section-title {
+      padding-left: 10px;
+    }
+    
+    .section-title h3 {
+      font-size: 1.1rem;
+    }
+  }
+
+  /* Estilos para a página de gestão de categorias */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --text-color: #333;
+    --hover-color: #3a7bc8;
+    --detail-color: #97AED4;
+    --boxShadow-color: #EEEEEE;
+    --danger-color: #ff6b6b;
+    --success-color: #4CAF50;
+    --warning-color: #FFC107;
+    --inactive-color: #9e9e9e;
+  }
+  
+  .category-management-container {
+    width: 90%;
+    margin: 40px auto;
+  }
+  
+  /* Estilos para os títulos de seção */
+  .section-title {
+    margin: 40px 0 20px;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 15px;
+  }
+  
+  .section-title h3 {
+    font-size: 1.4rem;
+    color: var(--text-color);
+    margin: 0;
+  }
+  
+  /* Tabela de categorias */
+  .category-table-container {
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--boxShadow-color);
+    margin-bottom: 40px;
+  }
+  
+  .category-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .category-table th,
+  .category-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .category-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .category-table tr:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  .category-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Miniatura da imagem da categoria */
+  .category-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .no-image {
+    font-style: italic;
+    color: var(--inactive-color);
+  }
+  
+  /* Botão de remover */
+  .remove-button {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .remove-button:hover {
+    background-color: #e53935;
+  }
+  
+  /* Formulário para adicionar categoria */
+  .add-category-form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px var(--boxShadow-color);
+  }
+  
+  .add-category-form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    outline: none;
+  }
+  
+  .form-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: var(--inactive-color);
+  }
+  
+  .form-actions {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .submit-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: var(--hover-color);
+  }
+  
+  /* Alerta de sucesso */
+  .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+  
+  /* Mensagem quando não há categorias */
+  .no-categories {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-color);
+    font-size: 1.2rem;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .category-management-container {
+      width: 95%;
+    }
+    
+    .section-title h3 {
+      font-size: 1.2rem;
+    }
+    
+    .category-table th,
+    .category-table td {
+      padding: 12px 10px;
+    }
+    
+    .category-thumbnail {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .remove-button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+    
+    .add-category-form-container {
+      padding: 20px;
+    }
+    
+    .form-input {
+      padding: 10px;
+    }
+    
+    .submit-button {
+      padding: 10px 20px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .category-thumbnail {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .form-group small {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Botões de ação para gerenciamento de usuários */
+.action-button {
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+.block-button {
+  background-color: var(--warning-color);
+  color: #212529;
+}
+
+.block-button:hover {
+  background-color: #e0a800;
+}
+
+.unblock-button {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.unblock-button:hover {
+  background-color: #218838;
+}
+
+.delete-button {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Ajustes responsivos para os botões */
+@media (max-width: 992px) {
+  .action-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .action-button {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Modal de Bloqueio */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-modal:hover {
+  color: var(--danger-color);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--text-color);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+#blockModalUsername {
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+/* Botões de Ação do Modal */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.cancel-button {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+.block-confirm-button {
+  background-color: var(--danger-color);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.block-confirm-button:hover {
+  background-color: #c82333;
+}
+
+/* Estilos do formulário */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 15% auto;
+    padding: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .cancel-button,
+  .block-confirm-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Estilos para exibição de motivo de bloqueio */
+.block-reason-display {
+  position: relative;
+}
+
+.reason-type {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.reason-info-toggle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.reason-info-toggle:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+}
+
+.reason-extra-info {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--secondary-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #666;
+  word-break: break-word;
+}
+
+/* Modal de Bloqueio */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-modal:hover {
+  color: var(--danger-color);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--text-color);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+#blockModalUsername {
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+/* Botões de Ação do Modal */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.cancel-button {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+.block-confirm-button {
+  background-color: var(--danger-color);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.block-confirm-button:hover {
+  background-color: #c82333;
+}
+
+/* Estilos do formulário */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 15% auto;
+    padding: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .cancel-button,
+  .block-confirm-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

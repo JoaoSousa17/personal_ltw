@@ -1,0 +1,213 @@
+/* Estilos para a página principal */
+
+/*----------------
+Banner Principal
+----------------*/
+.main-banner {
+    width: 90%;
+    margin: 30px auto;
+    height: 700px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../Images/site/mainPage/banner.png');
+    background-position: center;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.banner-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.banner-content p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.banner-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--primary-color);
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.banner-button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+/*----------------
+Títulos de Secção
+----------------*/
+.featured-services {
+    width: 90%;
+    margin: 50px auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/*----------------
+Carrosseis
+----------------
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .items {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+  }
+  
+  .items .item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 300ms ease-in-out;
+    z-index: -1;
+    opacity: 0;
+  }
+  
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .item.active {
+    opacity: 1;
+    z-index: 99;
+    box-shadow: 0px 0px 105px -35px rgba(0, 0, 0, 0.75);
+  }
+  
+  .item.prev {
+    z-index: 2;
+    opacity: 0.25;
+    transform: translate(-125%, -50%);
+  }
+  
+  .item.next {
+    z-index: 2;
+    opacity: 0.25;
+    transform: translate(25%, -50%);
+  }
+  
+  .items .button-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 275px;
+    z-index: 100;
+  }
+  
+  .button-container .button {
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.75;
+    transition: all 300ms ease-in-out;
+  }
+  
+  .button-container .button:hover {
+    opacity: 1;
+  }
+  
+  .button-container .button:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 1);
+    border-radius: 50%;
+    z-index: -99;
+  }
+  
+  .button-container .button:nth-child(1) {
+    float: left;
+  }
+  
+  .button-container .button:nth-child(2) {
+    float: right;
+  }*/
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .carousel-item {
+        flex: 0 0 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-banner {
+        height: 300px;
+    }
+    
+    .banner-content h1 {
+        font-size: 2rem;
+    }
+    
+    .banner-content p {
+        font-size: 1rem;
+    }
+    
+    .carousel-item {
+        flex: 0 0 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-banner {
+        height: 250px;
+    }
+    
+    .banner-content h1 {
+        font-size: 1.8rem;
+    }
+}
+
+.aux{
+  color: white;
+  border-radius: 10px;
+  background-color: var(--primary-color);
+  text-align: center;
+  padding: 10px 0;
+}
+
+.a-aux{
+  margin: -70px auto 50px auto;
+  display: block;
+  width: 15%;
+}
