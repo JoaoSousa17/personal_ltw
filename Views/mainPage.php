@@ -1,6 +1,15 @@
 <?php
+// Incluir o arquivo de gestão de sessões
+require_once(dirname(__FILE__)."/../Utils/session.php");
 require_once(dirname(__FILE__)."/../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../Templates/special_elems.php");
+
+// Verificar e obter dados da sessão usando as funções do utils
+$currentUser = getCurrentUser();
+$isLoggedIn = isUserLoggedIn();
+$isAdmin = isUserAdmin();
+$cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+
 drawHeader("Handee - Main Page", ["/Styles/main_page.css", "/Styles/carousel.css"]);
 ?>
 <main>

@@ -1,6 +1,21 @@
 <?php
+require_once(dirname(__FILE__)."/../../Utils/session.php");
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Templates/adminPages_elems.php");
+
+// Verificar se o utilizador está autenticado
+if (!isUserLoggedIn()) {
+    $_SESSION['error'] = 'Deve fazer login para aceder a esta página.';
+    header("Location: /Views/auth.php");
+    exit();
+}
+
+// Verificar se o utilizador é administrador
+if (!isUserAdmin()) {
+    $_SESSION['error'] = 'Não tem permissão para aceder ao painel de administração.';
+    header("Location: /Views/mainPage.php");
+    exit();
+}
 
 drawHeader("Handee - Painel de Admin", ["/Styles/admin.css"]);
 ?>

@@ -1,39 +1,40 @@
 <?php
-session_start();
+require_once(dirname(__FILE__)."/../../Utils/session.php");
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Controllers/userController.php");
+
+// Verificar se o utilizador está autenticado
+if (!isUserLoggedIn()) {
+    $_SESSION['error'] = 'Deve fazer login para aceder ao perfil.';
+    header("Location: /Views/auth.php");
+    exit();
+}
 
 // Verificar se foi passado um ID de utilizador via GET
 $profileUserId = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-// Se não foi passado ID e o utilizador está autenticado, mostrar o próprio perfil
-if (!$profileUserId && isset($_SESSION['user_id'])) {
-    $profileUserId = $_SESSION['user_id'];
-}
-
-// Se não há ID definido, redirecionar para a página principal
+// Se não foi passado ID, mostrar o próprio perfil
 if (!$profileUserId) {
-    header("Location: /Views/mainPage.php");
-    exit();
+    $profileUserId = getCurrentUserId();
 }
 
 // Obter os dados do utilizador a visualizar
 $profileUser = getUserById($profileUserId);
 
 if (!$profileUser) {
+    $_SESSION['error'] = 'Utilizador não encontrado.';
     header("Location: /Views/mainPage.php");
     exit();
 }
 
 // Verificar se é o próprio perfil
-$isOwnProfile = isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $profileUserId);
-$isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
-$isLoggedIn = isset($_SESSION['user_id']);
+$isOwnProfile = (getCurrentUserId() == $profileUserId);
+$isAdmin = isUserAdmin();
+$isLoggedIn = isUserLoggedIn();
 
 // Processar logout se solicitado (apenas no próprio perfil)
 if ($isOwnProfile && isset($_POST['logout'])) {
-    logoutUser();
-    header("Location: /Views/mainPage.php");
+    header("Location: /Controllers/authController.php?action=logout");
     exit();
 }
 
@@ -95,7 +96,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($profileUser->getName()), ["
                 <div class="profile-actions">
                     <?php if ($isOwnProfile): ?>
                         <!-- Ações para o próprio perfil -->
-                        <a href="/Pages/editProfile.php" class="edit-profile-btn">Editar Perfil</a>
+                        <a href="/Views/profile/editProfile.php" class="edit-profile-btn">Editar Perfil</a>
                         <form method="post" style="display: inline;">
                             <button type="submit" name="logout" class="logout-btn">Terminar Sessão</button>
                         </form>

@@ -11,10 +11,16 @@ Usados em todas as páginas
  * @param array $styles  Lista de estilos CSS a serem incluídos.
  */
 function drawHeader($title, $styles){
-    // Verificar se existe sessão ativa
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    } ?>
+    // Incluir as funções de sessão
+    require_once(dirname(__FILE__)."/../Utils/session.php");
+    
+    // Obter dados da sessão usando as funções do utils
+    $currentUser = getCurrentUser();
+    $isLoggedIn = isUserLoggedIn();
+    $isAdmin = isUserAdmin();
+    $cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+    $userId = getCurrentUserId();
+    ?>
     <!DOCTYPE html>
     <html lang="pt">
 
@@ -62,27 +68,27 @@ function drawHeader($title, $styles){
                 <!-- Botão do carrinho --> 
                 <a href="/Views/cart.php" id="carrinho-button"> 
                     <img src="/Images/site/header/carrinho-de-compras.png" alt="Carrinho" class="top-icons"> 
-                    <div id="cart-badge" <?php if($cartCount == 0) echo 'style="display: none;"'; ?>>  <!--Não apresenta no caso de não ter artigos no carrinho--> 
-                        <?php echo $cartCount; ?> <!--Escreve o número de artigos no carrinho--> 
+                    <div id="cart-badge" <?php if($cartCount == 0) echo 'style="display: none;"'; ?>>
+                        <?php echo $cartCount; ?>
                     </div> 
                     <div id="cart-label">Carrinho</div> 
                 </a>
 
                 <!-- Botão de Notificações -->
-                <a href="" id="notifications-button">
+                <a href="/Views/messages.php" id="notifications-button">
                     <img src="/Images/site/header/notifications-icon.png" alt="" class="top-icons">
-                    <div id="notification-label">Notificações</div>
+                    <div id="notification-label">Mensagens</div>
                 </a>
                 
                 <!-- Botão de Perfil -->
                 <div id="profile-button">
-                    <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php if ($isLoggedIn): ?>
                         <a href="/Views/profile/profile.php">
-                            <img src="" alt=""> <!-- Colocar img do profile -->
+                            <img src="/Images/site/header/genericProfile.png" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%;">
                         </a>
                     <?php else: ?>
                         <a href="/Views/auth.php">
-                            <img src="" alt=""> <!-- Colocar img do profile -->
+                            <img src="/Images/site/header/genericProfile.png" alt="Login" style="width: 100%; height: 100%; border-radius: 50%;">
                         </a>
                     <?php endif; ?>
                 </div>
@@ -93,20 +99,27 @@ function drawHeader($title, $styles){
                         <img src="/Images/site/header/dropDown-icon.png" alt="" class="top-icons">
                     </button>
                     <div id="dropdown-content">
-                        <a href="/">Home</a>
-                        <a href="/sobre.html">Sobre</a>
-                        <a href="/contacto.html">Contacto</a>
-                        <a href="/servicos.html">Serviços</a>
-                        <a href="/blog.html">Blog</a>
-                        <?php if (isset($_SESSION['user_id'])): ?>
+                        <!-- Links sempre visíveis -->
+                        <a href="/Views/mainPage.php">Home</a>
+                        <a href="/Views/staticPages/aboutUS.php">Sobre</a>
+                        <a href="/Views/staticPages/contact.php">Contacto</a>
+                        <a href="/Views/staticPages/services.php">Serviços</a>
+                        <a href="/Views/categories.php">Categorias</a>
+                        <a href="/Views/staticPages/faq.php">FAQ</a>
+                        
+                        <?php if ($isLoggedIn): ?>
+                            <!-- Opções para utilizador autenticado -->
                             <a href="/Views/profile/profile.php">O Meu Perfil</a>
                             <a href="/Views/profile/editProfile.php">Editar Perfil</a>
-                            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="/Views/messages.php">Mensagens</a>
+                            <?php if ($isAdmin): ?>
                                 <a href="/Views/admin/adminPannel.php">Admin</a>
                             <?php endif; ?>
+                            <a href="/Controllers/authController.php?action=logout">Terminar Sessão</a>
                         <?php else: ?>
-                            <a href="/Views/auth/login.php">Login</a>
-                            <a href="/Views/auth/register.php">Registar</a>
+                            <!-- Opções para utilizador não autenticado -->
+                            <a href="/Views/auth.php">Login</a>
+                            <a href="/Views/auth.php">Registar</a>
                         <?php endif; ?>
                     </div>
                 </div>

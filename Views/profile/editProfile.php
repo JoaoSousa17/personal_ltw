@@ -1,22 +1,36 @@
 <?php
-require_once(dirname(__FILE__)."/../Templates/common_elems.php");
-require_once(dirname(__FILE__)."/../Controllers/userController.php");
+require_once(dirname(__FILE__)."/../../Utils/session.php");
+require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
+require_once(dirname(__FILE__)."/../../Controllers/userController.php");
 
 // Verificar se o utilizador está autenticado
-if (!isset($_SESSION['user_id'])) {
-    if (session_status() === PHP_SESSION_NONE) session_start();
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: /Pages/login.php");
-        exit();
-    }
+if (!isUserLoggedIn()) {
+    $_SESSION['error'] = 'Deve fazer login para aceder a esta página.';
+    header("Location: /Views/auth.php");
+    exit();
 }
 
-// Obter os dados do utilizador
-$userId = $_SESSION['user_id'];
-$user = getUserById($userId);
+// Verificar se foi passado um ID de utilizador via GET (para admins editarem outros perfis)
+$editUserId = isset($_GET['id']) ? intval($_GET['id']) : getCurrentUserId();
+
+// Verificar permissões de acesso
+$currentUserId = getCurrentUserId();
+$isAdmin = isUserAdmin();
+$isOwnProfile = ($currentUserId == $editUserId);
+
+// Só pode editar se for o próprio perfil OU se for admin
+if (!$isOwnProfile && !$isAdmin) {
+    $_SESSION['error'] = 'Não tem permissão para editar este perfil.';
+    header("Location: /Views/profile/profile.php");
+    exit();
+}
+
+// Obter os dados do utilizador a editar
+$user = getUserById($editUserId);
 
 if (!$user) {
-    header("Location: /Pages/mainPage.php");
+    $_SESSION['error'] = 'Utilizador não encontrado.';
+    header("Location: /Views/mainPage.php");
     exit();
 }
 
@@ -34,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!empty($_POST['email']) && $_POST['email'] !== $user->getEmail()) {
         // Verificar se o email já existe
-        $existingUser = getUserByUsername($_POST['email']);
-        if ($existingUser && $existingUser->getId() !== $userId) {
+        $existingUser = getUserByEmail($_POST['email']);
+        if ($existingUser && $existingUser->getId() !== $editUserId) {
             $error = 'Este email já está em uso.';
         } else {
             $data['email'] = $_POST['email'];
@@ -45,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['username']) && $_POST['username'] !== $user->getUsername()) {
         // Verificar se o username já existe
         $existingUser = getUserByUsername($_POST['username']);
-        if ($existingUser && $existingUser->getId() !== $userId) {
+        if ($existingUser && $existingUser->getId() !== $editUserId) {
             $error = 'Este username já está em uso.';
         } else {
             $data['username'] = $_POST['username'];
@@ -59,14 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Se não houver erros, atualizar o utilizador
     if (empty($error) && !empty($data)) {
-        if (updateUser($userId, $data)) {
+        if (updateUser($editUserId, $data)) {
             $success = 'Perfil atualizado com sucesso!';
             // Atualizar os dados do utilizador para refletir as mudanças
-            $user = getUserById($userId);
+            $user = getUserById($editUserId);
             
-            // Atualizar a sessão se o username foi alterado
-            if (isset($data['username'])) {
-                $_SESSION['username'] = $data['username'];
+            // Atualizar a sessão se for o próprio perfil e o username foi alterado
+            if ($isOwnProfile && isset($data['username'])) {
+                setCurrentUser($data['username']);
             }
         } else {
             $error = 'Erro ao atualizar o perfil.';
@@ -77,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['bio']) || isset($_POST['webLink'])) {
         $db = getDatabaseConnection();
         $updateFields = [];
-        $params = [':id' => $userId];
+        $params = [':id' => $editUserId];
         
         if (isset($_POST['bio'])) {
             $updateFields[] = "bio = :bio";
@@ -94,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare($query);
             if ($stmt->execute($params)) {
                 $success = 'Perfil atualizado com sucesso!';
-                $user = getUserById($userId);
+                $user = getUserById($editUserId);
             } else {
                 $error = 'Erro ao atualizar o perfil.';
             }
@@ -102,14 +116,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-drawHeader("Handee - Editar Perfil", ["/Styles/profile.css"]);
+$pageTitle = $isOwnProfile ? "Editar o Meu Perfil" : "Editar Perfil de " . htmlspecialchars($user->getName());
+drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
 ?>
 
 <main>
     <section class="section-header">
-        <h2>Editar Perfil</h2>
-        <p>Atualize as suas informações pessoais</p>
-        <a href="/Pages/profile.php" id="link-back-button">
+        <h2><?php echo $pageTitle; ?></h2>
+        <p><?php echo $isOwnProfile ? 'Atualize as suas informações pessoais' : 'Editar informações do utilizador (Admin)'; ?></p>
+        <a href="/Views/profile/profile.php<?php echo $isOwnProfile ? '' : '?id=' . $editUserId; ?>" id="link-back-button">
             <img src="/Images/site/otherPages/back-icon.png" alt="Go Back" class="back-button">
         </a>
     </section>
@@ -125,6 +140,12 @@ drawHeader("Handee - Editar Perfil", ["/Styles/profile.css"]);
                     <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
                 <?php endif; ?>
                 
+                <?php if (!$isOwnProfile && $isAdmin): ?>
+                    <div class="alert" style="background-color: #e3f2fd; color: #1976d2; border: 1px solid #1976d2;">
+                        <strong>Modo Administrador:</strong> Está a editar o perfil de outro utilizador.
+                    </div>
+                <?php endif; ?>
+                
                 <form method="post" class="edit-form">
                     <div class="form-group">
                         <label for="name">Nome</label>
@@ -134,7 +155,7 @@ drawHeader("Handee - Editar Perfil", ["/Styles/profile.css"]);
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user->getUsername()); ?>" required>
-                        <p class="form-hint">Este será o seu identificador único no site</p>
+                        <p class="form-hint">Este será o identificador único no site</p>
                     </div>
                     
                     <div class="form-group">
@@ -151,18 +172,18 @@ drawHeader("Handee - Editar Perfil", ["/Styles/profile.css"]);
                     <div class="form-group">
                         <label for="bio">Biografia</label>
                         <textarea id="bio" name="bio" rows="5"><?php echo htmlspecialchars($user->getBio() ?? ''); ?></textarea>
-                        <p class="form-hint">Conte-nos um pouco sobre si</p>
+                        <p class="form-hint"><?php echo $isOwnProfile ? 'Conte-nos um pouco sobre si' : 'Biografia do utilizador'; ?></p>
                     </div>
                     
                     <div class="form-group">
                         <label for="webLink">Website</label>
                         <input type="url" id="webLink" name="webLink" value="<?php echo htmlspecialchars($user->getWebLink() ?? ''); ?>" placeholder="https://exemplo.com">
-                        <p class="form-hint">Link para o seu website pessoal ou portfolio</p>
+                        <p class="form-hint">Link para website pessoal ou portfolio</p>
                     </div>
                     
                     <div class="form-buttons">
                         <button type="submit" class="btn-submit">Guardar Alterações</button>
-                        <a href="/Pages/profile.php" class="btn-cancel">Cancelar</a>
+                        <a href="/Views/profile/profile.php<?php echo $isOwnProfile ? '' : '?id=' . $editUserId; ?>" class="btn-cancel">Cancelar</a>
                     </div>
                 </form>
             </div>
