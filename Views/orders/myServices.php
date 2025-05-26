@@ -110,16 +110,6 @@ drawHeader("Handee - Os Meus Serviços", ["/Styles/MyRequest&Items.css"]);
                 <i class="fas fa-plus"></i>
                 Adicionar Novo Serviço
             </button>
-            
-            <a href="/Views/services/serviceAnalytics.php" class="btn-secondary">
-                <i class="fas fa-chart-line"></i>
-                Ver Relatórios
-            </a>
-            
-            <button class="btn-secondary" onclick="exportServices()">
-                <i class="fas fa-download"></i>
-                Exportar Dados
-            </button>
         </div>
     </section>
 

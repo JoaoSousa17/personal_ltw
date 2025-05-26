@@ -451,3 +451,202 @@ h6 {
   margin-top: 5px;
   text-align: right;
 }
+
+/* ===== ESTILOS PARA CRIAÇÃO DE SERVIÇOS ===== */
+
+.create-service-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Seção de convite para freelancer */
+.become-freelancer-section {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.freelancer-invitation {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.invitation-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.freelancer-invitation h3 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.freelancer-invitation > p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.benefits-list {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 25px;
+  margin: 30px 0;
+  text-align: left;
+}
+
+.benefits-list h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.benefits-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefits-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.benefits-list li i {
+  color: #7ed321;
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+.btn-become-freelancer {
+  background: linear-gradient(45deg, #7ed321, #56b819);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(126, 211, 33, 0.3);
+}
+
+.btn-become-freelancer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(126, 211, 33, 0.4);
+}
+
+.btn-become-freelancer i {
+  margin-right: 10px;
+}
+
+/* Formulário de criação */
+.create-service-form {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.form-sections {
+  padding: 0;
+}
+
+.form-section {
+  padding: 30px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  color: #4a90e2;
+  font-size: 1.3rem;
+  margin: 0 0 25px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-section h3 i {
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.form-group small {
+  display: block;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+/* Layout de duas colunas */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Preview de preços */
+.price-preview {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  border-left: 4px solid #4a90e2;
+}
+
+.price-preview h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
