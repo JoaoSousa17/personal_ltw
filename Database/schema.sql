@@ -190,6 +190,21 @@ CREATE TABLE distances_Districts (
   PRIMARY KEY (origin, destiny)
 );
 
+CREATE TABLE Contact (
+    id INTEGER PRIMARY KEY,
+    name_ TEXT NOT NULL,
+    email TEXT NOT NULL CHECK( email LIKE '%@%.%' AND LENGTH(email) >= 6),
+    phone TEXT,
+    subject TEXT NOT NULL,
+    message_ TEXT NOT NULL,
+    created_at DATE NOT NULL DEFAULT (DATE('now')),
+    created_time TIME NOT NULL DEFAULT (TIME('now')),
+    is_read BOOLEAN NOT NULL DEFAULT false,
+    admin_response TEXT,
+    response_date DATE,
+    response_time TIME
+);
+
 /************
    TRIGGERS
 ************/

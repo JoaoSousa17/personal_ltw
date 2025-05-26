@@ -13,6 +13,7 @@ Usados em todas as páginas
 function drawHeader($title, $styles){
     // Incluir as funções de sessão
     require_once(dirname(__FILE__)."/../Utils/session.php");
+    require_once(dirname(__FILE__)."/../Controllers/userController.php");
     
     // Obter dados da sessão usando as funções do utils
     $currentUser = getCurrentUser();
@@ -20,6 +21,12 @@ function drawHeader($title, $styles){
     $isAdmin = isUserAdmin();
     $cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
     $userId = getCurrentUserId();
+    
+    // Obter URL da foto de perfil se o usuário estiver logado
+    $profilePhotoUrl = null;
+    if ($isLoggedIn && $userId) {
+        $profilePhotoUrl = getProfilePhotoUrl($userId);
+    }
     ?>
     <!DOCTYPE html>
     <html lang="pt">
@@ -84,7 +91,11 @@ function drawHeader($title, $styles){
                 <div id="profile-button">
                     <?php if ($isLoggedIn): ?>
                         <a href="/Views/profile/profile.php">
-                            <img src="/Images/site/header/genericProfile.png" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%;">
+                            <?php if ($profilePhotoUrl): ?>
+                                <img src="<?php echo htmlspecialchars($profilePhotoUrl); ?>" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            <?php else: ?>
+                                <img src="/Images/site/header/genericProfile.png" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%;">
+                            <?php endif; ?>
                         </a>
                     <?php else: ?>
                         <a href="/Views/auth.php">
@@ -99,14 +110,6 @@ function drawHeader($title, $styles){
                         <img src="/Images/site/header/dropDown-icon.png" alt="" class="top-icons">
                     </button>
                     <div id="dropdown-content">
-                        <!-- Links sempre visíveis -->
-                        <a href="/Views/mainPage.php">Home</a>
-                        <a href="/Views/staticPages/aboutUS.php">Sobre</a>
-                        <a href="/Views/staticPages/contact.php">Contacto</a>
-                        <a href="/Views/staticPages/services.php">Serviços</a>
-                        <a href="/Views/categories.php">Categorias</a>
-                        <a href="/Views/staticPages/faq.php">FAQ</a>
-                        
                         <?php if ($isLoggedIn): ?>
                             <!-- Opções para utilizador autenticado -->
                             <a href="/Views/profile/profile.php">O Meu Perfil</a>

@@ -811,4 +811,29 @@ INSERT INTO Complaint (service_data_id, message_id, admin_id, title, body_, is_a
 (14, 14, 2, 'Material desatualizado', 'O material utilizado nas aulas de programação está desatualizado.', FALSE),
 (18, 18, 1, 'Problema não resolvido', 'O problema no computador voltou a acontecer no dia seguinte.', TRUE);
 
+/************
+   CONTACT populate
+************/
+INSERT INTO Contact (name_, email, phone, subject, message_, created_at, created_time, is_read, admin_response, response_date, response_time) VALUES
+-- Mensagens já respondidas
+('Maria Silva', 'maria.silva@email.com', '912345678', 'Dúvidas sobre Serviços', 'Gostaria de saber como funciona o processo de contratação de um serviço de limpeza. Há alguma garantia?', '2025-01-15', '14:30:00', 1, 'Olá Maria! O processo é muito simples: pesquise o serviço, escolha o prestador, agende e pague pela plataforma. Todos os prestadores são verificados e oferecemos garantia de qualidade. Qualquer dúvida, estamos aqui!', '2025-01-15', '16:45:00'),
+
+('João Santos', 'joao.santos@gmail.com', '963852741', 'Problemas de Pagamento', 'Tentei efetuar um pagamento mas a transação foi recusada. O valor foi debitado do meu cartão mas o serviço não foi confirmado.', '2025-01-20', '10:15:00', 1, 'Olá João! Verificámos a sua situação e o valor será reembolsado em 3-5 dias úteis. O pagamento foi efetivamente recusado pelo banco. Pode tentar novamente ou contactar o seu banco. Pedimos desculpa pelo inconveniente.', '2025-01-20', '11:30:00'),
+
+('Ana Costa', 'ana.costa@outlook.com', NULL, 'Sugestões', 'Seria interessante ter uma funcionalidade de chat em tempo real com os prestadores de serviços. Isso facilitaria muito a comunicação!', '2025-01-18', '16:20:00', 1, 'Olá Ana! Obrigado pela excelente sugestão! Já está nos nossos planos implementar um sistema de chat em tempo real. Esperamos lançar esta funcionalidade nos próximos meses. A sua opinião é muito valiosa!', '2025-01-19', '09:15:00'),
+
+-- Mensagens não lidas (recentes)
+('Pedro Oliveira', 'pedro.oliveira@email.com', '917654321', 'Suporte Técnico', 'Não consigo fazer login na minha conta. Quando introduzo as credenciais, aparece uma mensagem de erro. Podem ajudar?', '2025-01-25', '08:45:00', 0, NULL, NULL, NULL),
+
+('Carla Mendes', 'carla.mendes@gmail.com', '925678432', 'Reclamações', 'Contratei um serviço de jardinagem que não correspondeu às expectativas. O prestador chegou atrasado e o trabalho ficou incompleto. Como posso resolver esta situação?', '2025-01-24', '19:30:00', 0, NULL, NULL, NULL),
+
+('Rui Fernandes', 'rui.fernandes@company.com', '934567890', 'Parcerias', 'Represento uma empresa de seguros e gostaria de explorar uma possível parceria para oferecer seguros aos serviços contratados através da vossa plataforma.', '2025-01-23', '11:20:00', 0, NULL, NULL, NULL),
+
+('Sofia Rodrigues', 'sofia.rodrigues@email.com', NULL, 'Dúvidas sobre Serviços', 'É possível agendar serviços recorrentes, como limpeza semanal? Como funciona o sistema de fidelização?', '2025-01-22', '15:10:00', 0, NULL, NULL, NULL),
+
+('Miguel Torres', 'miguel.torres@gmail.com', '918765432', 'Suporte Técnico', 'A aplicação está muito lenta no meu telefone. Já tentei reiniciar mas continua com problemas. Utilizo um iPhone 12.', '2025-01-21', '20:45:00', 0, NULL, NULL, NULL),
+
+('Inês Almeida', 'ines.almeida@outlook.com', '926543217', 'Outro', 'Gostaria de saber se têm planos para expandir os serviços para outras cidades do país. Vivo em Coimbra e seria muito útil ter acesso à plataforma.', '2025-01-26', '12:30:00', 0, NULL, NULL, NULL),
+
+('Ricardo Pereira', 'ricardo.pereira@email.com', '939876543', 'Sugestões', 'Seria útil ter um sistema de avaliação mais detalhado, com critérios específicos como pontualidade, qualidade e simpatia. Assim seria mais fácil escolher prestadores.', '2025-01-26', '16:50:00', 0, NULL, NULL, NULL);
 COMMIT;

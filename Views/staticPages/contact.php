@@ -1,6 +1,18 @@
 <?php 
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Templates/staticPages_elems.php");
+
+// Iniciar sessão para mensagens de feedback
+session_start();
+
+// Obter mensagens de feedback
+$contactError = $_SESSION['contact_error'] ?? '';
+$contactSuccess = $_SESSION['contact_success'] ?? '';
+$formData = $_SESSION['contact_form_data'] ?? [];
+
+// Limpar mensagens da sessão
+unset($_SESSION['contact_error'], $_SESSION['contact_success'], $_SESSION['contact_form_data']);
+
 drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
 <div id="common-placeholder"></div>
     <main>
@@ -9,99 +21,136 @@ drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
 
         <!-- Informações de Contacto -->
         <section class="main-section">
-            <?php drawSectionHeader("Fale Connosco", "Escolha a melhor forma de entrar em contacto") ?>
+            <?php drawSectionHeader("Fale Connosco", "Escolha a melhor forma de nos contactar") ?>
+            <div class="main-content">
+                <div class="main-image">
+                    <img src="/Images/site/staticPages/contact.png" alt="">
+                </div>
+                <div class="main-text">
+                    <p>Na Handee, valorizamos a comunicação direta com os nossos utilizadores. Estamos sempre disponíveis para esclarecer dúvidas, receber sugestões ou resolver qualquer questão relacionada com a nossa plataforma. A sua opinião é fundamental para continuarmos a melhorar os nossos serviços.</p>
+                    
+                    <p>Utilize o formulário abaixo para nos enviar a sua mensagem, ou contacte-nos através dos meios disponibilizados. Garantimos uma resposta rápida e personalizada a todas as suas questões.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formulário de Contacto -->
+        <section class="contact-form-section">
+            <?php drawSectionHeader("Envie-nos uma Mensagem", "Preencha o formulário abaixo") ?>
             
-            <div class="contact-container">
-                <div class="contact-info">
-                    <?php drawContactCard("/Images/site/staticPages/location-icon.png", "Endereço", "Rua Dr. Roberto Frias, s/n", "4200-465 Porto, Portugal") ?>
-                    
-                    <?php drawContactCard("/Images/site/staticPages/phone-icon.png", "Telefone", "+351 123 456 789", "Seg-Sex: 9h às 18h") ?>
-                    
-                    <?php drawContactCard("/Images/site/staticPages/email-icon.png", "Email", "geral@handee.pt", "Respondemos em até 24h úteis") ?>
+            <?php if ($contactError): ?>
+                <div class="alert alert-error">
+                    <?php echo $contactError; ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if ($contactSuccess): ?>
+                <div class="alert alert-success">
+                    <?php echo $contactSuccess; ?>
+                </div>
+            <?php endif; ?>
+
+            <form class="contact-form" action="/Controllers/contactController.php" method="POST">
+                <div class="form-group">
+                    <label for="name">Nome Completo *</label>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($formData['name'] ?? ''); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($formData['email'] ?? ''); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefone</label>
+                    <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($formData['phone'] ?? ''); ?>" placeholder="Opcional">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Assunto *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Selecione o assunto</option>
+                        <option value="Suporte Técnico" <?php echo (($formData['subject'] ?? '') === 'Suporte Técnico') ? 'selected' : ''; ?>>Suporte Técnico</option>
+                        <option value="Dúvidas sobre Serviços" <?php echo (($formData['subject'] ?? '') === 'Dúvidas sobre Serviços') ? 'selected' : ''; ?>>Dúvidas sobre Serviços</option>
+                        <option value="Problemas de Pagamento" <?php echo (($formData['subject'] ?? '') === 'Problemas de Pagamento') ? 'selected' : ''; ?>>Problemas de Pagamento</option>
+                        <option value="Sugestões" <?php echo (($formData['subject'] ?? '') === 'Sugestões') ? 'selected' : ''; ?>>Sugestões</option>
+                        <option value="Parcerias" <?php echo (($formData['subject'] ?? '') === 'Parcerias') ? 'selected' : ''; ?>>Parcerias</option>
+                        <option value="Reclamações" <?php echo (($formData['subject'] ?? '') === 'Reclamações') ? 'selected' : ''; ?>>Reclamações</option>
+                        <option value="Outro" <?php echo (($formData['subject'] ?? '') === 'Outro') ? 'selected' : ''; ?>>Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Mensagem *</label>
+                    <textarea id="message" name="message" rows="6" placeholder="Descreva a sua questão ou sugestão em detalhe..." required><?php echo htmlspecialchars($formData['message'] ?? ''); ?></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="submit-button">Enviar Mensagem</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Informações de Contacto Direto -->
+        <section class="contact-info">
+            <?php drawSectionHeader("Outras Formas de Contacto", "Informações adicionais") ?>
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <img src="/Images/site/staticPages/email-icon.png" alt="Email">
+                    <h3>Email</h3>
+                    <p>suporte@handee.pt</p>
+                    <p>Resposta em até 24 horas</p>
                 </div>
                 
-                <div class="contact-form">
-                    <h3>Envie-nos uma mensagem</h3>
-                    <form action="/Controllers/contactController.php" method="POST">
-                        <div class="contact-form-group">
-                            <label for="name">Nome Completo</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        
-                        <div class="contact-form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="contact-form-group">
-                            <label for="phone">Telefone</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                        
-                        <div class="contact-form-group">
-                            <label for="subject">Assunto</label>
-                            <input type="text" id="subject" name="subject" required>
-                        </div>
-                        
-                        <div class="contact-form-group">
-                            <label for="message">Mensagem</label>
-                            <textarea id="message" name="message" required></textarea>
-                        </div>
-                        
-                        <div class="form-checkbox">
-                            <input type="checkbox" id="privacy" name="privacy" required>
-                            <label for="privacy">Concordo com a <a href="/Views/staticPages/privacy.php">Política de Privacidade</a></label>
-                        </div>
-                        
-                        <button type="submit" class="contact-submit">Enviar Mensagem</button>
-                    </form>
+                <div class="contact-item">
+                    <img src="/Images/site/staticPages/phone-icon.png" alt="Telefone">
+                    <h3>Telefone</h3>
+                    <p>+351 220 000 000</p>
+                    <p>Segunda a Sexta: 9h - 18h</p>
+                </div>
+                
+                <div class="contact-item">
+                    <img src="/Images/site/staticPages/location-icon.png" alt="Localização">
+                    <h3>Morada</h3>
+                    <p>Rua Dr. Roberto Frias</p>
+                    <p>4200-465 Porto, Portugal</p>
                 </div>
             </div>
         </section>
 
-        <!-- Mapa -->
-        <section class="main-section">
-            <div class="section-header">
-                <h2>Nossa Localização</h2>
-                <p>Venha nos visitar</p>
-            </div>
-            
-            <div class="map-container">
-                <!-- Substitua o iframe abaixo pelo mapa do Google Maps da sua localização -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3004.456245733869!2d-8.598185223459374!3d41.17720887132762!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2464437e91fbc1%3A0x85e95055cd2bef05!2sFaculdade%20de%20Engenharia%20da%20Universidade%20do%20Porto!5e0!3m2!1spt-PT!2spt!4v1714067981339!5m2!1spt-PT!2spt" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </section>
-
-        <!-- Horário de Funcionamento -->
-        <section class="main-section">
-            <div class="section-header">
-                <h2>Horário de Funcionamento</h2>
-                <p>Quando estamos disponíveis para atendê-lo</p>
-            </div>
-            
+        <!-- Horários de Funcionamento -->
+        <section class="schedule-section">
+            <?php drawSectionHeader("Horários de Funcionamento", "") ?>
             <div class="schedule-container">
-                <div class="schedule-card">
-                    <h3>Horário Comercial</h3>
-                    <ul class="schedule-list">
-                        <li><span class="day">Segunda-Feira:</span> <span class="hours">9h às 18h</span></li>
-                        <li><span class="day">Terça-Feira:</span> <span class="hours">9h às 18h</span></li>
-                        <li><span class="day">Quarta-Feira:</span> <span class="hours">9h às 18h</span></li>
-                        <li><span class="day">Quinta-Feira:</span> <span class="hours">9h às 18h</span></li>
-                        <li><span class="day">Sexta-Feira:</span> <span class="hours">9h às 18h</span></li>
-                        <li><span class="day">Sábado:</span> <span class="hours">Fechado</span></li>
-                        <li><span class="day">Domingo:</span> <span class="hours">Fechado</span></li>
-                    </ul>
-                    <p class="schedule-note">*Agendamentos fora do horário comercial podem ser disponibilizados mediante solicitação prévia.</p>
+                <?php drawScheduleCard("Suporte Técnico", [
+                    "Segunda-feira: 9:00 - 18:00",
+                    "Terça-feira: 9:00 - 18:00", 
+                    "Quarta-feira: 9:00 - 18:00",
+                    "Quinta-feira: 9:00 - 18:00",
+                    "Sexta-feira: 9:00 - 18:00",
+                    "Sábado: 10:00 - 14:00",
+                    "Domingo: Encerrado"
+                ]) ?>
+            </div>
+        </section>
+
+        <!-- FAQ Rápido -->
+        <section class="quick-faq">
+            <?php drawSectionHeader("Perguntas Frequentes", "Respostas rápidas às dúvidas mais comuns") ?>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <h3>Como posso cancelar um serviço?</h3>
+                    <p>Pode cancelar um serviço através do seu perfil, na secção "Os Meus Serviços", até 24 horas antes do agendamento.</p>
                 </div>
                 
-                <div class="schedule-card">
-                    <h3>Suporte Técnico</h3>
-                    <ul class="schedule-list">
-                        <li><span class="day">Segunda a Sexta:</span> <span class="hours">8h às 20h</span></li>
-                        <li><span class="day">Sábado:</span> <span class="hours">9h às 13h</span></li>
-                        <li><span class="day">Domingo:</span> <span class="hours">Fechado</span></li>
-                    </ul>
-                    <p class="schedule-info">Para clientes com contrato de suporte prioritário, oferecemos atendimento 24/7 através do email <strong>suporte@handee.pt</strong> ou pelo telefone de emergência fornecido no contrato.</p>
+                <div class="faq-item">
+                    <h3>Como funciona o sistema de pagamentos?</h3>
+                    <p>Os pagamentos são processados de forma segura através da nossa plataforma, com confirmação por email após cada transação.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Que garantias tenho sobre os prestadores?</h3>
+                    <p>Todos os prestadores são verificados e avaliados pelos utilizadores. Oferecemos também um sistema de resolução de conflitos.</p>
                 </div>
             </div>
         </section>
