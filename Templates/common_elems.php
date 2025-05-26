@@ -126,7 +126,7 @@ function drawHeader($title, $styles){
                                 <i class="fas fa-shopping-bag" style="margin-right: 8px;"></i>
                                 Meus Pedidos
                             </a>
-                            <a href="/Views/services/myServices.php">
+                            <a href="/Views/orders/myServices.php">
                                 <i class="fas fa-briefcase" style="margin-right: 8px;"></i>
                                 Meus Anúncios
                             </a>
