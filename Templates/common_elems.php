@@ -2,7 +2,7 @@
 Usados em todas as páginas
 --------------------------->
 
-<?php 
+<?php
 /**
  * Gera o cabeçalho HTML padrão da página, definindo o head, com o título da página e os estilos a utilizar. Adicionalmente desenha o header (top menu) do 
  * site.
@@ -72,24 +72,26 @@ function drawHeader($title, $styles){
             </div>
                 
             <div id="user-actions">
-                <!-- Botão do carrinho --> 
-                <a href="/Views/cart.php" id="carrinho-button"> 
-                    <img src="/Images/site/header/carrinho-de-compras.png" alt="Carrinho" class="top-icons"> 
-                    <div id="cart-badge" <?php if($cartCount == 0) echo 'style="display: none;"'; ?>>
-                        <?php echo $cartCount; ?>
-                    </div> 
-                    <div id="cart-label">Carrinho</div> 
-                </a>
+                <?php if ($isLoggedIn): ?>
+                    <!-- Elementos visíveis apenas para utilizadores logados -->
+                    
+                    <!-- Botão do carrinho --> 
+                    <a href="/Views/cart.php" id="carrinho-button"> 
+                        <img src="/Images/site/header/carrinho-de-compras.png" alt="Carrinho" class="top-icons"> 
+                        <div id="cart-badge" <?php if($cartCount == 0) echo 'style="display: none;"'; ?>>
+                            <?php echo $cartCount; ?>
+                        </div> 
+                        <div id="cart-label">Carrinho</div> 
+                    </a>
 
-                <!-- Botão de Notificações -->
-                <a href="/Views/messages.php" id="notifications-button">
-                    <img src="/Images/site/header/notifications-icon.png" alt="" class="top-icons">
-                    <div id="notification-label">Mensagens</div>
-                </a>
-                
-                <!-- Botão de Perfil -->
-                <div id="profile-button">
-                    <?php if ($isLoggedIn): ?>
+                    <!-- Botão de Notificações -->
+                    <a href="/Views/messages.php" id="notifications-button">
+                        <img src="/Images/site/header/notifications-icon.png" alt="" class="top-icons">
+                        <div id="notification-label">Mensagens</div>
+                    </a>
+                    
+                    <!-- Botão de Perfil -->
+                    <div id="profile-button">
                         <a href="/Views/profile/profile.php">
                             <?php if ($profilePhotoUrl): ?>
                                 <img src="<?php echo htmlspecialchars($profilePhotoUrl); ?>" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
@@ -97,12 +99,8 @@ function drawHeader($title, $styles){
                                 <img src="/Images/site/header/genericProfile.png" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%;">
                             <?php endif; ?>
                         </a>
-                    <?php else: ?>
-                        <a href="/Views/auth.php">
-                            <img src="/Images/site/header/genericProfile.png" alt="Login" style="width: 100%; height: 100%; border-radius: 50%;">
-                        </a>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                     
                 <!-- Botão Menu DropDown -->
                 <div id="menu-dropdown">
@@ -112,17 +110,52 @@ function drawHeader($title, $styles){
                     <div id="dropdown-content">
                         <?php if ($isLoggedIn): ?>
                             <!-- Opções para utilizador autenticado -->
-                            <a href="/Views/profile/profile.php">O Meu Perfil</a>
-                            <a href="/Views/profile/editProfile.php">Editar Perfil</a>
-                            <a href="/Views/messages.php">Mensagens</a>
+                            <a href="/Views/profile/profile.php">
+                                <i class="fas fa-user" style="margin-right: 8px;"></i>
+                                Perfil
+                            </a>
+                            <a href="/Views/profile/editProfile.php">
+                                <i class="fas fa-edit" style="margin-right: 8px;"></i>
+                                Editar Perfil
+                            </a>
+                            <a href="/Views/categories.php">
+                                <i class="fas fa-th-large" style="margin-right: 8px;"></i>
+                                Categorias
+                            </a>
+                            <a href="/Views/orders/myOrders.php">
+                                <i class="fas fa-shopping-bag" style="margin-right: 8px;"></i>
+                                Meus Pedidos
+                            </a>
+                            <a href="/Views/services/myServices.php">
+                                <i class="fas fa-briefcase" style="margin-right: 8px;"></i>
+                                Meus Anúncios
+                            </a>
                             <?php if ($isAdmin): ?>
-                                <a href="/Views/admin/adminPannel.php">Admin</a>
+                                <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                                <a href="/Views/admin/adminPannel.php">
+                                    <i class="fas fa-crown" style="margin-right: 8px;"></i>
+                                    Admin
+                                </a>
                             <?php endif; ?>
-                            <a href="/Controllers/authController.php?action=logout">Terminar Sessão</a>
+                            <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                            <a href="/Controllers/authController.php?action=logout">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
+                                Terminar Sessão
+                            </a>
                         <?php else: ?>
                             <!-- Opções para utilizador não autenticado -->
-                            <a href="/Views/auth.php">Login</a>
-                            <a href="/Views/auth.php">Registar</a>
+                            <a href="/Views/auth.php">
+                                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                                Login
+                            </a>
+                            <a href="/Views/auth.php">
+                                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>
+                                Registar
+                            </a>
+                            <a href="/Views/categories.php">
+                                <i class="fas fa-th-large" style="margin-right: 8px;"></i>
+                                Categorias
+                            </a>
                         <?php endif; ?>
                     </div>
                 </div>

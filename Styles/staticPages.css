@@ -704,3 +704,187 @@
         padding: 20px 15px;
     }
 }
+
+/* CSS adicional para a página de contacto - adicionar ao staticPages.css */
+
+/* Layout personalizado para a secção de contactos */
+.contact-methods-custom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 30px;
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+.contact-item-wide {
+    grid-column: 1 / -1; /* Ocupa toda a largura (ambas as colunas) */
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.contact-item-wide:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-color: #4299e1;
+}
+
+.contact-item-wide img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.contact-item-wide h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.contact-item-wide p {
+    color: #4a5568;
+    margin: 8px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Melhorar o estilo dos outros itens de contacto */
+.contact-methods-custom .contact-item:not(.contact-item-wide) {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px 20px;
+    transition: all 0.3s ease;
+}
+
+.contact-methods-custom .contact-item:not(.contact-item-wide):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #4299e1;
+}
+
+/* Estilos para o cartão de horários */
+.schedule-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.schedule-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.schedule-card h3 {
+    color: #2d3748;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    text-align: center;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 10px;
+}
+
+.schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.schedule-list li:last-child {
+    border-bottom: none;
+}
+
+.schedule-list li:hover {
+    background-color: #f8fafc;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 6px;
+}
+
+.day {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.hours {
+    color: #4a5568;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.schedule-note {
+    font-size: 0.85rem;
+    color: #718096;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background-color: #f7fafc;
+    border-radius: 6px;
+    border-left: 4px solid #4299e1;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .contact-methods-custom {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .contact-item-wide {
+        grid-column: 1;
+        padding: 20px;
+    }
+    
+    .contact-item-wide img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 15px;
+    }
+    
+    .contact-item-wide h3 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    
+    .schedule-list li {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 0;
+    }
+    
+    .day {
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    
+    .hours {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-item-wide {
+        padding: 15px;
+    }
+    
+    .schedule-card {
+        padding: 20px;
+    }
+}

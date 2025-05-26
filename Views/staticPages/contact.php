@@ -94,7 +94,7 @@ drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
         <!-- Informações de Contacto Direto -->
         <section class="contact-info">
             <?php drawSectionHeader("Outras Formas de Contacto", "Informações adicionais") ?>
-            <div class="contact-methods">
+            <div class="contact-methods contact-methods-custom">
                 <div class="contact-item">
                     <img src="/Images/site/staticPages/email-icon.png" alt="Email">
                     <h3>Email</h3>
@@ -109,11 +109,15 @@ drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
                     <p>Segunda a Sexta: 9h - 18h</p>
                 </div>
                 
-                <div class="contact-item">
+                <div class="contact-item contact-item-wide">
                     <img src="/Images/site/staticPages/location-icon.png" alt="Localização">
                     <h3>Morada</h3>
                     <p>Rua Dr. Roberto Frias</p>
                     <p>4200-465 Porto, Portugal</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                        <i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i>
+                        Faculdade de Engenharia da Universidade do Porto
+                    </p>
                 </div>
             </div>
         </section>
@@ -131,27 +135,6 @@ drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
                     "Sábado: 10:00 - 14:00",
                     "Domingo: Encerrado"
                 ]) ?>
-            </div>
-        </section>
-
-        <!-- FAQ Rápido -->
-        <section class="quick-faq">
-            <?php drawSectionHeader("Perguntas Frequentes", "Respostas rápidas às dúvidas mais comuns") ?>
-            <div class="faq-items">
-                <div class="faq-item">
-                    <h3>Como posso cancelar um serviço?</h3>
-                    <p>Pode cancelar um serviço através do seu perfil, na secção "Os Meus Serviços", até 24 horas antes do agendamento.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>Como funciona o sistema de pagamentos?</h3>
-                    <p>Os pagamentos são processados de forma segura através da nossa plataforma, com confirmação por email após cada transação.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>Que garantias tenho sobre os prestadores?</h3>
-                    <p>Todos os prestadores são verificados e avaliados pelos utilizadores. Oferecemos também um sistema de resolução de conflitos.</p>
-                </div>
             </div>
         </section>
     </main>

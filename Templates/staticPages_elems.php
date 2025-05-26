@@ -195,3 +195,35 @@ function drawContactCard($imagePath, $header, $p1, $p2){ ?>
         </div>
     </div>
 <?php } ?>
+
+<?php
+/**
+ * Desenha um cartão de horários de funcionamento.
+ *
+ * @param string $title Título do cartão (ex: "Suporte Técnico").
+ * @param array $schedules Lista de horários (ex: ["Segunda-feira: 9:00 - 18:00", ...]).
+ */
+function drawScheduleCard($title, $schedules) { ?>
+    <div class="schedule-card">
+        <h3><?php echo htmlspecialchars($title); ?></h3>
+        <ul class="schedule-list">
+            <?php foreach ($schedules as $schedule): ?>
+                <?php 
+                // Separar dia e horário
+                $parts = explode(':', $schedule, 2);
+                $day = trim($parts[0]);
+                $hours = isset($parts[1]) ? trim($parts[1]) : '';
+                ?>
+                <li>
+                    <span class="day"><?php echo htmlspecialchars($day); ?></span>
+                    <span class="hours"><?php echo htmlspecialchars($hours); ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <div class="schedule-note">
+            <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+            Horários sujeitos a alterações durante feriados
+        </div>
+    </div>
+<?php }
+?>
