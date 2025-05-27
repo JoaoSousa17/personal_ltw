@@ -2107,3 +2107,292 @@ textarea.form-input {
     display: none;
   }
 }
+
+/* ===== CONTACTS TABLE SPECIFIC STYLES ===== */
+/* Container da tabela de contactos */
+.contacts-table-container {
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  overflow-x: auto;
+  box-shadow: 0 5px 15px var(--boxShadow-color);
+  border-radius: 10px;
+}
+
+/* Tabela de contactos */
+.contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 1000px; /* Largura mínima para evitar compressão excessiva */
+}
+
+.contacts-table thead {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.contacts-table th {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  padding: 15px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+}
+
+.contacts-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.contacts-table tbody tr:hover {
+  background-color: var(--secondary-color);
+}
+
+.contacts-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Linhas não lidas destacadas */
+.contacts-table .unread-contact {
+  background-color: rgba(74, 144, 226, 0.05);
+  border-left: 4px solid var(--primary-color);
+}
+
+.contacts-table .unread-contact:hover {
+  background-color: rgba(74, 144, 226, 0.1);
+}
+
+/* Colunas específicas */
+.contacts-table th:nth-child(1), /* ID */
+.contacts-table td:nth-child(1) {
+  width: 60px;
+  text-align: center;
+}
+
+.contacts-table th:nth-child(2), /* Nome */
+.contacts-table td:nth-child(2) {
+  width: 120px;
+}
+
+.contacts-table th:nth-child(3), /* Email */
+.contacts-table td:nth-child(3) {
+  width: 180px;
+}
+
+.contacts-table th:nth-child(4), /* Telefone */
+.contacts-table td:nth-child(4) {
+  width: 120px;
+}
+
+.contacts-table th:nth-child(5), /* Assunto */
+.contacts-table td:nth-child(5) {
+  width: 150px;
+}
+
+.contacts-table th:nth-child(6), /* Mensagem */
+.contacts-table td:nth-child(6) {
+  width: 200px;
+}
+
+.contacts-table th:nth-child(7), /* Data */
+.contacts-table td:nth-child(7) {
+  width: 140px;
+}
+
+.contacts-table th:nth-child(8), /* Estado */
+.contacts-table td:nth-child(8) {
+  width: 100px;
+  text-align: center;
+}
+
+.contacts-table th:nth-child(9), /* Ações */
+.contacts-table td:nth-child(9) {
+  width: 120px;
+  text-align: center;
+}
+
+/* Preview da mensagem */
+.message-preview {
+  max-width: 200px;
+  cursor: help;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+.message-preview span {
+  display: block;
+  line-height: 1.4;
+}
+
+/* Estados de leitura */
+.status-read {
+  display: inline-block;
+  background-color: var(--success-color);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-unread {
+  display: inline-block;
+  background-color: var(--warning-color);
+  color: #212529;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Botão de marcar como lida */
+.mark-read-button {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.mark-read-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.mark-read-button img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Container de ações dos contactos */
+.contact-actions {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.contact-actions form {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.contact-actions .delete-button {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  min-height: 32px;
+}
+
+/* Mensagem quando não há contactos */
+.no-contacts {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: white;
+  border-radius: 10px;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+/* Responsividade para tabela de contactos */
+@media (max-width: 1200px) {
+  .contacts-table {
+    min-width: 900px;
+  }
+  
+  .contacts-table th,
+  .contacts-table td {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .message-preview {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 992px) {
+  .contacts-table-container {
+    width: 95%;
+  }
+  
+  .contacts-table {
+    min-width: 800px;
+  }
+  
+  .contacts-table th,
+  .contacts-table td {
+    padding: 8px 6px;
+    font-size: 0.85rem;
+  }
+  
+  .message-preview {
+    max-width: 120px;
+  }
+  
+  .mark-read-button,
+  .contact-actions .delete-button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    min-height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contacts-table {
+    min-width: 700px;
+  }
+  
+  .contacts-table th,
+  .contacts-table td {
+    padding: 6px 4  /* Base Table Styles */
+
+  }
+
+  .newsletter-table-container,
+  .blocked-users-table-container,
+  .contacts-table-container,
+  .users-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px var(--boxShadow-color);
+    border-radius: 10px;
+  }
+  
+  .newsletter-table-container,
+  .blocked-users-table-container,
+  .contacts-table-container {
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 100px;
+  }
+  
+  .newsletter-table,
+  .blocked-users-table,
+  .contacts-table,
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+}
