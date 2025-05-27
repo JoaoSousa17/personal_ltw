@@ -60,39 +60,39 @@ INSERT INTO Category (name_, photo_id) VALUES
    ADMINS
 ************/
 INSERT INTO User_ (name_, password_, email, username, is_admin, phone_number, web_link, creation_date, currency) VALUES
-('Admin Santos', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'admin.santos@homegenie.pt', 'adminsantos', TRUE, '912345678', 'linkedin.com/adminsantos', '2023-08-10', 'eur'),
-('Admin Pereira', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'admin.pereira@homegenie.pt', 'adminpereira', TRUE, '923456789', 'linkedin.com/adminpereira', '2023-08-15', 'eur');
+('Admin Santos', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'admin.santos@homegenie.pt', 'adminsantos', TRUE, '912345678', 'linkedin.com/adminsantos', '2023-08-10', 'eur'),
+('Admin Pereira', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'admin.pereira@homegenie.pt', 'adminpereira', TRUE, '923456789', 'linkedin.com/adminpereira', '2023-08-15', 'eur');
 
 /************
    FREELANCERS
 ************/
 INSERT INTO User_ (name_, password_, email, username, is_freelancer, phone_number, web_link, creation_date, currency) VALUES
-('Joana Silva', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'joana.silva@gmail.com', 'joanasilva', TRUE, '932156789', 'joanasilva.pt', '2023-09-01', 'eur'),
-('Manuel Costa', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'manuel.costa@gmail.com', 'manuelcosta', TRUE, '961234567', 'manuelcosta.pt', '2023-09-10', 'eur'),
-('Sofia Martins', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'sofia.martins@gmail.com', 'sofiamartins', TRUE, '936543219', 'sofiamartins.pt', '2023-09-15', 'eur'),
-('António Ferreira', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'antonio.ferreira@gmail.com', 'antonioferreira', TRUE, '914738292', 'antonioferreira.pt', '2023-09-20', 'eur'),
-('Ana Rodrigues', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'ana.rodrigues@gmail.com', 'anarodrigues', TRUE, '926547891', 'anarodrigues.pt', '2023-09-25', 'eur'),
-('João Oliveira', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'joao.oliveira@gmail.com', 'joaooliveira', TRUE, '918273645', 'joaooliveira.pt', '2023-10-01', 'eur'),
-('Mariana Santos', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'mariana.santos@gmail.com', 'marianasantos', TRUE, '939182736', 'marianasantos.pt', '2023-10-05', 'eur'),
-('Ricardo Sousa', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'ricardo.sousa@gmail.com', 'ricardosousa', TRUE, '968574839', 'ricardosousa.pt', '2023-10-10', 'eur'),
-('Teresa Gomes', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'teresa.gomes@gmail.com', 'teresagomes', TRUE, '927364518', 'teresagomes.pt', '2023-10-15', 'eur');
+('Joana Silva', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'joana.silva@gmail.com', 'joanasilva', TRUE, '932156789', 'joanasilva.pt', '2023-09-01', 'eur'),
+('Manuel Costa', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'manuel.costa@gmail.com', 'manuelcosta', TRUE, '961234567', 'manuelcosta.pt', '2023-09-10', 'eur'),
+('Sofia Martins', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'sofia.martins@gmail.com', 'sofiamartins', TRUE, '936543219', 'sofiamartins.pt', '2023-09-15', 'eur'),
+('António Ferreira', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'antonio.ferreira@gmail.com', 'antonioferreira', TRUE, '914738292', 'antonioferreira.pt', '2023-09-20', 'eur'),
+('Ana Rodrigues', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'ana.rodrigues@gmail.com', 'anarodrigues', TRUE, '926547891', 'anarodrigues.pt', '2023-09-25', 'eur'),
+('João Oliveira', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'joao.oliveira@gmail.com', 'joaooliveira', TRUE, '918273645', 'joaooliveira.pt', '2023-10-01', 'eur'),
+('Mariana Santos', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'mariana.santos@gmail.com', 'marianasantos', TRUE, '939182736', 'marianasantos.pt', '2023-10-05', 'eur'),
+('Ricardo Sousa', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'ricardo.sousa@gmail.com', 'ricardosousa', TRUE, '968574839', 'ricardosousa.pt', '2023-10-10', 'eur'),
+('Teresa Gomes', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'teresa.gomes@gmail.com', 'teresagomes', TRUE, '927364518', 'teresagomes.pt', '2023-10-15', 'eur');
 
 /************
    REGULAR USERS
 ************/
 INSERT INTO User_ (name_, password_, email, username, phone_number, creation_date, currency) VALUES
-('Carlos Almeida', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'carlos.almeida@gmail.com', 'carlosalmeida', '913647281', '2023-10-20', 'eur'),
-('Isabel Pinto', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'isabel.pinto@gmail.com', 'isabelpinto', '925836914', '2023-10-25', 'eur'),
-('Paulo Neves', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'paulo.neves@gmail.com', 'pauloneves', '968394712', '2023-11-01', 'eur'),
-('Filipa Castro', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'filipa.castro@gmail.com', 'filipacastro', '937162534', '2023-11-05', 'eur'),
-('Diogo Rocha', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'diogo.rocha@gmail.com', 'diogorocha', '917263548', '2023-11-10', 'eur'),
-('Catarina Mota', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'catarina.mota@gmail.com', 'catarinamota', '928374651', '2023-11-15', 'eur'),
-('Tiago Lopes', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'tiago.lopes@gmail.com', 'tiagolopes', '964738291', '2023-11-20', 'eur'),
-('Marta Ribeiro', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'marta.ribeiro@gmail.com', 'martaribeiro', '935647182', '2023-11-25', 'eur'),
-('Bruno Cunha', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'bruno.cunha@gmail.com', 'brunocunha', '916748392', '2023-12-01', 'eur'),
-('Andreia Moreira', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'andreia.moreira@gmail.com', 'andreiamoreira', '924837165', '2023-12-05', 'eur'),
-('Pedro Vieira', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'pedro.vieira@gmail.com', 'pedrovieira', '963718294', '2023-12-10', 'eur'),
-('Raquel Dias', '5f5ebe2b944917b8c4923228b3cc9c4ab37f0a18b747f118c88baf07c5bd62aa', 'raquel.dias@gmail.com', 'raqueldias', '933647182', '2023-12-15', 'eur');
+('Carlos Almeida', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'carlos.almeida@gmail.com', 'carlosalmeida', '913647281', '2023-10-20', 'eur'),
+('Isabel Pinto', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'isabel.pinto@gmail.com', 'isabelpinto', '925836914', '2023-10-25', 'eur'),
+('Paulo Neves', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'paulo.neves@gmail.com', 'pauloneves', '968394712', '2023-11-01', 'eur'),
+('Filipa Castro', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'filipa.castro@gmail.com', 'filipacastro', '937162534', '2023-11-05', 'eur'),
+('Diogo Rocha', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'diogo.rocha@gmail.com', 'diogorocha', '917263548', '2023-11-10', 'eur'),
+('Catarina Mota', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'catarina.mota@gmail.com', 'catarinamota', '928374651', '2023-11-15', 'eur'),
+('Tiago Lopes', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'tiago.lopes@gmail.com', 'tiagolopes', '964738291', '2023-11-20', 'eur'),
+('Marta Ribeiro', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'marta.ribeiro@gmail.com', 'martaribeiro', '935647182', '2023-11-25', 'eur'),
+('Bruno Cunha', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'bruno.cunha@gmail.com', 'brunocunha', '916748392', '2023-12-01', 'eur'),
+('Andreia Moreira', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'andreia.moreira@gmail.com', 'andreiamoreira', '924837165', '2023-12-05', 'eur'),
+('Pedro Vieira', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'pedro.vieira@gmail.com', 'pedrovieira', '963718294', '2023-12-10', 'eur'),
+('Raquel Dias', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'raquel.dias@gmail.com', 'raqueldias', '933647182', '2023-12-15', 'eur');
 
 /************
    MEDIA populate - Profile Photos

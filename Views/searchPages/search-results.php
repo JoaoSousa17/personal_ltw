@@ -97,7 +97,7 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
                         </div>
                         <div class="service-info">
                             <div class="category-tag"><?php echo $category_name; ?></div>
-                            <h3><a href="/Views/cart&payment/service-details.php?id=<?php echo $service['id']; ?>"><?php echo $service['name']; ?></a></h3>
+                            <h3><a href="/Views/product.php?id=<?php echo $service['id']; ?>"><?php echo $service['name']; ?></a></h3>
                             <p class="service-description"><?php echo substr($service['description'], 0, 100); ?>...</p>
                             <div class="service-meta">
                                 <span class="duration"><i class="clock-icon"></i> <?php echo $service['duration']; ?> min</span>
@@ -113,7 +113,7 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
                             <div class="service-total">
                                 <span>Preço Total: <strong>€<?php echo number_format($total_price, 2); ?></strong></span>
                             </div>
-                            <a href="/Views/cart&payment/service-details.php?id=<?php echo $service['id']; ?>" class="view-service-btn">Ver Detalhes</a>
+                            <a href="/Views/product.php?id=<?php echo $service['id']; ?>" class="view-service-btn">Ver Detalhes</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

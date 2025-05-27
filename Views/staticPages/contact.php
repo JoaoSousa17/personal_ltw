@@ -96,21 +96,21 @@ drawHeader("Handee - Contacto",["/Styles/staticPages.css"])?>
             <?php drawSectionHeader("Outras Formas de Contacto", "Informações adicionais") ?>
             <div class="contact-methods contact-methods-custom">
                 <div class="contact-item">
-                    <img src="/Images/site/staticPages/email-icon.png" alt="Email">
+                    <img src="/Images/site/footer/mail.png" alt="Email">
                     <h3>Email</h3>
                     <p>suporte@handee.pt</p>
                     <p>Resposta em até 24 horas</p>
                 </div>
                 
                 <div class="contact-item">
-                    <img src="/Images/site/staticPages/phone-icon.png" alt="Telefone">
+                    <img src="/Images/site/footer/phone.png" alt="Telefone">
                     <h3>Telefone</h3>
                     <p>+351 220 000 000</p>
                     <p>Segunda a Sexta: 9h - 18h</p>
                 </div>
                 
                 <div class="contact-item contact-item-wide">
-                    <img src="/Images/site/staticPages/location-icon.png" alt="Localização">
+                    <img src="/Images/site/footer/home.png" alt="Localização">
                     <h3>Morada</h3>
                     <p>Rua Dr. Roberto Frias</p>
                     <p>4200-465 Porto, Portugal</p>

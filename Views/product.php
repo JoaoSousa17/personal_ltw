@@ -5,7 +5,6 @@ require_once("../Database/connection.php");
 
 drawHeader("Product", ["../Styles/product.css"]);
 
-session_start();
 $loggedInUser = $_SESSION['user_id'] ?? null;
 
 if (!$loggedInUser) {
@@ -14,14 +13,14 @@ if (!$loggedInUser) {
     exit();
 }
 
-$serviceId = 7;                // PARA TESTAR APENAS
-/*if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+//$serviceId = 13;                // PARA TESTAR APENAS
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<p>Serviço inválido.</p>";
     drawFooter();
     exit;
-}*/
+}
 
-//$serviceId = intval($_GET['id']);
+$serviceId = intval($_GET['id']);
 $db = getDatabaseConnection();
 
 // Consulta SQL
@@ -80,7 +79,7 @@ $date = $rawDate ? date("d \ F \ Y", strtotime($rawDate)) : "Data desconhecida";
     </div>
 
     <div class="product-info-side">
-      <?php drawProductInfo($date, $title, $finalPrice); ?>
+      <?php drawProductInfo($date, $title, $finalPrice, $serviceId); ?>
       <?php drawAdvertiserInfo($username, $profilePhotoId); ?>
     </div>
   </div>

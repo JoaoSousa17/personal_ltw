@@ -30,7 +30,9 @@ function drawCartItems($cartItems) { ?>
             <?php foreach ($cartItems as $item):
                 $id = md5($item['title'] . $item['price'] . $item['seller']);
             ?>
-            <div class="product-item" data-id="<?= $id ?>">
+            <div class="product-item clickable"
+     data-id="<?= htmlspecialchars($item['id']) ?>"
+     data-link="../Views/product.php?id=<?= urlencode($item['id']) ?>">
                 <img src="<?= htmlspecialchars($item['image']) ?>" alt="Produto" />
                 <div class="description">
                     <h2><?= htmlspecialchars($item['title']) ?></h2>
@@ -82,4 +84,16 @@ function drawCartSummary($total, $cartItems) { ?>
             <button type="submit" id="comprar-btn">Comprar</button>
         </form>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".product-item.clickable").forEach(function (item) {
+                item.addEventListener("click", function (e) {
+                    if (e.target.closest(".remove-btn")) return;
+                    const link = this.getAttribute("data-link");
+                    if (link) window.location.href = link;
+                });
+            });
+        });
+    </script>
 <?php }

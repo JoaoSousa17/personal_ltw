@@ -86,7 +86,7 @@ function drawHeader($title, $styles){
 
                     <!-- Botão de Notificações -->
                     <a href="/Views/messages.php" id="notifications-button">
-                        <img src="/Images/site/header/notifications-icon.png" alt="" class="top-icons">
+                        <img src="/Images/site/header/notifications-icon.png" alt="" class="top-icons inverted-icon">
                         <div id="notification-label">Mensagens</div>
                     </a>
                     
@@ -107,27 +107,29 @@ function drawHeader($title, $styles){
                     <button id="icon-dropdown">
                         <img src="/Images/site/header/dropDown-icon.png" alt="" class="top-icons">
                     </button>
+                    <div id="hover-buffer"></div>
                     <div id="dropdown-content">
                         <?php if ($isLoggedIn): ?>
                             <!-- Opções para utilizador autenticado -->
                             <a href="/Views/profile/profile.php">
-                                <i class="fas fa-user" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/perfil.png" style="margin-right: 8px; width: 1em;">
                                 Perfil
                             </a>
                             <a href="/Views/profile/editProfile.php">
-                                <i class="fas fa-edit" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/editProfile.png" style="margin-right: 8px; width: 1em;">
                                 Editar Perfil
                             </a>
                             <a href="/Views/categories.php">
-                                <i class="fas fa-th-large" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/categories.png" style="margin-right: 8px; width: 1em;">
                                 Categorias
                             </a>
+                            <!-- Adicionar Mensagens -->
                             <a href="/Views/orders/myOrders.php">
-                                <i class="fas fa-shopping-bag" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/pedidos.png" style="margin-right: 8px; width: 1em;">
                                 Meus Pedidos
                             </a>
                             <a href="/Views/orders/myServices.php">
-                                <i class="fas fa-briefcase" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/services.png" style="margin-right: 8px; width: 1em;">
                                 Meus Anúncios
                             </a>
                             <?php if ($isAdmin): ?>
@@ -139,21 +141,21 @@ function drawHeader($title, $styles){
                             <?php endif; ?>
                             <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
                             <a href="/Controllers/authController.php?action=logout">
-                                <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/terminarSessao.png" style="margin-right: 8px; width: 1.3em;">
                                 Terminar Sessão
                             </a>
                         <?php else: ?>
                             <!-- Opções para utilizador não autenticado -->
                             <a href="/Views/auth.php">
-                                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/login.png" style="margin-right: 8px; width: 1em;">
                                 Login
                             </a>
                             <a href="/Views/auth.php">
-                                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/register.png" style="margin-right: 8px; width: 1em;">
                                 Registar
                             </a>
                             <a href="/Views/categories.php">
-                                <i class="fas fa-th-large" style="margin-right: 8px;"></i>
+                                <img src="/Images/site/header/categories.png" style="margin-right: 8px; width: 1em;">
                                 Categorias
                             </a>
                         <?php endif; ?>
@@ -163,7 +165,6 @@ function drawHeader($title, $styles){
         </header>
     </div>
 <?php }
-
 
 /**
  * Desenha o rodapé da página com navegação, informações de contacto, links úteis, redes sociais e formulário de subscrição à newsletter.

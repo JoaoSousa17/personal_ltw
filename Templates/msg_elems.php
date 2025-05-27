@@ -53,6 +53,20 @@ function drawAllChatWindows(array $conversations, int $loggedInUserId) {
 
 function getConversationMessages(int $userId, int $otherUserId): array {
     $db = getDatabaseConnection();
+
+    // Marca mensagens não lidas como lidas
+    $markStmt = $db->prepare("
+        UPDATE Message_
+        SET is_read = 1
+        WHERE receiver_id = :userId
+          AND sender_id = :otherUserId
+          AND is_read = 0
+    ");
+    $markStmt->execute([
+        'userId' => $userId,
+        'otherUserId' => $otherUserId,
+    ]);
+
     $stmt = $db->prepare("
         SELECT sender_id, body_ AS content, date_, time_
         FROM Message_
@@ -67,15 +81,7 @@ function getConversationMessages(int $userId, int $otherUserId): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getProfilePhotoUrl(?int $profilePhotoId): ?string {
-    if (!$profilePhotoId) return null;
 
-    $db = getDatabaseConnection();
-    $stmt = $db->prepare("SELECT path_ FROM Media WHERE id = ?");
-    $stmt->execute([$profilePhotoId]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result && !empty($result['path_']) ? $result['path_'] : null;
-}
 
 function getLastMessageTimestamp(int $userId, int $otherUserId): ?string {
     $db = getDatabaseConnection();

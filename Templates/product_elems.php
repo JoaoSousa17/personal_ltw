@@ -52,15 +52,16 @@ function drawProductDescription(string $description, array $categories) { ?>
  * @param string $date
  * @param string $title
  * @param float $price
+ * @param int $serviceId
  */
-function drawProductInfo(string $date, string $title, float $price) { ?>
+function drawProductInfo(string $date, string $title, float $price, $serviceId) { ?>
   <div class="product-info">
     <div>
       <h6>Publicado a <?= htmlspecialchars($date) ?></h6>
       <h2><?= htmlspecialchars($title) ?></h2>
       <h3>Preço: <?= number_format($price, 2, ',', '') ?>€</h3>
       <button onclick="openPopup()">Enviar mensagem</button>
-      <button id="orderBtn">Encomendar</button>
+      <button id="orderBtn" data-id="<?= htmlspecialchars($serviceId) ?>">Encomendar</button>
     </div>
   </div>
 <?php }
@@ -88,26 +89,6 @@ function drawAdvertiserInfo(string $username, ?int $profilePhotoId) {
         <?= htmlspecialchars($username) ?>
     </div>
 <?php }
-
-
-/**
- * Função para obter a URL da imagem de perfil com base no ID.
- * @param int $profilePhotoId
- * @return string|null
- */
-function getProfilePhotoUrl(int $profilePhotoId): ?string {
-    try {
-        $db = getDatabaseConnection();
-        $query = "SELECT path_ FROM Media WHERE id = ?";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$profilePhotoId]);
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result && !empty($result['path_']) ? $result['path_'] : null;
-    } catch (PDOException $e) {
-        return null;
-    }
-}
 
 /**
  * Função para desenhar o Popup
