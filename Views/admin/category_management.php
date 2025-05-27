@@ -18,8 +18,8 @@ if (!isUserAdmin()) {
     exit();
 }
 
-$successMessage = '';
-$errorMessage = '';
+$message = '';
+$messageType = '';
 
 // Processar remoção de categoria
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_category'])) {
@@ -28,82 +28,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_category'])) {
     $result = deleteCategory($categoryId);
     
     if ($result['success']) {
-        $successMessage = $result['message'];
+        $message = $result['message'];
+        $messageType = 'success';
     } else {
-        $errorMessage = $result['message'];
+        $message = $result['message'];
+        $messageType = 'error';
     }
-    
-    // Redirecionar para evitar reenvio do formulário
-    $_SESSION['category_success'] = $successMessage;
-    $_SESSION['category_error'] = $errorMessage;
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
 }
 
 // Processar adição de categoria
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
-    error_log("=== PROCESSAMENTO CATEGORIA ===");
-    error_log("POST recebido: " . print_r($_POST, true));
-    error_log("FILES recebido: " . print_r($_FILES, true));
-    
     $categoryName = trim($_POST['category_name']);
     
-    // Verificar se foi enviado um ficheiro de imagem
-    if (!isset($_FILES['category_image']) || $_FILES['category_image']['error'] === UPLOAD_ERR_NO_FILE) {
-        $errorMessage = 'Por favor, selecione uma imagem para a categoria.';
-        error_log("Erro: Nenhuma imagem selecionada");
+    // Verificar se o ficheiro foi enviado
+    if (!isset($_FILES['category_image']) || $_FILES['category_image']['error'] !== UPLOAD_ERR_OK) {
+        $message = 'Erro: Deve selecionar uma imagem para a categoria.';
+        $messageType = 'error';
     } else {
-        error_log("A processar categoria: " . $categoryName);
-        $result = createCategory($categoryName, $_FILES['category_image']);
-        error_log("Resultado: " . print_r($result, true));
+        // Tentar adicionar a categoria
+        $result = addCategory($categoryName, $_FILES['category_image']);
         
-        if ($result['success']) {
-            $successMessage = $result['message'];
+        if ($result) {
+            $message = 'Categoria adicionada com sucesso!';
+            $messageType = 'success';
         } else {
-            $errorMessage = $result['message'];
+            $message = 'Erro ao adicionar categoria. Verifique se o nome não está duplicado e se a imagem é válida.';
+            $messageType = 'error';
         }
     }
-    
-    // Redirecionar para evitar reenvio do formulário
-    $_SESSION['category_success'] = $successMessage;
-    $_SESSION['category_error'] = $errorMessage;
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
 }
 
-// Verificar mensagens da sessão
-if (isset($_SESSION['category_success']) && !empty($_SESSION['category_success'])) {
-    $successMessage = $_SESSION['category_success'];
-    unset($_SESSION['category_success']);
-}
-
-if (isset($_SESSION['category_error']) && !empty($_SESSION['category_error'])) {
-    $errorMessage = $_SESSION['category_error'];
-    unset($_SESSION['category_error']);
-}
-
-// Obter todas as categorias - usando a função do controller
+// Obter todas as categorias
 $categories = getAllCategories();
 
-drawHeader("Handee - Gestão de Categorias", ["/Styles/admin.css"]);
+drawHeader("Handee - Gestão de Categorias", ["/Styles/admin.css", "/Styles/users.css", "/Styles/category_management.css"]);
 ?>
 
 <main class="category-management-container">
     <?php drawSectionHeader("Gestão de Categorias", "Visualize, adicione e remova categorias do sistema", true); ?>
 
-    <!-- Mensagens de sucesso/erro -->
-    <?php if (!empty($successMessage)): ?>
-    <div class="alert alert-success">
-        <?php echo htmlspecialchars($successMessage); ?>
+    <?php if (!empty($message)): ?>
+    <div class="alert alert-<?php echo $messageType; ?>">
+        <?php echo htmlspecialchars($message); ?>
     </div>
     <?php endif; ?>
-
-    <?php if (!empty($errorMessage)): ?>
-    <div class="alert alert-error">
-        <?php echo htmlspecialchars($errorMessage); ?>
-    </div>
-    <?php endif; ?>
-
+    
     <?php drawSectionTitle('Categorias Existentes') ?>
 
     <!-- Tabela de categorias -->
@@ -114,8 +83,5 @@ drawHeader("Handee - Gestão de Categorias", ["/Styles/admin.css"]);
     <!-- Formulário para adicionar categoria -->
     <?php drawAddCategoryForm() ?> 
 </main>
-
-<!-- JavaScript para melhorar a experiência do utilizador -->
-<script src="/Scripts/categoryManagement.js"></script>
 
 <?php drawFooter(); ?>

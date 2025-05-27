@@ -1,6 +1,5 @@
 <?php
 require_once(dirname(__FILE__) . '/../Models/Category.php');
-require_once(dirname(__FILE__) . '/../Database/connection.php');
 
 /**
  * Devolve todas as categorias existentes na base de dados.
@@ -22,7 +21,6 @@ function getAllCategories() {
     
     // Em caso de erro, devolve um array vazio
     catch (PDOException $e) {
-        error_log("Erro ao obter categorias: " . $e->getMessage());
         return [];
     }
 }
@@ -45,121 +43,10 @@ function getCategoryById($id) {
     
     // Em caso de erro, devolve null
     catch (PDOException $e) {
-        error_log("Erro ao obter categoria por ID: " . $e->getMessage());
         return null;
     }
 }
 
-/**
- * Conta o número de serviços associados a uma categoria.
- *
- * @param int $categoryId ID da categoria.
- * @return int Número de serviços na categoria.
- */
-function getServiceCountByCategory($categoryId) {
-    try {
-        $db = getDatabaseConnection();
-        $stmt = $db->prepare("SELECT COUNT(*) as count FROM Service_ WHERE category_id = :category_id");
-        $stmt->execute([':category_id' => $categoryId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return (int)$result['count'];
-    } catch (PDOException $e) {
-        error_log("Erro ao contar serviços da categoria: " . $e->getMessage());
-        return 0;
-    }
-}
-
-/**
- * Cria uma nova categoria com upload de imagem.
- *
- * @param string $name Nome da categoria.
- * @param array $imageFile Array do $_FILES['image'].
- * @return array Resultado da operação com status e mensagem.
- */
-function createCategory($name, $imageFile) {
-    try {
-        error_log("=== INÍCIO CREATE CATEGORY ===");
-        error_log("Nome recebido: " . $name);
-        error_log("Ficheiro recebido: " . print_r($imageFile, true));
-        
-        $db = getDatabaseConnection();
-        
-        // Validar nome da categoria
-        if (empty(trim($name))) {
-            error_log("Nome da categoria vazio");
-            return ['success' => false, 'message' => 'Nome da categoria é obrigatório.'];
-        }
-        
-        // Verificar se a categoria já existe
-        $stmt = $db->prepare("SELECT id FROM Category WHERE name_ = :name");
-        $stmt->execute([':name' => trim($name)]);
-        if ($stmt->fetch()) {
-            error_log("Categoria já existe: " . $name);
-            return ['success' => false, 'message' => 'Já existe uma categoria com este nome.'];
-        }
-        
-        // Processar upload da imagem
-        error_log("A processar upload da imagem...");
-        $uploadResult = uploadCategoryImage($imageFile);
-        if (!$uploadResult['success']) {
-            error_log("Erro no upload: " . $uploadResult['message']);
-            return $uploadResult;
-        }
-        
-        error_log("Upload bem-sucedido: " . $uploadResult['path']);
-        
-        // Inserir na tabela Media
-        $stmt = $db->prepare("INSERT INTO Media (path_, title) VALUES (:path, :title)");
-        $result = $stmt->execute([
-            ':path' => $uploadResult['path'],
-            ':title' => 'Categoria: ' . trim($name)
-        ]);
-        
-        if (!$result) {
-            error_log("Erro ao inserir na tabela Media");
-            return ['success' => false, 'message' => 'Erro ao guardar dados da imagem.'];
-        }
-        
-        $mediaId = $db->lastInsertId();
-        error_log("Media ID criado: " . $mediaId);
-        
-        // Inserir na tabela Category
-        $stmt = $db->prepare("INSERT INTO Category (name_, photo_id) VALUES (:name, :photo_id)");
-        $result = $stmt->execute([
-            ':name' => trim($name),
-            ':photo_id' => $mediaId
-        ]);
-        
-        if ($result) {
-            $categoryId = $db->lastInsertId();
-            error_log("Categoria criada com sucesso. ID: " . $categoryId);
-            return ['success' => true, 'message' => 'Categoria criada com sucesso!'];
-        } else {
-            error_log("Erro ao inserir categoria na base de dados");
-            // Se falhou a criação da categoria, limpar a imagem
-            if (file_exists(dirname(__DIR__) . '/' . $uploadResult['path'])) {
-                unlink(dirname(__DIR__) . '/' . $uploadResult['path']);
-            }
-            $stmt = $db->prepare("DELETE FROM Media WHERE id = :id");
-            $stmt->execute([':id' => $mediaId]);
-            return ['success' => false, 'message' => 'Erro ao criar categoria.'];
-        }
-        
-    } catch (PDOException $e) {
-        error_log("Erro PDO ao criar categoria: " . $e->getMessage());
-        return ['success' => false, 'message' => 'Erro interno do sistema: ' . $e->getMessage()];
-    } catch (Exception $e) {
-        error_log("Erro geral ao criar categoria: " . $e->getMessage());
-        return ['success' => false, 'message' => 'Erro interno do sistema: ' . $e->getMessage()];
-    }
-}
-
-/**
- * Remove uma categoria e todos os serviços associados em cascata.
- *
- * @param int $categoryId ID da categoria a remover.
- * @return array Resultado da operação com status e mensagem.
- */
 function deleteCategory($categoryId) {
     try {
         $db = getDatabaseConnection();
@@ -261,86 +148,126 @@ function deleteCategory($categoryId) {
 }
 
 /**
- * Faz upload de uma imagem para a pasta de categorias.
- *
- * @param array $file Array do $_FILES['image'].
- * @return array Resultado do upload com path relativo.
+ * Adiciona uma nova categoria com upload de imagem.
+ * 
+ * @param string $name Nome da categoria
+ * @param array $imageFile Array do $_FILES para a imagem
+ * @return bool True se adicionado com sucesso, False caso contrário
  */
-function uploadCategoryImage($file) {
+function addCategory($name, $imageFile) {
     try {
-        error_log("=== INÍCIO UPLOAD ===");
-        error_log("Ficheiro recebido: " . print_r($file, true));
+        $db = getDatabaseConnection();
         
-        // Verificar se há erro no upload
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            error_log("Erro no upload: " . $file['error']);
-            switch ($file['error']) {
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                    return ['success' => false, 'message' => 'Ficheiro muito grande.'];
-                case UPLOAD_ERR_PARTIAL:
-                    return ['success' => false, 'message' => 'Upload incompleto.'];
-                case UPLOAD_ERR_NO_FILE:
-                    return ['success' => false, 'message' => 'Nenhum ficheiro selecionado.'];
-                default:
-                    return ['success' => false, 'message' => 'Erro no upload.'];
-            }
+        // Validar nome da categoria
+        if (empty(trim($name))) {
+            return false;
         }
         
-        // Verificar tamanho (máximo 5MB)
+        // Verificar se categoria já existe
+        $checkStmt = $db->prepare("SELECT id FROM Category WHERE name_ = :name");
+        $checkStmt->execute([':name' => trim($name)]);
+        if ($checkStmt->fetch()) {
+            return false; // Categoria já existe
+        }
+        
+        // Processar upload da imagem
+        $uploadResult = processCategoryImageUpload($imageFile);
+        if (!$uploadResult['success']) {
+            return false;
+        }
+        
+        // Inserir na tabela Media
+        $mediaStmt = $db->prepare("INSERT INTO Media (service_id, path_, title) VALUES (NULL, :path, :title)");
+        $mediaResult = $mediaStmt->execute([
+            ':path' => $uploadResult['path'],
+            ':title' => 'Imagem da categoria: ' . trim($name)
+        ]);
+        
+        if (!$mediaResult) {
+            // Eliminar ficheiro se a inserção na BD falhou
+            if (file_exists(dirname(__DIR__) . '/' . $uploadResult['path'])) {
+                unlink(dirname(__DIR__) . '/' . $uploadResult['path']);
+            }
+            return false;
+        }
+        
+        $mediaId = $db->lastInsertId();
+        
+        // Inserir na tabela Category
+        $categoryStmt = $db->prepare("INSERT INTO Category (name_, photo_id) VALUES (:name, :photo_id)");
+        $categoryResult = $categoryStmt->execute([
+            ':name' => trim($name),
+            ':photo_id' => $mediaId
+        ]);
+        
+        if (!$categoryResult) {
+            // Reverter: eliminar da tabela Media e ficheiro
+            $db->prepare("DELETE FROM Media WHERE id = :id")->execute([':id' => $mediaId]);
+            if (file_exists(dirname(__DIR__) . '/' . $uploadResult['path'])) {
+                unlink(dirname(__DIR__) . '/' . $uploadResult['path']);
+            }
+            return false;
+        }
+        
+        return true;
+        
+    } catch (PDOException $e) {
+        error_log("Erro ao adicionar categoria: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Processa o upload da imagem da categoria.
+ * 
+ * @param array $file Array do $_FILES
+ * @return array Resultado do processamento
+ */
+function processCategoryImageUpload($file) {
+    try {
+        // Validar erro no upload
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return ['success' => false, 'message' => 'Erro no upload do ficheiro.'];
+        }
+        
+        // Validar tamanho (máximo 5MB)
         if ($file['size'] > 5 * 1024 * 1024) {
-            error_log("Ficheiro muito grande: " . $file['size']);
             return ['success' => false, 'message' => 'Ficheiro muito grande. Máximo 5MB.'];
         }
         
-        // Verificar tipo MIME
+        // Validar tipo MIME
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!in_array($file['type'], $allowedTypes)) {
-            error_log("Tipo não permitido: " . $file['type']);
             return ['success' => false, 'message' => 'Tipo de ficheiro não permitido. Use JPEG, PNG, GIF ou WebP.'];
         }
         
         // Verificar se é realmente uma imagem
         $imageInfo = getimagesize($file['tmp_name']);
         if ($imageInfo === false) {
-            error_log("Não é uma imagem válida");
             return ['success' => false, 'message' => 'Ficheiro não é uma imagem válida.'];
         }
         
         // Criar diretório se não existir
         $uploadDir = dirname(__DIR__) . '/Images/site/categories/';
-        error_log("Diretório de upload: " . $uploadDir);
-        
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {
-                error_log("Erro ao criar diretório: " . $uploadDir);
                 return ['success' => false, 'message' => 'Erro ao criar diretório.'];
             }
-            error_log("Diretório criado: " . $uploadDir);
         }
         
         // Gerar nome único para o ficheiro
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $fileName = 'category_' . uniqid() . '.' . $extension;
         $filePath = $uploadDir . $fileName;
-        $relativePath = 'Images/site/categories/' . $fileName;
-        
-        error_log("Nome do ficheiro: " . $fileName);
-        error_log("Caminho completo: " . $filePath);
-        error_log("Caminho relativo: " . $relativePath);
+        $relativePath = '/Images/site/categories/' . $fileName;
         
         // Mover ficheiro
         if (!move_uploaded_file($file['tmp_name'], $filePath)) {
-            error_log("Erro ao mover ficheiro de " . $file['tmp_name'] . " para " . $filePath);
             return ['success' => false, 'message' => 'Erro ao guardar o ficheiro.'];
         }
         
-        error_log("Ficheiro movido com sucesso");
-        
-        // Redimensionar imagem se necessário (máximo 800x600)
-        resizeCategoryImage($filePath, 800, 600);
-        
-        error_log("=== FIM UPLOAD ===");
+        // Redimensionar imagem se necessário (opcional)
+        resizeCategoryImage($filePath, 500, 500);
         
         return [
             'success' => true,
@@ -349,17 +276,17 @@ function uploadCategoryImage($file) {
         ];
         
     } catch (Exception $e) {
-        error_log("Erro no upload da imagem: " . $e->getMessage());
-        return ['success' => false, 'message' => 'Erro ao processar o ficheiro: ' . $e->getMessage()];
+        error_log("Erro no upload da imagem da categoria: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro interno no processamento da imagem.'];
     }
 }
 
 /**
- * Redimensiona uma imagem mantendo a proporção.
- *
- * @param string $filePath Caminho do ficheiro.
- * @param int $maxWidth Largura máxima.
- * @param int $maxHeight Altura máxima.
+ * Redimensiona uma imagem da categoria mantendo a proporção.
+ * 
+ * @param string $filePath Caminho do ficheiro
+ * @param int $maxWidth Largura máxima
+ * @param int $maxHeight Altura máxima
  */
 function resizeCategoryImage($filePath, $maxWidth, $maxHeight) {
     try {
@@ -435,7 +362,26 @@ function resizeCategoryImage($filePath, $maxWidth, $maxHeight) {
         imagedestroy($destination);
         
     } catch (Exception $e) {
-        error_log("Erro ao redimensionar imagem: " . $e->getMessage());
+        error_log("Erro ao redimensionar imagem da categoria: " . $e->getMessage());
+    }
+}
+
+/**
+ * Conta o número de serviços por categoria.
+ * 
+ * @param int $categoryId ID da categoria
+ * @return int Número de serviços
+ */
+function getServiceCountByCategory($categoryId) {
+    try {
+        $db = getDatabaseConnection();
+        $stmt = $db->prepare("SELECT COUNT(*) as count FROM Service_ WHERE category_id = :category_id");
+        $stmt->execute([':category_id' => $categoryId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$result['count'];
+    } catch (PDOException $e) {
+        error_log("Erro ao contar serviços da categoria: " . $e->getMessage());
+        return 0;
     }
 }
 

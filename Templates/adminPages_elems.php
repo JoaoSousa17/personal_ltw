@@ -266,7 +266,8 @@ Usados na página de Controlo de Users Bloqueados
  *
  * @param array $blockedUsers Lista de utilizadores bloqueados, objetos User, retornado por consulta da DB.
  */
-function drawBlockedUsersTable($blockedUsers) { ?>
+function drawBlockedUsersTable($blockedUsers) { 
+    $reasonBlockController = new ReasonBlockController(); ?>
     <div class="blocked-users-table-container">
         <!-- Caso não exista qualquer utilizador bloqueado na plataforma -->
         <?php if (empty($blockedUsers)): ?>
@@ -292,7 +293,7 @@ function drawBlockedUsersTable($blockedUsers) { ?>
                 <!-- Preenchimento do corpo da tabela, com os dados apropriados -->
                 <tbody>
                     <?php foreach ($blockedUsers as $user): 
-                        $blockReason = getBlockReason($user->getId());
+                        $blockReason = $reasonBlockController->getBlockReason($user->getId());
                     ?>
                         <tr>
                             <!-- Gestão dos dados dos utilizadores -->
@@ -380,7 +381,7 @@ function drawNewsletterTable($subscriptions) { ?>
 
                             <!-- Botão para remover registo da Newsletter -->
                             <td>
-                                <form method="POST" action="/Controllers/newsletterController.php"
+                                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>"
                                       onsubmit="return confirm('Tem certeza que deseja anular esta inscrição?');">
                                     <input type="hidden" name="remove_id" value="<?php echo $subscription['id']; ?>">
                                     <button type="submit" class="delete-button">Anular Inscrição</button>
@@ -438,8 +439,8 @@ function drawCategoriesTable($categories) { ?>
                             <td>
                                 <?php if (!empty($category['photo_url'])): ?>
                                     <img src="<?php echo htmlspecialchars($category['photo_url']); ?>" 
-                                         alt="<?php echo htmlspecialchars($category['name']); ?>" 
-                                         class="category-thumbnail">
+                                        alt="<?php echo htmlspecialchars($category['name']); ?>" 
+                                        class="category-thumbnail">
                                 <?php else: ?>
                                     <span class="no-image">Sem imagem</span>
                                 <?php endif; ?>
@@ -452,7 +453,7 @@ function drawCategoriesTable($categories) { ?>
                             <!-- Botão para apagar a categoria. Esta ação carece de dupla confirmação -->
                             <td>
                                 <form method="POST" action=""
-                                      onsubmit="return confirm('Tem certeza que deseja remover esta categoria? Todos os serviços relacionados também serão eliminados.');">
+                                      onsubmit="return confirm('Tem certeza que deseja remover esta categoria? Todos os serviços relacionados serão afetados.');">
                                     <input type="hidden" name="remove_category" value="<?php echo $category['id']; ?>">
                                     <button type="submit" class="remove-button">Remover</button>
                                 </form>
@@ -474,19 +475,15 @@ function drawAddCategoryForm() { ?>
             <!-- Seleção Nome da Categoria -->
             <div class="form-group">
                 <label for="category_name">Nome da Categoria:</label>
-                <input type="text" id="category_name" name="category_name" required class="form-input" 
-                       placeholder="Ex: Desenvolvimento Web, Design Gráfico...">
+                <input type="text" id="category_name" name="category_name" required class="form-input" maxlength="100">
+                <small>Insira o nome da nova categoria (máximo 100 caracteres)</small>
             </div>
 
             <!-- Upload da Imagem -->
             <div class="form-group">
                 <label for="category_image">Imagem da Categoria:</label>
-                <input type="file" id="category_image" name="category_image" required class="form-input" 
-                       accept="image/jpeg,image/png,image/gif,image/webp">
-                <small>
-                    Formatos aceites: JPEG, PNG, GIF, WebP. Tamanho máximo: 5MB.<br>
-                    A imagem será automaticamente redimensionada para 800x600 píxeis.
-                </small>
+                <input type="file" id="category_image" name="category_image" required class="form-input" accept="image/*">
+                <small>Selecione uma imagem para a categoria (JPEG, PNG, GIF ou WebP, máximo 5MB)</small>
             </div>
 
             <!-- Botão de Submissão do Formulário de Criação da Categoria -->
