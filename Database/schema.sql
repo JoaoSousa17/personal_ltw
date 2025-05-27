@@ -104,7 +104,7 @@ CREATE TABLE Category (
     id INTEGER PRIMARY KEY,
     name_ TEXT NOT NULL UNIQUE,
     photo_id INTEGER NOT NULL,
-    FOREIGN KEY(photo_id) REFERENCES Media_(id)
+    FOREIGN KEY(photo_id) REFERENCES Media(id)
 );
 
 CREATE TABLE Service_Data (
