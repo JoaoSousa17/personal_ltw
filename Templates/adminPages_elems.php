@@ -439,8 +439,8 @@ function drawCategoriesTable($categories) { ?>
                             <td>
                                 <?php if (!empty($category['photo_url'])): ?>
                                     <img src="<?php echo htmlspecialchars($category['photo_url']); ?>" 
-                                         alt="<?php echo htmlspecialchars($category['name']); ?>" 
-                                         class="category-thumbnail">
+                                        alt="<?php echo htmlspecialchars($category['name']); ?>" 
+                                        class="category-thumbnail">
                                 <?php else: ?>
                                     <span class="no-image">Sem imagem</span>
                                 <?php endif; ?>
@@ -471,18 +471,19 @@ function drawCategoriesTable($categories) { ?>
  */
 function drawAddCategoryForm() { ?>
     <div class="add-category-form-container">
-        <form method="POST" action="" class="add-category-form">
+        <form method="POST" action="" class="add-category-form" enctype="multipart/form-data">
             <!-- Seleção Nome da Categoria -->
             <div class="form-group">
                 <label for="category_name">Nome da Categoria:</label>
-                <input type="text" id="category_name" name="category_name" required class="form-input">
+                <input type="text" id="category_name" name="category_name" required class="form-input" maxlength="100">
+                <small>Insira o nome da nova categoria (máximo 100 caracteres)</small>
             </div>
 
             <!-- Upload da Imagem -->
             <div class="form-group">
-                <label for="photo_id">ID da Imagem:</label>
-                <input type="number" id="photo_id" name="photo_id" required class="form-input">
-                <small>Insira o ID de uma imagem já existente na tabela Media</small>
+                <label for="category_image">Imagem da Categoria:</label>
+                <input type="file" id="category_image" name="category_image" required class="form-input" accept="image/*">
+                <small>Selecione uma imagem para a categoria (JPEG, PNG, GIF ou WebP, máximo 5MB)</small>
             </div>
 
             <!-- Botão de Submissão do Formulário de Criação da Categoria -->

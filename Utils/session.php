@@ -37,7 +37,19 @@ function isUserLoggedIn(){
  * @return bool - true se for admin, false caso contrário.
  */
 function isUserAdmin(){
-    return isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
+    // Verificar se a variável de sessão existe
+    if (!isset($_SESSION['is_admin'])) {
+        return false;
+    }
+    
+    $isAdmin = $_SESSION['is_admin'];
+    
+    // Aceitar múltiplos formatos possíveis vindos da base de dados
+    // true (boolean), 1 (integer), "1" (string), "true" (string)
+    return $isAdmin === true || 
+           $isAdmin === 1 || 
+           $isAdmin === "1" || 
+           (is_string($isAdmin) && strtolower(trim($isAdmin)) === "true");
 }
 
 /**

@@ -18,41 +18,48 @@ if (!isUserAdmin()) {
     exit();
 }
 
+$message = '';
+$messageType = '';
+
 // Processar remoção de categoria
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_category'])) {
     $categoryId = $_POST['remove_category'];
     
-    // Aqui deveria existir uma função para remover categoria
-    // Como não foi fornecida, vamos assumir que precisamos implementá-la
+    $result = deleteCategory($categoryId);
     
-    // Redirecionar para evitar reenvio do formulário
-    header("Location: " . $_SERVER['PHP_SELF'] . "?removed=1");
-    exit;
+    if ($result['success']) {
+        $message = $result['message'];
+        $messageType = 'success';
+    } else {
+        $message = $result['message'];
+        $messageType = 'error';
+    }
 }
 
 // Processar adição de categoria
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
     $categoryName = trim($_POST['category_name']);
-    $photoId = isset($_POST['photo_id']) ? $_POST['photo_id'] : null;
     
-    // Aqui deveria existir uma função para adicionar categoria
-    // Como não foi fornecida, vamos assumir que precisamos implementá-la
-    
-    // Redirecionar para evitar reenvio do formulário
-    header("Location: " . $_SERVER['PHP_SELF'] . "?added=1");
-    exit;
+    // Verificar se o ficheiro foi enviado
+    if (!isset($_FILES['category_image']) || $_FILES['category_image']['error'] !== UPLOAD_ERR_OK) {
+        $message = 'Erro: Deve selecionar uma imagem para a categoria.';
+        $messageType = 'error';
+    } else {
+        // Tentar adicionar a categoria
+        $result = addCategory($categoryName, $_FILES['category_image']);
+        
+        if ($result) {
+            $message = 'Categoria adicionada com sucesso!';
+            $messageType = 'success';
+        } else {
+            $message = 'Erro ao adicionar categoria. Verifique se o nome não está duplicado e se a imagem é válida.';
+            $messageType = 'error';
+        }
+    }
 }
 
 // Obter todas as categorias
 $categories = getAllCategories();
-
-// Contar número de serviços por categoria
-// Esta função não existe no código fornecido, então vamos criar uma simulação
-function getServiceCountByCategory($categoryId) {
-    // Aqui deveria ter uma consulta ao banco de dados para contar os serviços
-    // Como não temos essa função, vamos retornar um número aleatório para exemplo
-    return rand(0, 50);
-}
 
 drawHeader("Handee - Gestão de Categorias", ["/Styles/admin.css", "/Styles/users.css", "/Styles/category_management.css"]);
 ?>
@@ -60,18 +67,11 @@ drawHeader("Handee - Gestão de Categorias", ["/Styles/admin.css", "/Styles/user
 <main class="category-management-container">
     <?php drawSectionHeader("Gestão de Categorias", "Visualize, adicione e remova categorias do sistema", true); ?>
 
-    <?php if (isset($_GET['removed'])): ?>
-    <div class="alert alert-success">
-        Categoria removida com sucesso!
+    <?php if (!empty($message)): ?>
+    <div class="alert alert-<?php echo $messageType; ?>">
+        <?php echo htmlspecialchars($message); ?>
     </div>
     <?php endif; ?>
-
-    <?php if (isset($_GET['added'])): ?>
-    <div class="alert alert-success">
-        Categoria adicionada com sucesso!
-    </div>
-    <?php endif; ?>
-
     
     <?php drawSectionTitle('Categorias Existentes') ?>
 

@@ -20,15 +20,11 @@ if (!isUserAdmin()) {
     exit();
 }
 
-// Criar uma instância do controlador de usuários
-$userController = new UserController();
-// Chamar o método no objeto para obter usuários bloqueados
-$blockedUsers = $userController->getAllBlockedUsers();
+// Obter utilizadores bloqueados - usando as funções do controller
+$blockedUsers = getAllBlockedUsers();
 
-// Criar uma instância do controlador de pedidos de desbloqueio
-$appealController = new UnblockAppealController();
-// Obter todos os pedidos de desbloqueio
-$appeals = $appealController->getAllAppeals();
+// Obter todos os pedidos de desbloqueio - usando as funções do controller
+$appeals = getAllAppeals();
 
 drawHeader("Handee - Utilizadores Bloqueados", ["/Styles/admin.css", "/Styles/appeals.css"]);
 ?>

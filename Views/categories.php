@@ -49,7 +49,7 @@ $total = count($categories);
                                 <?php if (isset($category['product_count'])): ?>
                                     <span class="product-count"><?= $category['product_count'] ?> produtos</span>
                                 <?php endif; ?>
-                                <a href="products.php?category=<?= $category['id'] ?>" class="btn-view-category">Ver Produtos</a>
+                                <a href="searchPages/search-results.php?category=<?= $category['id'] ?>" class="btn-view-category">Ver Produtos</a>
                             </div>
                         </div>
                     <?php endforeach; ?>

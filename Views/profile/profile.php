@@ -199,7 +199,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                         <!-- Mostrar moeda preferida apenas no próprio perfil -->
                         <div class="contact-item">
                             <div class="contact-icon">
-                                <i class="fas fa-coins" style="color: white; font-size: 20px;"></i>
+                            <img src="/Images/site/footer/dollar.png" alt="Moeda">
                             </div>
                             <div class="contact-text">
                                 <p class="contact-label">Moeda Preferida</p>
@@ -229,7 +229,7 @@ drawHeader("Handee - Perfil de " . htmlspecialchars($userData['name_']), ["/Styl
                         <?php if (!$isOwnProfile && !empty($userData['phone_number'])): ?>
                         <div class="contact-item">
                             <div class="contact-icon">
-                                <img src="/Images/site/footer/phone.png" alt="Telefone">
+                                <img src="/Images/site/footer/phone.png" alt="Telefone" width="16">
                             </div>
                             <div class="contact-text">
                                 <p class="contact-label">Telefone</p>

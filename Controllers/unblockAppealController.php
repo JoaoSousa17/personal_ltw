@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($isAjax) {
             echo json_encode(['success' => $success]);
         } else {
-            header("Location: ../Views/admin/appeals.php?" . ($success ? "success=approved" : "error=1"));
+            header("Location: ../Views/admin/blockedUsers.php?" . ($success ? "success=approved" : "error=1"));
         }
         exit;
     }
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($isAjax) {
             echo json_encode(['success' => $success]);
         } else {
-            header("Location: ../Views/admin/appeals.php?" . ($success ? "success=rejected" : "error=1"));
+            header("Location: ../Views/admin/blockedUsers.php?" . ($success ? "success=rejected" : "error=1"));
         }
         exit;
     }

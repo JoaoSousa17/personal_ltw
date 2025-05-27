@@ -153,9 +153,53 @@ Estilos do header
 
 /* Botão Notificações */
 #notifications-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.inverted-icon {
+  filter: invert(1);
+}
+
+#notifications-button img {
+  position: relative;
+  top: 7px;
+  display: block;
+  margin: 0 auto;
+}
+
+#notifications-dropdown {
+  position: relative;
+  z-index: 1000;
+}
+
+#notifications-content {
+  display: none;
+  position: absolute;
+  top: 72px;
+  right: 0;
+  min-width: 200px;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1001;
+  font-size: 14px;
+}
+
+#notifications-dropdown:hover #notifications-content {
+  display: block;
+}
+
+#new-messages-message {
+  font-weight: bold;
+  color: #d60000;
+}
+
+#notifications-label{
+  position: relative;
+  top: -50px;
 }
 
 /* Botão Perfil */
@@ -176,6 +220,7 @@ Estilos do header
 /* Botão Dropdown */
 #menu-dropdown {
   position: relative;
+  z-index: 1000;
 }
 
 #icon-dropdown {
@@ -185,18 +230,29 @@ Estilos do header
   padding: 5px;
 }
 
+#hover-buffer { /*serve para o hover funcionar corretamente*/
+  position: absolute;
+  top: 48px;
+  right: 0;
+  height: 20px;
+  width: 100%;
+  background: transparent;
+  z-index: 1001;
+}
+
 #dropdown-content {
   display: none;
   position: absolute;
   right: 0;
-  top: 65px;
+  top: 68px;
   min-width: 180px;
   background-color: white;
   border-radius: 5px;
   border: 1px solid lightgray;
 }
 
-#menu-dropdown:hover #dropdown-content {
+#menu-dropdown:hover #dropdown-content,
+#menu-dropdown:hover #hover-buffer {
   display: block;
 }
 
@@ -766,9 +822,7 @@ Estilos dos Contact Cards
 }
 
 .contact-icon img {
-  width: 24px;
-  height: 24px;
-  filter: brightness(0) invert(1);
+  width: 30px;
 }
 
 .contact-detail h4 {

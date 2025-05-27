@@ -186,11 +186,6 @@ Estilos do Perfil
     margin-right: 15px;
   }
   
-  .contact-icon img {
-    width: 20px;
-    filter: brightness(0) invert(1);
-  }
-  
   .contact-text {
     flex-grow: 1;
   }
@@ -389,6 +384,10 @@ Estilos do Perfil
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+  }
+
+  .icon-format{
+    width: 10em;
   }
   
   /* Responsividade */

@@ -2,6 +2,7 @@
 require_once(dirname(__FILE__)."/../../Utils/session.php");
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Templates/adminPages_elems.php");
+require_once(dirname(__FILE__)."/../../Controllers/userController.php");
 
 // Verificar se o utilizador está autenticado
 if (!isUserLoggedIn()) {
@@ -33,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promote_id'])) {
     }
 }
 
-// Obter todos os usuários administradores
+// Obter todos os usuários administradores - usando as funções do controller
 $admins = [];
 $allUsers = getAllUsers();
 foreach ($allUsers as $user) {
