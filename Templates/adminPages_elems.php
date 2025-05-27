@@ -266,8 +266,7 @@ Usados na página de Controlo de Users Bloqueados
  *
  * @param array $blockedUsers Lista de utilizadores bloqueados, objetos User, retornado por consulta da DB.
  */
-function drawBlockedUsersTable($blockedUsers) { 
-    $reasonBlockController = new ReasonBlockController(); ?>
+function drawBlockedUsersTable($blockedUsers) { ?>
     <div class="blocked-users-table-container">
         <!-- Caso não exista qualquer utilizador bloqueado na plataforma -->
         <?php if (empty($blockedUsers)): ?>
@@ -293,7 +292,7 @@ function drawBlockedUsersTable($blockedUsers) {
                 <!-- Preenchimento do corpo da tabela, com os dados apropriados -->
                 <tbody>
                     <?php foreach ($blockedUsers as $user): 
-                        $blockReason = $reasonBlockController->getBlockReason($user->getId());
+                        $blockReason = getBlockReason($user->getId());
                     ?>
                         <tr>
                             <!-- Gestão dos dados dos utilizadores -->
@@ -381,7 +380,7 @@ function drawNewsletterTable($subscriptions) { ?>
 
                             <!-- Botão para remover registo da Newsletter -->
                             <td>
-                                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>"
+                                <form method="POST" action="/Controllers/newsletterController.php"
                                       onsubmit="return confirm('Tem certeza que deseja anular esta inscrição?');">
                                     <input type="hidden" name="remove_id" value="<?php echo $subscription['id']; ?>">
                                     <button type="submit" class="delete-button">Anular Inscrição</button>
@@ -453,7 +452,7 @@ function drawCategoriesTable($categories) { ?>
                             <!-- Botão para apagar a categoria. Esta ação carece de dupla confirmação -->
                             <td>
                                 <form method="POST" action=""
-                                      onsubmit="return confirm('Tem certeza que deseja remover esta categoria? Todos os serviços relacionados serão afetados.');">
+                                      onsubmit="return confirm('Tem certeza que deseja remover esta categoria? Todos os serviços relacionados também serão eliminados.');">
                                     <input type="hidden" name="remove_category" value="<?php echo $category['id']; ?>">
                                     <button type="submit" class="remove-button">Remover</button>
                                 </form>
@@ -471,18 +470,23 @@ function drawCategoriesTable($categories) { ?>
  */
 function drawAddCategoryForm() { ?>
     <div class="add-category-form-container">
-        <form method="POST" action="" class="add-category-form">
+        <form method="POST" action="" class="add-category-form" enctype="multipart/form-data">
             <!-- Seleção Nome da Categoria -->
             <div class="form-group">
                 <label for="category_name">Nome da Categoria:</label>
-                <input type="text" id="category_name" name="category_name" required class="form-input">
+                <input type="text" id="category_name" name="category_name" required class="form-input" 
+                       placeholder="Ex: Desenvolvimento Web, Design Gráfico...">
             </div>
 
             <!-- Upload da Imagem -->
             <div class="form-group">
-                <label for="photo_id">ID da Imagem:</label>
-                <input type="number" id="photo_id" name="photo_id" required class="form-input">
-                <small>Insira o ID de uma imagem já existente na tabela Media</small>
+                <label for="category_image">Imagem da Categoria:</label>
+                <input type="file" id="category_image" name="category_image" required class="form-input" 
+                       accept="image/jpeg,image/png,image/gif,image/webp">
+                <small>
+                    Formatos aceites: JPEG, PNG, GIF, WebP. Tamanho máximo: 5MB.<br>
+                    A imagem será automaticamente redimensionada para 800x600 píxeis.
+                </small>
             </div>
 
             <!-- Botão de Submissão do Formulário de Criação da Categoria -->

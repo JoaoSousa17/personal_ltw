@@ -329,6 +329,63 @@ class UnblockAppeal {
     }
 
     /**
+     * Obtém todos os pedidos de desbloqueio do sistema.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @return array Lista de todos os pedidos de desbloqueio.
+     */
+    public static function getAllAppeals($db) {
+        try {
+            // Query com JOIN para obter dados do usuário junto com o pedido
+            $stmt = $db->prepare("
+                SELECT ua.*, u.name_, u.username, rb.reason, rb.extra_info
+                FROM Unblock_Appeal ua
+                JOIN User_ u ON ua.user_id = u.id
+                LEFT JOIN Reason_Block rb ON u.id = rb.user_id
+                ORDER BY ua.date_ DESC, ua.time_ DESC
+            ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results;
+        } 
+        
+        // Gestão de falhas na operação.
+        catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Obtém todos os pedidos de desbloqueio pendentes.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @return array Lista de pedidos pendentes.
+     */
+    public static function getPendingAppeals($db) {
+        try {
+            // Query com JOIN para obter dados do usuário junto com o pedido
+            $stmt = $db->prepare("
+                SELECT ua.*, u.name_, u.username, rb.reason, rb.extra_info
+                FROM Unblock_Appeal ua
+                JOIN User_ u ON ua.user_id = u.id
+                LEFT JOIN Reason_Block rb ON u.id = rb.user_id
+                WHERE ua.status_ = 'pending'
+                ORDER BY ua.date_ DESC, ua.time_ DESC
+            ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results;
+        } 
+        
+        // Gestão de falhas na operação.
+        catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    /**
      * Constrói uma instância de UnblockAppeal a partir de um array associativo.
      *
      * @param PDO $db Instância da base de dados.

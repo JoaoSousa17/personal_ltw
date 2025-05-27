@@ -19,47 +19,45 @@ if (!isUserAdmin()) {
     exit();
 }
 
-$userController = new UserController();
-$reasonBlockController = new ReasonBlockController();
-
+// Obter utilizadores - usando as funções do controller, não classes
 $searchTerm = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $searchTerm = $_GET['search'];
-    $users = $userController->searchUsers($searchTerm);
+    $users = searchUsers($searchTerm);
 } else {
-    $users = $userController->getAllUsers();
+    $users = getAllUsers();
 }
 
+// Processar ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_POST['user_id'])) {
-    $userController = new UserController();
     $userId = $_POST['user_id'];
     $action = $_POST['action'];
     $result = false;
     
     switch ($action) {
         case 'block_user':
-            $result = $userController->blockUser($userId);
+            $result = blockUser($userId);
             
             // Se o bloqueio foi bem-sucedido, registrar a razão
             if ($result && isset($_POST['block_reason'])) {
                 $reason = $_POST['block_reason'];
                 $extraInfo = isset($_POST['block_extra_info']) ? $_POST['block_extra_info'] : '';
                 
-                $reasonBlockController->addBlockReason($userId, $reason, $extraInfo);
+                addBlockReason($userId, $reason, $extraInfo);
             }
             break;
             
         case 'unblock_user':
-            $result = $userController->unblockUser($userId);
+            $result = unblockUser($userId);
             
             // Se o desbloqueio foi bem-sucedido, remover a razão
             if ($result) {
-                $reasonBlockController->removeBlockReason($userId);
+                removeBlockReason($userId);
             }
             break;
             
         case 'delete_user':
-            $result = $userController->deleteUser($userId);
+            $result = deleteUser($userId);
             break;
     }
     

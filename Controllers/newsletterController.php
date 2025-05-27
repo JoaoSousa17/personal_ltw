@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/../Models/NewsletterSubscription.php');
+require_once(dirname(__FILE__) . '/../Database/connection.php');
 
 /**
  * Insere um novo email na lista da newsletter.
@@ -62,18 +63,38 @@ function isSubscribed($email) {
  * Processamento de pedidos POST, caso este ficheiro seja acedido diretamente.
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Iniciar sessão se necessário
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
-    // Processar nova inscrição na newsletter
-    if (isset($_POST['email'])) {
-        insertSubscription($_POST['email']);
-        header("Location: ../Views/mainPage.php");
+    // Processar nova inscrição na newsletter (do footer)
+    if (isset($_POST['email']) && !isset($_POST['remove_id'])) {
+        $success = insertSubscription($_POST['email']);
+        if ($success) {
+            $_SESSION['newsletter_success'] = 'Subscrição efetuada com sucesso!';
+        } else {
+            $_SESSION['newsletter_error'] = 'Erro ao efetuar subscrição. Verifique se o email é válido.';
+        }
+        
+        // Redirecionar de volta para a página anterior ou main page
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/Views/mainPage.php';
+        header("Location: " . $referer);
         exit;
     }
 
-    // Processar remoção de subscrição existente
+    // Processar remoção de subscrição existente (do admin)
     if (isset($_POST['remove_id'])) {
         $success = removeSubscription($_POST['remove_id']);
-        echo json_encode(['success' => $success]);
+        
+        if ($success) {
+            $_SESSION['admin_success'] = 'Subscrição removida com sucesso!';
+        } else {
+            $_SESSION['admin_error'] = 'Erro ao remover subscrição.';
+        }
+        
+        // Redirecionar de volta para a página admin da newsletter
+        header("Location: /Views/admin/newsletter.php");
         exit;
     }
 }
