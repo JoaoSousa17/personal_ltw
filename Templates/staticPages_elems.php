@@ -227,3 +227,137 @@ function drawScheduleCard($title, $schedules) { ?>
     </div>
 <?php }
 ?>
+
+<?php
+/*-------------------------------------
+Funções adicionais para staticPages_elems.php
+-------------------------------------*/
+
+/**
+ * Desenha uma seção de conteúdo principal com imagem e texto.
+ * 
+ * @param string $imagePath  Caminho para a imagem.
+ * @param string $imageAlt   Texto alternativo da imagem.
+ * @param string $content    Conteúdo HTML da seção.
+ */
+function drawMainContentSection($imagePath, $imageAlt, $content) { ?>
+    <div class="main-content">
+        <div class="main-image">
+            <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($imageAlt); ?>">
+        </div>
+        <div class="main-text">
+            <?php echo $content; ?>
+        </div>
+    </div>
+<?php }
+
+/**
+ * Desenha um campo de formulário de contacto.
+ * 
+ * @param string $type        Tipo do campo (text, email, tel, select, textarea).
+ * @param string $id          ID do campo.
+ * @param string $name        Nome do campo.
+ * @param string $label       Label do campo.
+ * @param bool $required      Se o campo é obrigatório.
+ * @param string $value       Valor atual do campo.
+ * @param string $placeholder Placeholder do campo.
+ * @param array $options      Opções para select (opcional).
+ */
+function drawFormField($type, $id, $name, $label, $required = false, $value = "", $placeholder = "", $options = []) { ?>
+    <div class="form-group">
+        <label for="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($label); ?>
+            <?php if ($required): ?> *<?php endif; ?>
+        </label>
+        
+        <?php if ($type === 'select'): ?>
+            <select id="<?php echo htmlspecialchars($id); ?>" name="<?php echo htmlspecialchars($name); ?>" <?php echo $required ? 'required' : ''; ?>>
+                <option value=""><?php echo htmlspecialchars($placeholder); ?></option>
+                <?php foreach ($options as $optionValue => $optionText): ?>
+                    <option value="<?php echo htmlspecialchars($optionValue); ?>" <?php echo ($value === $optionValue) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($optionText); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        <?php elseif ($type === 'textarea'): ?>
+            <textarea id="<?php echo htmlspecialchars($id); ?>" 
+                      name="<?php echo htmlspecialchars($name); ?>" 
+                      rows="6" 
+                      placeholder="<?php echo htmlspecialchars($placeholder); ?>"
+                      <?php echo $required ? 'required' : ''; ?>><?php echo htmlspecialchars($value); ?></textarea>
+        <?php else: ?>
+            <input type="<?php echo htmlspecialchars($type); ?>" 
+                   id="<?php echo htmlspecialchars($id); ?>" 
+                   name="<?php echo htmlspecialchars($name); ?>" 
+                   value="<?php echo htmlspecialchars($value); ?>" 
+                   placeholder="<?php echo htmlspecialchars($placeholder); ?>"
+                   <?php echo $required ? 'required' : ''; ?>>
+        <?php endif; ?>
+    </div>
+<?php }
+
+/**
+ * Desenha um alerta de sucesso ou erro.
+ * 
+ * @param string $message Mensagem do alerta.
+ * @param string $type    Tipo do alerta (success ou error).
+ */
+function drawAlert($message, $type = 'success') { ?>
+    <div class="alert alert-<?php echo htmlspecialchars($type); ?>">
+        <?php echo htmlspecialchars($message); ?>
+    </div>
+<?php }
+
+/**
+ * Desenha uma seção de conteúdo legal estruturada.
+ * 
+ * @param string $id      ID da seção.
+ * @param string $title   Título da seção.
+ * @param string $content Conteúdo HTML da seção.
+ */
+function drawLegalSection($id, $title, $content) { ?>
+    <div id="<?php echo htmlspecialchars($id); ?>" class="legal-section-content">
+        <h3><?php echo htmlspecialchars($title); ?></h3>
+        <?php echo $content; ?>
+    </div>
+<?php }
+
+/**
+ * Desenha o índice de uma página legal.
+ * 
+ * @param array $sections Array de seções com 'id' e 'title'.
+ */
+function drawLegalToc($sections) { ?>
+    <div class="legal-toc">
+        <h3>Índice</h3>
+        <ul>
+            <?php foreach ($sections as $section): ?>
+                <li><a href="#<?php echo htmlspecialchars($section['id']); ?>"><?php echo htmlspecialchars($section['title']); ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php }
+
+/**
+ * Desenha uma lista de contactos.
+ * 
+ * @param array $contacts Array de contactos com email, telefone, etc.
+ */
+function drawContactList($contacts) { ?>
+    <ul class="contact-list">
+        <?php foreach ($contacts as $contact): ?>
+            <li>
+                <?php if (isset($contact['email'])): ?>
+                    E-mail: <a href="mailto:<?php echo htmlspecialchars($contact['email']); ?>"><?php echo htmlspecialchars($contact['email']); ?></a>
+                <?php elseif (isset($contact['phone'])): ?>
+                    Telefone: <?php echo htmlspecialchars($contact['phone']); ?>
+                <?php elseif (isset($contact['address'])): ?>
+                    Endereço: <?php echo htmlspecialchars($contact['address']); ?>
+                <?php else: ?>
+                    <?php echo htmlspecialchars($contact['text']); ?>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php }
+?>

@@ -75,6 +75,6 @@ $amountToPay = $total / 2;
   </form>
 </div>
 
-<script src="/Scripts/checkout.js"></script>
+<script src="/Scripts/Cart&Checkout.js"></script>
 
 <?php drawFooter(); ?>

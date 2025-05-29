@@ -1,17 +1,17 @@
 <?php
+// Verificar permissões e incluir dependências
 require_once(dirname(__FILE__)."/../../Utils/session.php");
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Templates/adminPages_elems.php");
 require_once(dirname(__FILE__)."/../../Controllers/userController.php");
 
-// Verificar se o utilizador está autenticado
+// Verificar autenticação e permissões
 if (!isUserLoggedIn()) {
     $_SESSION['error'] = 'Deve fazer login para aceder a esta página.';
     header("Location: /Views/auth.php");
     exit();
 }
 
-// Verificar se o utilizador é administrador
 if (!isUserAdmin()) {
     $_SESSION['error'] = 'Não tem permissão para aceder ao painel de administração.';
     header("Location: /Views/mainPage.php");
@@ -24,17 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promote_id'])) {
     $user = getUserById($userId);
     
     if ($user) {
-        // Atualizar o usuário para administrador
         $updateData = ['is_admin' => true];
         $result = updateUser($userId, $updateData);
         
-        // Redirecionar para evitar reenvio do formulário
         header("Location: " . $_SERVER['PHP_SELF'] . "?promoted=1");
         exit;
     }
 }
 
-// Obter todos os usuários administradores - usando as funções do controller
+// Obter dados dos administradores
 $admins = [];
 $allUsers = getAllUsers();
 foreach ($allUsers as $user) {
@@ -43,7 +41,7 @@ foreach ($allUsers as $user) {
     }
 }
 
-// Verificar se há uma busca
+// Processar busca de utilizadores
 $searchTerm = '';
 $searchResults = [];
 if (isset($_GET['search']) && !empty($_GET['search'])) {
@@ -53,26 +51,26 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 
 drawHeader("Handee - Controle de Administradores", ["/Styles/admin.css", "/Styles/users.css", "/Styles/admin_control.css"]);
 ?>
+
 <main class="admin-control-container">
+    <!-- Cabeçalho da página -->
     <?php drawSectionHeader("Controle de Administradores", "Gerencie os usuários administradores do sistema", true); ?>
     
+    <!-- Mensagem de sucesso -->
     <?php if (isset($_GET['promoted'])): ?>
     <div class="alert alert-success">
         Usuário promovido a administrador com sucesso!
     </div>
     <?php endif; ?>
 
-    <!-- Tabela de administradores -->
+    <!-- Tabela de administradores atuais -->
     <?php drawSectionTitle('Administradores Atuais') ?>
     <?php drawAdminTable($admins) ?>
 
-    <!-- Seção para adicionar novos administradores -->
+    <!-- Seção para promover usuários -->
     <?php drawSectionTitle('Promover Usuário a Administrador') ?>
-
-    <!-- Barra de pesquisa -->
     <?php drawSearchBar($searchTerm) ?>
-
-    <!-- Resultados da pesquisa -->
     <?php drawSearchResultTable($searchTerm, $searchResults) ?>
 </main>
+
 <?php drawFooter(); ?>

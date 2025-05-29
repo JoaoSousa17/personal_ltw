@@ -768,3 +768,338 @@ function drawContactsTable($contacts) { ?>
         <?php endif; ?>
     </div>
 <?php } ?>
+
+<?php
+/**
+ * Desenha a seção de estatísticas gerais
+ */
+function drawGeneralStatsSection($generalStats) {
+    ?>
+    <section class="stats-overview">
+        <h3 class="section-subtitle">Visão Geral</h3>
+        <div class="stats-grid">
+            <div class="stat-card primary">
+                <div class="stat-icon">
+                    <img src="/Images/site/admin/users.png" alt="Utilizadores">
+                </div>
+                <div class="stat-content">
+                    <h4>Utilizadores</h4>
+                    <div class="stat-number"><?= $generalStats['users']['total_users'] ?></div>
+                    <div class="stat-breakdown">
+                        <span class="admin-count"><?= $generalStats['users']['admin_users'] ?> admins</span>
+                        <span class="freelancer-count"><?= $generalStats['users']['freelancer_users'] ?> freelancers</span>
+                        <span class="blocked-count"><?= $generalStats['users']['blocked_users'] ?> bloqueados</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card secondary">
+                <div class="stat-icon">
+                    <img src="/Images/site/admin/services.png" alt="Serviços">
+                </div>
+                <div class="stat-content">
+                    <h4>Serviços</h4>
+                    <div class="stat-number"><?= $generalStats['services']['total_services'] ?></div>
+                    <div class="stat-detail">
+                        <?= $generalStats['services']['active_services'] ?> ativos
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card tertiary">
+                <div class="stat-icon">
+                    <img src="/Images/site/admin/categories.png" alt="Categorias">
+                </div>
+                <div class="stat-content">
+                    <h4>Categorias</h4>
+                    <div class="stat-number"><?= $generalStats['categories']['total_categories'] ?></div>
+                </div>
+            </div>
+
+            <div class="stat-card quaternary">
+                <div class="stat-icon">
+                    <img src="/Images/site/admin/newsletter.png" alt="Newsletter">
+                </div>
+                <div class="stat-content">
+                    <h4>Newsletter</h4>
+                    <div class="stat-number"><?= $generalStats['newsletter']['total_subscriptions'] ?></div>
+                    <div class="stat-detail">subscrições</div>
+                </div>
+            </div>
+
+            <div class="stat-card quinary">
+                <div class="stat-icon">
+                    <img src="/Images/site/admin/contacts.png" alt="Contactos">
+                </div>
+                <div class="stat-content">
+                    <h4>Contactos</h4>
+                    <div class="stat-number"><?= $generalStats['contacts']['total_contacts'] ?></div>
+                    <div class="stat-detail">
+                        <?= $generalStats['contacts']['unread_contacts'] ?> não lidos
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+/**
+ * Desenha a seção de crescimento mensal
+ */
+function drawGrowthSection($growthStats) {
+    ?>
+    <section class="growth-section">
+        <h3 class="section-subtitle">Crescimento Mensal</h3>
+        <div class="growth-grid">
+            <div class="growth-card">
+                <h4>Novos Utilizadores</h4>
+                <div class="growth-numbers">
+                    <span class="current-month"><?= $growthStats['users']['current'] ?></span>
+                    <span class="vs">vs</span>
+                    <span class="previous-month"><?= $growthStats['users']['previous'] ?></span>
+                </div>
+                <div class="growth-percent <?= $growthStats['users']['growth_percent'] >= 0 ? 'positive' : 'negative' ?>">
+                    <?= $growthStats['users']['growth_percent'] > 0 ? '+' : '' ?><?= $growthStats['users']['growth_percent'] ?>%
+                </div>
+            </div>
+            
+            <div class="growth-card">
+                <h4>Novos Contactos</h4>
+                <div class="growth-numbers">
+                    <span class="current-month"><?= $growthStats['contacts']['current'] ?></span>
+                    <span class="vs">vs</span>
+                    <span class="previous-month"><?= $growthStats['contacts']['previous'] ?></span>
+                </div>
+                <div class="growth-percent <?= $growthStats['contacts']['growth_percent'] >= 0 ? 'positive' : 'negative' ?>">
+                    <?= $growthStats['contacts']['growth_percent'] > 0 ? '+' : '' ?><?= $growthStats['contacts']['growth_percent'] ?>%
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+/**
+ * Desenha a seção de gráficos
+ */
+function drawChartsSection() {
+    ?>
+    <section class="charts-section">
+        <h3 class="section-subtitle">Atividade dos Últimos 7 Dias</h3>
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h4>Novos Utilizadores</h4>
+                <div class="chart-wrapper">
+                    <canvas id="newUsersChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h4>Contactos Recebidos</h4>
+                <div class="chart-wrapper">
+                    <canvas id="contactsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h4>Complaints/Disputas</h4>
+                <div class="chart-wrapper">
+                    <canvas id="complaintsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h4>Subscrições Newsletter</h4>
+                <div class="chart-wrapper">
+                    <canvas id="newsletterChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+/**
+ * Desenha a seção de atividade recente
+ */
+function drawRecentActivitySection($recentActivity) {
+    ?>
+    <section class="recent-activity">
+        <h3 class="section-subtitle">Atividade Recente</h3>
+        <div class="activity-grid">
+            <div class="activity-card">
+                <h4>Últimos Utilizadores</h4>
+                <div class="activity-list">
+                    <?php if (!empty($recentActivity['users'])): ?>
+                        <?php foreach ($recentActivity['users'] as $user): ?>
+                            <div class="activity-item">
+                                <span class="activity-name"><?= htmlspecialchars($user['name_']) ?></span>
+                                <span class="activity-detail">@<?= htmlspecialchars($user['username']) ?></span>
+                                <span class="activity-date"><?= date('d/m', strtotime($user['creation_date'])) ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="no-activity">Sem atividade recente</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <h4>Últimos Contactos</h4>
+                <div class="activity-list">
+                    <?php if (!empty($recentActivity['contacts'])): ?>
+                        <?php foreach ($recentActivity['contacts'] as $contact): ?>
+                            <div class="activity-item">
+                                <span class="activity-name"><?= htmlspecialchars($contact['name_']) ?></span>
+                                <span class="activity-detail"><?= htmlspecialchars($contact['subject']) ?></span>
+                                <span class="activity-date"><?= date('d/m', strtotime($contact['created_at'])) ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="no-activity">Sem contactos recentes</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <h4>Últimos Serviços</h4>
+                <div class="activity-list">
+                    <?php if (!empty($recentActivity['services'])): ?>
+                        <?php foreach ($recentActivity['services'] as $service): ?>
+                            <div class="activity-item">
+                                <span class="activity-name"><?= htmlspecialchars($service['name_']) ?></span>
+                                <span class="activity-detail">por @<?= htmlspecialchars($service['username']) ?></span>
+                                <span class="activity-price">€<?= number_format($service['price_per_hour'], 2) ?>/h</span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="no-activity">Sem serviços recentes</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+/**
+ * Desenha o filtro de pedidos de desbloqueio
+ */
+function drawAppealFilter() {
+    ?>
+    <div class="appeal-filter-container">
+        <button class="appeal-filter-btn active" data-filter="all">Todos os Pedidos</button>
+        <button class="appeal-filter-btn" data-filter="pending">Pendentes</button>
+        <button class="appeal-filter-btn" data-filter="approved">Aprovados</button>
+        <button class="appeal-filter-btn" data-filter="rejected">Rejeitados</button>
+    </div>
+    <?php
+}
+
+/**
+ * Desenha os cards de pedidos de desbloqueio
+ */
+function drawAppealsGrid($appeals) {
+    ?>
+    <div class="appeals-container">
+        <?php if (empty($appeals)): ?>
+            <div class="no-appeals">
+                <p>Não existem pedidos de desbloqueio no momento.</p>
+            </div>
+        <?php else: ?>
+            <div class="appeals-grid">
+                <?php foreach ($appeals as $appeal): ?>
+                    <div class="appeal-card" data-status="<?php echo htmlspecialchars($appeal['status_']); ?>">
+                        <div class="appeal-card-header">
+                            <h3 class="appeal-title"><?php echo htmlspecialchars($appeal['title']); ?></h3>
+                            <span class="appeal-status <?php echo htmlspecialchars($appeal['status_']); ?>">
+                                <?php 
+                                    $statusText = '';
+                                    switch($appeal['status_']) {
+                                        case 'pending':
+                                            $statusText = 'Pendente';
+                                            break;
+                                        case 'approved':
+                                            $statusText = 'Aprovado';
+                                            break;
+                                        case 'rejected':
+                                            $statusText = 'Rejeitado';
+                                            break;
+                                    }
+                                    echo $statusText;
+                                ?>
+                            </span>
+                        </div>
+                        <div class="appeal-card-body">
+                            <div class="user-info">
+                                <strong>Usuário:</strong> <?php echo htmlspecialchars($appeal['name_']); ?><br>
+                                <strong>ID:</strong> <?php echo htmlspecialchars($appeal['user_id']); ?><br>
+                                <strong>Username:</strong> <?php echo htmlspecialchars($appeal['username']); ?>
+                            </div>
+                            
+                            <div class="block-reason">
+                                <div class="reason-label">Razão do bloqueio:</div>
+                                <div class="reason-content">
+                                    <?php if (!empty($appeal['reason'])): ?>
+                                        <div class="reason-main"><?php echo htmlspecialchars($appeal['reason']); ?></div>
+                                        <?php if (!empty($appeal['extra_info'])): ?>
+                                            <div class="reason-extra"><?php echo htmlspecialchars($appeal['extra_info']); ?></div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <div class="reason-none">Não especificada</div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            
+                            <div class="appeal-message">
+                                <div class="message-label">Mensagem do usuário:</div>
+                                <p><?php echo nl2br(htmlspecialchars($appeal['body_'])); ?></p>
+                            </div>
+                            <div class="appeal-date">
+                                <small>Enviado em: <?php echo htmlspecialchars($appeal['date_']); ?> às <?php echo htmlspecialchars($appeal['time_']); ?></small>
+                            </div>
+                        </div>
+                        <?php if ($appeal['status_'] === 'pending'): ?>
+                            <div class="appeal-card-footer">
+                                <form method="post" action="../../Controllers/UnblockAppealController.php">
+                                    <input type="hidden" name="action" value="approve_appeal">
+                                    <input type="hidden" name="appeal_id" value="<?php echo $appeal['id']; ?>">
+                                    <button type="submit" class="appeal-btn approve">Aprovar</button>
+                                </form>
+                                <form method="post" action="../../Controllers/UnblockAppealController.php">
+                                    <input type="hidden" name="action" value="reject_appeal">
+                                    <input type="hidden" name="appeal_id" value="<?php echo $appeal['id']; ?>">
+                                    <button type="submit" class="appeal-btn reject">Rejeitar</button>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+/**
+ * Desenha mensagens de sucesso ou erro para appeals
+ */
+function drawAppealMessages() {
+    if (isset($_GET['success'])): ?>
+        <div class="alert-success">
+            <?php if ($_GET['success'] === 'approved'): ?>
+                Pedido aprovado com sucesso. Usuário foi desbloqueado.
+            <?php elseif ($_GET['success'] === 'rejected'): ?>
+                Pedido rejeitado com sucesso.
+            <?php endif; ?>
+        </div>
+    <?php endif;
+    
+    if (isset($_GET['error'])): ?>
+        <div class="alert-error">
+            Ocorreu um erro ao processar o pedido.
+        </div>
+    <?php endif;
+}
+?>
