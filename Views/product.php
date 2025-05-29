@@ -2,6 +2,7 @@
 require_once("../Templates/common_elems.php");
 require_once("../Templates/product_elems.php");
 require_once("../Database/connection.php");
+require_once(dirname(__FILE__)."/../../Controllers/distancesCalculationController.php");
 
 drawHeader("Product", ["../Styles/product.css"]);
 
@@ -61,6 +62,7 @@ if (!$service) {
 $price = $service['price_per_hour'];
 $discount = $service['promotion'];
 $finalPrice = $price * (1 - $discount / 100.0);
+$displayPrice = convertAndFormatPrice($finalPrice, $loggedInUser);
 $images = explode(",", $service['image_paths'] ?? "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png");
 $categories = [$service['category_name']];
 $description = $service['description_'];
@@ -79,7 +81,7 @@ $date = $rawDate ? date("d \ F \ Y", strtotime($rawDate)) : "Data desconhecida";
     </div>
 
     <div class="product-info-side">
-      <?php drawProductInfo($date, $title, $finalPrice, $serviceId); ?>
+      <?php drawProductInfo($date, $title, $displayPrice, $serviceId); ?>
       <?php drawAdvertiserInfo($username, $profilePhotoId); ?>
     </div>
   </div>

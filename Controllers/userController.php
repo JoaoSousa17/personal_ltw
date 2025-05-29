@@ -451,23 +451,6 @@ function validateProfileData($data, $userId) {
 }
 
 /**
- * Obtém o símbolo da moeda baseado no código.
- *
- * @param string $currencyCode Código da moeda
- * @return string Símbolo da moeda
- */
-function getCurrencySymbol($currencyCode) {
-    $symbols = [
-        'eur' => '€',
-        'usd' => '$',
-        'gbp' => '£',
-        'brl' => 'R$'
-    ];
-
-    return $symbols[$currencyCode] ?? '€';
-}
-
-/**
  * Atualiza apenas a moeda do utilizador.
  *
  * @param int $userId ID do utilizador

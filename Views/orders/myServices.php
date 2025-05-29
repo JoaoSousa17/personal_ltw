@@ -3,6 +3,7 @@ require_once(dirname(__FILE__)."/../../Utils/session.php");
 require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Controllers/serviceController.php");
 require_once(dirname(__FILE__)."/../../Controllers/categoriesController.php");
+require_once(dirname(__FILE__)."/../../Controllers/distancesCalculationController.php");
 
 // Verificar se o utilizador está autenticado
 if (!isUserLoggedIn()) {
@@ -129,88 +130,25 @@ drawHeader("Handee - Os Meus Serviços", ["/Styles/MyRequest&Items.css"]);
             </div>
         <?php else: ?>
             <div class="services-list">
-                <?php foreach ($services as $service): 
-                    $isActive = $service['is_active'];
-                    $activeClass = $isActive ? 'service-active' : 'service-inactive';
-                    $discountedPrice = calculateDiscountedPrice($service['price_per_hour'], $service['promotion']);
-                    $avgRating = $service['avg_rating'] ? round($service['avg_rating'], 1) : 0;
+            <?php foreach ($services as $service): 
+                $discountedPrice = calculateDiscountedPrice($service['price_per_hour'], $service['promotion']);
+                
+                // Converter preços
+                $userId = getCurrentUserId();
+                $displayPricePerHour = convertAndFormatPrice($service['price_per_hour'], $userId);
+                $displayDiscountedPrice = convertAndFormatPrice($discountedPrice, $userId);
                 ?>
-                    <div class="service-card <?php echo $activeClass; ?>">
-                        <div class="service-header">
-                            <div class="service-info">
-                                <h3 class="service-name"><?php echo htmlspecialchars($service['name_']); ?></h3>
-                                <p class="category-name"><?php echo htmlspecialchars($service['category_name']); ?></p>
+                    <div class="service-card">
+                        <div class="service-pricing">
+                            <div class="price-info">
+                                <?php if ($service['promotion'] > 0): ?>
+                                    <span class="original-price"><?php echo $displayPricePerHour; ?>/h</span>
+                                    <span class="discounted-price"><?php echo $displayDiscountedPrice; ?>/h</span>
+                                    <span class="discount-badge"><?php echo $service['promotion']; ?>% OFF</span>
+                                <?php else: ?>
+                                    <span class="current-price"><?php echo $displayPricePerHour; ?>/h</span>
+                                <?php endif; ?>
                             </div>
-                            <div class="service-status">
-                                <span class="status-badge <?php echo $isActive ? 'status-active' : 'status-inactive'; ?>">
-                                    <?php echo $isActive ? 'Ativo' : 'Inativo'; ?>
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="service-body">
-                            <div class="service-description">
-                                <p><?php echo htmlspecialchars($service['description_']); ?></p>
-                            </div>
-                            
-                            <div class="service-pricing">
-                                <div class="price-info">
-                                    <?php if ($service['promotion'] > 0): ?>
-                                        <span class="original-price">€<?php echo number_format($service['price_per_hour'], 2); ?>/h</span>
-                                        <span class="discounted-price">€<?php echo number_format($discountedPrice, 2); ?>/h</span>
-                                        <span class="discount-badge"><?php echo $service['promotion']; ?>% OFF</span>
-                                    <?php else: ?>
-                                        <span class="current-price">€<?php echo number_format($service['price_per_hour'], 2); ?>/h</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="duration-info">
-                                    <i class="fas fa-clock"></i>
-                                    <?php echo $service['duration']; ?> minutos
-                                </div>
-                            </div>
-                            
-                            <div class="service-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <span><?php echo $service['total_orders']; ?> pedidos</span>
-                                </div>
-                                
-                                <div class="stat-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span><?php echo $service['completed_orders']; ?> concluídos</span>
-                                </div>
-                                
-                                <div class="stat-item">
-                                    <i class="fas fa-star"></i>
-                                    <span><?php echo $avgRating; ?>/5 (<?php echo $service['total_reviews']; ?>)</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="service-actions">
-                            <form method="post" style="display: inline;">
-                                <input type="hidden" name="service_id" value="<?php echo $service['id']; ?>">
-                                <input type="hidden" name="action" value="toggle_status">
-                                <button type="submit" class="btn-toggle <?php echo $isActive ? 'btn-deactivate' : 'btn-activate'; ?>">
-                                    <i class="fas fa-<?php echo $isActive ? 'eye-slash' : 'eye'; ?>"></i>
-                                    <?php echo $isActive ? 'Desativar' : 'Ativar'; ?>
-                                </button>
-                            </form>
-                            
-                            <button class="btn-edit" onclick="editService(<?php echo $service['id']; ?>)">
-                                <i class="fas fa-edit"></i>
-                                Editar
-                            </button>
-                            
-                            <a href="/Views/product.php?id=<?php echo $service['id']; ?>" class="btn-view" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                                Ver Anúncio
-                            </a>
-                            
-                            <button class="btn-stats" onclick="viewServiceStats(<?php echo $service['id']; ?>)">
-                                <i class="fas fa-chart-bar"></i>
-                                Estatísticas
-                            </button>
                         </div>
                     </div>
                 <?php endforeach; ?>

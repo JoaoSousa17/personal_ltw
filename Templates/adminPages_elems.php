@@ -633,3 +633,139 @@ function drawSearchResultTable($searchTerm, $searchResults) { ?>
         <?php endif; ?>
     <?php endif; ?>
 <?php } ?>
+
+<?php
+/*!-----------------------------------------
+Usados na página de Controlo de Contactos
+------------------------------------------>
+
+/**
+ * Desenha uma tabela com os contactos recebidos, mostrando informações detalhadas
+ * e permitindo ao administrador marcar como lido ou eliminar cada mensagem.
+ *
+ * @param array $contacts Lista de contactos, objetos Contact retornados por consulta da DB.
+ */
+function drawContactsTable($contacts) { ?>
+    <div class="contacts-table-container">
+        <!-- Caso não exista qualquer contacto -->
+        <?php if (empty($contacts)): ?>
+            <div class="no-contacts">
+                <p>📧 Não existem mensagens de contacto.</p>
+            </div>
+
+        <!-- Caso de existência de contactos -->
+        <?php else: ?>
+            <table class="contacts-table">
+                <!-- Nomes das colunas da tabela -->
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Assunto</th>
+                        <th>Mensagem</th>
+                        <th>Data/Hora</th>
+                        <th>Estado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <!-- Preenchimento do corpo da tabela, com os dados apropriados -->
+                <tbody>
+                    <?php foreach ($contacts as $contact): ?>
+                        <tr class="<?php echo $contact->getIsRead() ? '' : 'unread-contact'; ?>">
+                            <!-- ID -->
+                            <td><?php echo htmlspecialchars($contact->getId()); ?></td>
+                            
+                            <!-- Nome -->
+                            <td>
+                                <strong><?php echo htmlspecialchars($contact->getName()); ?></strong>
+                            </td>
+                            
+                            <!-- Email -->
+                            <td>
+                                <a href="mailto:<?php echo htmlspecialchars($contact->getEmail()); ?>" 
+                                   style="color: var(--primary-color); text-decoration: none;">
+                                    <?php echo htmlspecialchars($contact->getEmail()); ?>
+                                </a>
+                            </td>
+                            
+                            <!-- Telefone -->
+                            <td>
+                                <?php 
+                                $phone = $contact->getPhone();
+                                if (!empty($phone)) {
+                                    echo '<a href="tel:' . htmlspecialchars($phone) . '" style="color: var(--primary-color); text-decoration: none;">' . htmlspecialchars($phone) . '</a>';
+                                } else {
+                                    echo '<span class="empty-field">N/A</span>';
+                                }
+                                ?>
+                            </td>
+                            
+                            <!-- Assunto -->
+                            <td>
+                                <span title="<?php echo htmlspecialchars($contact->getSubject()); ?>">
+                                    <?php 
+                                    $subject = $contact->getSubject();
+                                    echo strlen($subject) > 25 ? htmlspecialchars(substr($subject, 0, 25)) . '...' : htmlspecialchars($subject);
+                                    ?>
+                                </span>
+                            </td>
+                            
+                            <!-- Mensagem (preview) -->
+                            <td class="message-preview">
+                                <?php 
+                                $message = $contact->getMessage();
+                                $truncated = strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message;
+                                echo '<span title="' . htmlspecialchars($message) . '">' . htmlspecialchars($truncated) . '</span>';
+                                ?>
+                            </td>
+                            
+                            <!-- Data e Hora -->
+                            <td>
+                                <div style="font-size: 0.9em;">
+                                    <div><?php echo htmlspecialchars(date('d/m/Y', strtotime($contact->getCreatedAt()))); ?></div>
+                                    <div style="color: #666; font-size: 0.85em;">
+                                        <?php echo htmlspecialchars(date('H:i', strtotime($contact->getCreatedTime()))); ?>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <!-- Estado -->
+                            <td>
+                                <?php if ($contact->getIsRead()): ?>
+                                    <span class="status-read">Lida</span>
+                                <?php else: ?>
+                                    <span class="status-unread">Não Lida</span>
+                                <?php endif; ?>
+                            </td>
+
+                            <!-- Botões de ação -->
+                            <td class="contact-actions">
+                                <!-- Botão para marcar como lida (apenas se não estiver lida) -->
+                                <?php if (!$contact->getIsRead()): ?>
+                                    <form method="POST" action="/Controllers/contactController.php" style="display: inline;">
+                                        <input type="hidden" name="action" value="mark_read">
+                                        <input type="hidden" name="contact_id" value="<?php echo $contact->getId(); ?>">
+                                        <button type="submit" class="mark-read-button" title="Marcar como lida">
+                                            ✓
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+
+                                <!-- Botão para eliminar contacto -->
+                                <form method="POST" action="/Controllers/contactController.php" style="display: inline;"
+                                      onsubmit="return confirm('Tem certeza que deseja eliminar este contacto?\n\nDe: <?php echo addslashes($contact->getName()); ?>\nAssunto: <?php echo addslashes($contact->getSubject()); ?>');">
+                                    <input type="hidden" name="action" value="delete_contact">
+                                    <input type="hidden" name="contact_id" value="<?php echo $contact->getId(); ?>">
+                                    <button type="submit" class="delete-button">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+<?php } ?>

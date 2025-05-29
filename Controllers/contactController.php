@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../Models/Contact.php');
 require_once(dirname(__FILE__) . '/../Database/connection.php');
+require_once(dirname(__FILE__) . '/../Utils/session.php');
 
 /**
  * Processa uma nova mensagem de contacto.
@@ -175,8 +176,108 @@ function notifyAdminsNewContact($contact) {
     return true;
 }
 
-// Processamento de requisições HTTP
+// ===== FUNÇÕES ADMINISTRATIVAS =====
+
+/**
+ * Verifica se o utilizador está autenticado e é admin
+ */
+function verifyAdminAccess() {
+    if (!isUserLoggedIn()) {
+        $_SESSION['error'] = 'Deve fazer login para aceder a esta página.';
+        header("Location: /Views/auth.php");
+        exit();
+    }
+
+    if (!isUserAdmin()) {
+        $_SESSION['error'] = 'Não tem permissão para aceder ao painel de administração.';
+        header("Location: /Views/mainPage.php");
+        exit();
+    }
+}
+
+/**
+ * Marca um contacto como lido (apenas para admins)
+ *
+ * @param int $contactId ID do contacto
+ * @return bool True se marcado com sucesso
+ */
+function adminMarkContactAsRead($contactId) {
+    $contact = getContactById($contactId);
+    if (!$contact) {
+        return false;
+    }
+    
+    return $contact->markAsRead();
+}
+
+/**
+ * Elimina um contacto (apenas para admins)
+ *
+ * @param int $contactId ID do contacto
+ * @return bool True se eliminado com sucesso
+ */
+function adminDeleteContact($contactId) {
+    $contact = getContactById($contactId);
+    if (!$contact) {
+        return false;
+    }
+    
+    return $contact->delete();
+}
+
+// ===== PROCESSAMENTO DE REQUISIÇÕES HTTP =====
+
+// Verificar se esta é uma requisição administrativa
+$isAdminAction = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && in_array($_POST['action'], ['mark_read', 'delete_contact'])) {
+        $isAdminAction = true;
+    }
+}
+
+// Processar ações administrativas
+if ($isAdminAction) {
+    session_start();
+    verifyAdminAccess();
+    
+    // Ação para marcar como lido
+    if ($_POST['action'] === 'mark_read' && isset($_POST['contact_id'])) {
+        $contactId = intval($_POST['contact_id']);
+        $success = adminMarkContactAsRead($contactId);
+        
+        if ($success) {
+            $_SESSION['admin_success'] = 'Contacto marcado como lido com sucesso!';
+        } else {
+            $_SESSION['admin_error'] = 'Erro ao marcar contacto como lido.';
+        }
+        
+        header("Location: /Views/admin/admin_contacts.php");
+        exit;
+    }
+    
+    // Ação para eliminar contacto
+    if ($_POST['action'] === 'delete_contact' && isset($_POST['contact_id'])) {
+        $contactId = intval($_POST['contact_id']);
+        $success = adminDeleteContact($contactId);
+        
+        if ($success) {
+            $_SESSION['admin_success'] = 'Contacto eliminado com sucesso!';
+        } else {
+            $_SESSION['admin_error'] = 'Erro ao eliminar contacto.';
+        }
+        
+        header("Location: /Views/admin/admin_contacts.php");
+        exit;
+    }
+    
+    // Se chegou aqui com ação admin inválida
+    $_SESSION['admin_error'] = 'Ação administrativa inválida.';
+    header("Location: /Views/admin/admin_contacts.php");
+    exit;
+}
+
+// Processamento de formulário de contacto público
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isAdminAction) {
     session_start();
     
     // Obter dados do formulário
@@ -233,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Processar requisições para marcar como lida (AJAX ou Admin)
+// Processar requisições AJAX para marcar como lida
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'mark_read') {
     session_start();
     
@@ -278,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $_SESSION['error'] = 'Dados inválidos.';
     }
     
-    header("Location: /Views/admin/contacts.php");
+    header("Location: /Views/admin/admin_contacts.php");
     exit;
 }
 ?>
