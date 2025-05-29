@@ -2,8 +2,10 @@
 
 require_once("../Templates/common_elems.php");
 require_once("../Templates/product_elems.php");
+require_once("../Templates/feedback_elems.php");
 require_once("../Database/connection.php");
 require_once("../Controllers/distancesCalculationController.php");
+require_once("../Controllers/feedbackController.php");
 
 // Verificar autenticação do utilizador
 $loggedInUser = $_SESSION['user_id'] ?? null;
@@ -68,6 +70,10 @@ if (!$service) {
     exit;
 }
 
+// Obter feedbacks do serviço
+$feedbacks = getServiceFeedbacks($serviceId);
+$feedbackStats = getServiceRating($serviceId);
+
 // Processamento de dados do serviço
 $price = $service['price_per_hour'];
 $duration = isset($service['duration']) ? (int)$service['duration'] : 0;
@@ -92,7 +98,7 @@ $profilePhotoId = $service['profile_photo'];
 $rawDate = $dateResult['creation_date'] ?? null;
 $date = $rawDate ? date("d \ F \ Y", strtotime($rawDate)) : "Data desconhecida";
 
-drawHeader("Product", ["../Styles/Categories&Product.css"]);
+drawHeader("Product", ["../Styles/Categories&Product.css", "../Styles/feedback.css"]);
 ?>
 
 <main class="page-container">
@@ -125,6 +131,9 @@ drawHeader("Product", ["../Styles/Categories&Product.css"]);
             <?php drawAdvertiserInfo($username, $profilePhotoId); ?>
         </div>
     </div>
+    
+    <!-- Seção de Feedbacks -->
+    <?php drawFeedbackSection($feedbacks, $feedbackStats, $serviceId); ?>
     
     <!-- Popup de Mensagens -->
     <?php drawMessagePopup($username); ?>

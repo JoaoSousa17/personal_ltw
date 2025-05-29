@@ -15,6 +15,11 @@ class Feedback {
     private $date;
     private $time;
     private $db;
+    
+    // Propriedades adicionais para dados relacionados
+    private $userName;
+    private $username;
+    private $serviceName;
 
     /**
      * Construtor da classe.
@@ -101,6 +106,24 @@ class Feedback {
         return $this->time;
     }
 
+    /**
+     * Getter para o nome do utilizador.
+     * 
+     * @return string|null Nome do utilizador.
+     */
+    public function getUserName() {
+        return $this->userName;
+    }
+
+    /**
+     * Getter para o nome do serviço.
+     * 
+     * @return string|null Nome do serviço.
+     */
+    public function getServiceName() {
+        return $this->serviceName;
+    }
+
     /********
      Setters
     ********/
@@ -175,6 +198,24 @@ class Feedback {
      */
     public function setTime($time) {
         $this->time = $time;
+    }
+
+    /**
+     * Setter para o nome do utilizador.
+     * 
+     * @param string $userName Nome do utilizador.
+     */
+    public function setUserName($userName) {
+        $this->userName = $userName;
+    }
+
+    /**
+     * Setter para o nome do serviço.
+     * 
+     * @param string $serviceName Nome do serviço.
+     */
+    public function setServiceName($serviceName) {
+        $this->serviceName = $serviceName;
     }
 
     /**********
@@ -313,9 +354,9 @@ class Feedback {
             $feedbacks = [];
             foreach ($results as $result) {
                 $feedback = self::createFromArray($db, $result);
-                // Adicionar informações do utilizador
-                $feedback->userName = $result['user_name'];
-                $feedback->username = $result['username'];
+                // Definir informações do utilizador usando setters
+                $feedback->setUserName($result['user_name']);
+                $feedback->setUsername($result['username']);
                 $feedbacks[] = $feedback;
             }
             return $feedbacks;
@@ -347,8 +388,8 @@ class Feedback {
             $feedbacks = [];
             foreach ($results as $result) {
                 $feedback = self::createFromArray($db, $result);
-                // Adicionar nome do serviço
-                $feedback->serviceName = $result['service_name'];
+                // Definir nome do serviço usando setter
+                $feedback->setServiceName($result['service_name']);
                 $feedbacks[] = $feedback;
             }
             return $feedbacks;
@@ -434,8 +475,8 @@ class Feedback {
             $feedbacks = [];
             foreach ($results as $result) {
                 $feedback = self::createFromArray($db, $result);
-                $feedback->userName = $result['user_name'];
-                $feedback->serviceName = $result['service_name'];
+                $feedback->setUserName($result['user_name']);
+                $feedback->setServiceName($result['service_name']);
                 $feedbacks[] = $feedback;
             }
             return $feedbacks;
@@ -479,7 +520,10 @@ class Feedback {
             'description_' => $this->description,
             'evaluation' => $this->evaluation,
             'date_' => $this->date,
-            'time_' => $this->time
+            'time_' => $this->time,
+            'user_name' => $this->userName,
+            'username' => $this->username,
+            'service_name' => $this->serviceName
         ];
     }
 
