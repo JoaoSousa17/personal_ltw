@@ -3,6 +3,7 @@ require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../../Controllers/searchBarController.php");
 require_once(dirname(__FILE__)."/../../Controllers/serviceController.php");
 require_once(dirname(__FILE__)."/../../Controllers/categoriesController.php");
+require_once(dirname(__FILE__)."/../../Controllers/distancesCalculationController.php");
 
 // Obter parâmetros da pesquisa
 $query = isset($_GET['query']) ? htmlspecialchars(strip_tags($_GET['query'])) : '';
@@ -12,6 +13,12 @@ $max_price = isset($_GET['max_price']) ? floatval($_GET['max_price']) : null;
 
 // Realizar a pesquisa
 $services = search($query, $category_id, $min_price, $max_price);
+
+// Aplicar conversão de moeda aos serviços
+$services = convertServicesPrice($services);
+
+// Obter informações da moeda do utilizador
+$currencyInfo = getUserCurrencyInfo();
 
 // Obter todas as categorias
 $categories = getAllCategories();
@@ -28,6 +35,9 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
         <div class="banner-content">
             <h1><?php echo $pageTitle; ?></h1>
             <p><?php echo count($services); ?> serviços encontrados</p>
+            <?php if (isUserLoggedIn()): ?>
+                <p class="currency-info">Preços exibidos em <?php echo $currencyInfo['name']; ?> (<?php echo $currencyInfo['symbol']; ?>)</p>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -53,7 +63,7 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
                 
                 <!-- Filtro por Preço -->
                 <div class="filter-group">
-                    <label for="min_price">Preço (€/hora):</label>
+                    <label for="min_price">Preço (<?php echo $currencyInfo['symbol']; ?>/hora):</label>
                     <div class="price-range">
                         <input type="number" name="min_price" id="min_price" placeholder="Min" value="<?php echo $min_price; ?>" min="0" step="0.01">
                         <span>até</span>
@@ -77,11 +87,17 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
         <?php else: ?>
             <div class="results-grid">
                 <?php foreach ($services as $service): 
-                    // Calcular preço com desconto
-                    $discounted_price = calculateDiscountedPrice($service['price_per_hour'], $service['promotion']);
+                    // Usar preços convertidos se disponíveis, senão usar originais
+                    $pricePerHour = isset($service['price_per_hour_converted']) ? $service['price_per_hour_converted'] : $service['price_per_hour'];
+                    $currencySymbol = isset($service['currency_symbol']) ? $service['currency_symbol'] : '€';
                     
-                    // Calcular preço total com base na duração
-                    $total_price = calculateTotalPrice($service['price_per_hour'], $service['promotion'], $service['duration']);
+                    // Calcular preço com desconto usando preço convertido
+                    $discounted_price = isset($service['discounted_price_converted']) ? 
+                        $service['discounted_price_converted'] : 
+                        calculateDiscountedPrice($pricePerHour, $service['promotion']);
+                    
+                    // Calcular preço total com base na duração usando preço convertido
+                    $total_price = $discounted_price * ($service['duration'] / 60);
                     
                     // Buscar informações da categoria
                     $category = getCategoryById($service['category_id']);
@@ -100,18 +116,15 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
                             <h3><a href="/Views/product.php?id=<?php echo $service['id']; ?>"><?php echo $service['name']; ?></a></h3>
                             <p class="service-description"><?php echo substr($service['description'], 0, 100); ?>...</p>
                             <div class="service-meta">
-                                <span class="duration"><i class="clock-icon"></i> <?php echo $service['duration']; ?> min</span>
+                                <span class="duration"><i class="clock-icon"></i> ~<?php echo $service['duration']; ?> hrs</span>
                                 <div class="price">
                                     <?php if ($service['promotion'] > 0): ?>
-                                        <span class="original-price">€<?php echo number_format($service['price_per_hour'], 2); ?>/h</span>
-                                        <span class="discounted-price">€<?php echo number_format($discounted_price, 2); ?>/h</span>
+                                        <span class="original-price"><?php echo $currencySymbol; ?><?php echo number_format($pricePerHour, 2, ',', ''); ?>/h</span>
+                                        <span class="discounted-price"><?php echo $currencySymbol; ?><?php echo number_format($discounted_price, 2, ',', ''); ?>/h</span>
                                     <?php else: ?>
-                                        <span class="price-value">€<?php echo number_format($service['price_per_hour'], 2); ?>/h</span>
+                                        <span class="price-value"><?php echo $currencySymbol; ?><?php echo number_format($pricePerHour, 2, ',', ''); ?>/h</span>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-                            <div class="service-total">
-                                <span>Preço Total: <strong>€<?php echo number_format($total_price, 2); ?></strong></span>
                             </div>
                             <a href="/Views/product.php?id=<?php echo $service['id']; ?>" class="view-service-btn">Ver Detalhes</a>
                         </div>

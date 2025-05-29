@@ -17,9 +17,14 @@ function drawCartHeader($itemCount) { ?>
 /**
  * Mostra os itens no carrinho ou uma mensagem caso esteja vazio.
  *
- * @param array $cartItems Lista dos itens no carrinho.
+ * @param array $cartItems Lista dos itens no carrinho (já com conversão aplicada).
+ * @param array $currencyInfo Informações da moeda do utilizador.
  */
-function drawCartItems($cartItems) { ?>
+function drawCartItems($cartItems, $currencyInfo = null) { 
+    if (!$currencyInfo) {
+        $currencyInfo = ['symbol' => '€', 'code' => 'eur'];
+    }
+    ?>
     <div class="products-containers">
         <?php if (count($cartItems) == 0): ?>
             <div class="carrinho-vazio" style="border: 2px dashed #555; padding: 20px; text-align: center;">
@@ -29,6 +34,8 @@ function drawCartItems($cartItems) { ?>
         <?php else: ?>
             <?php foreach ($cartItems as $item):
                 $id = md5($item['title'] . $item['price'] . $item['seller']);
+                $displayPrice = isset($item['price_converted']) ? $item['price_converted'] : $item['price'];
+                $currencySymbol = isset($item['currency_symbol']) ? $item['currency_symbol'] : $currencyInfo['symbol'];
             ?>
             <div class="product-item clickable"
      data-id="<?= htmlspecialchars($item['id']) ?>"
@@ -36,7 +43,7 @@ function drawCartItems($cartItems) { ?>
                 <img src="<?= htmlspecialchars($item['image']) ?>" alt="Produto" />
                 <div class="description">
                     <h2><?= htmlspecialchars($item['title']) ?></h2>
-                    <h3>€<?= number_format($item['price'], 2, ',', '') ?></h3>
+                    <h3><?= $currencySymbol ?><?= number_format($displayPrice, 2, ',', '') ?></h3>
                     <div class="vendedor-info">
                         <h5>Vendido por </h5>
                         <h5><?= htmlspecialchars($item['seller']) ?></h5>
@@ -54,28 +61,35 @@ function drawCartItems($cartItems) { ?>
 /**
  * Mostra o resumo de preços e o botão de checkout.
  *
- * @param float $total Total da compra.
- * @param array $cartItems Itens no carrinho.
+ * @param float $total Total da compra (já convertido).
+ * @param array $cartItems Itens no carrinho (já com conversão aplicada).
+ * @param array $currencyInfo Informações da moeda do utilizador.
  */
-function drawCartSummary($total, $cartItems) { ?>
+function drawCartSummary($total, $cartItems, $currencyInfo = null) { 
+    if (!$currencyInfo) {
+        $currencyInfo = ['symbol' => '€', 'code' => 'eur'];
+    }
+    ?>
     <div class="price-container">
         <div class="subtotal">
             <h4>Subtotal</h4>
-            <h4>€<?= number_format($total, 2, ',', '') ?></h4>
+            <h4><?= $currencyInfo['symbol'] ?><?= number_format($total, 2, ',', '') ?></h4>
         </div>
 
         <div class="custos-deslocação">
             <h4>Custos de Deslocação</h4>
-            <h4>€0,<span class="decimais">00</span></h4>
+            <h4><?= $currencyInfo['symbol'] ?>0,<span class="decimais">00</span></h4>
         </div>
 
         <div class="total">
             <h1>Total</h1>
-            <h1 class="Preco-final">€<?= number_format($total, 2, ',', '') ?></h1>
+            <h1 class="Preco-final"><?= $currencyInfo['symbol'] ?><?= number_format($total, 2, ',', '') ?></h1>
         </div>
 
         <form method="post" action="/Views/checkout.php">
             <input type="hidden" name="total" value="<?= $total ?>">
+            <input type="hidden" name="currency_code" value="<?= $currencyInfo['code'] ?>">
+            <input type="hidden" name="currency_symbol" value="<?= $currencyInfo['symbol'] ?>">
 
             <?php foreach ($cartItems as $item): ?>
                 <input type="hidden" name="services[]" value="<?= htmlspecialchars($item['title']) ?>">

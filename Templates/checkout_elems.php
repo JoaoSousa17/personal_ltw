@@ -58,10 +58,14 @@ function drawServiceFields($services) {
 
 /**
  * Desenha a secção de resumo de pagamento.
+ *
+ * @param float $total Total da compra (já convertido).
+ * @param float $amountToPay Valor a pagar agora (já convertido).
+ * @param string $currencySymbol Símbolo da moeda.
  */
-function drawPaymentSummary($total, $amountToPay) { ?>
+function drawPaymentSummary($total, $amountToPay, $currencySymbol = '€') { ?>
   <div class="resumo-pagamento">
-    <p><strong>Total:</strong> €<?= number_format($total, 2, ',', '') ?></p>
-    <p><strong>A pagar agora (50%):</strong> €<?= number_format($amountToPay, 2, ',', '') ?></p>
+    <p><strong>Total:</strong> <?= $currencySymbol ?><?= number_format($total, 2, ',', '') ?></p>
+    <p><strong>A pagar agora (50%):</strong> <?= $currencySymbol ?><?= number_format($amountToPay, 2, ',', '') ?></p>
   </div>
 <?php }

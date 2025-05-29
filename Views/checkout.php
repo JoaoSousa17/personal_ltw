@@ -2,6 +2,7 @@
 session_start();
 require_once("../Templates/common_elems.php");
 require_once("../Templates/checkout_elems.php");
+require_once("../Controllers/distancesCalculationController.php");
 
 drawHeader("Finalizar compra", ["../Styles/checkout.css"]);
 
@@ -13,6 +14,21 @@ if (!isset($_POST['total'])) {
 
 $services = $_POST['services'] ?? [];
 $total = floatval($_POST['total']);
+$currencyCode = $_POST['currency_code'] ?? 'eur';
+$currencySymbol = $_POST['currency_symbol'] ?? '€';
+
+// Se não há informação de moeda, obter do utilizador atual
+if (!isset($_POST['currency_code'])) {
+    $currencyInfo = getUserCurrencyInfo();
+    $currencyCode = $currencyInfo['code'];
+    $currencySymbol = $currencyInfo['symbol'];
+    
+    // Converter o total se necessário (caso venha em EUR)
+    if ($currencyCode !== 'eur') {
+        $total = convertCurrency($total, $currencyCode);
+    }
+}
+
 $amountToPay = $total / 2;
 ?>
 
@@ -51,16 +67,18 @@ $amountToPay = $total / 2;
       </li>
     </ul>
 
-    <?php drawPaymentSummary($total, $amountToPay); ?>
+    <?php drawPaymentSummary($total, $amountToPay, $currencySymbol); ?>
 
     <input type="hidden" name="total_price" value="<?= $total ?>" />
     <input type="hidden" name="amount_paid" value="<?= $amountToPay ?>" />
+    <input type="hidden" name="currency_code" value="<?= $currencyCode ?>" />
+    <input type="hidden" name="currency_symbol" value="<?= $currencySymbol ?>" />
 
     <?php foreach ($services as $s): ?>
       <input type="hidden" name="services[]" value="<?= htmlspecialchars($s) ?>">
     <?php endforeach; ?>
 
-    <button type="submit">Pagar €<?= number_format($amountToPay, 2, ',', '') ?></button>
+    <button type="submit">Pagar <?= $currencySymbol ?><?= number_format($amountToPay, 2, ',', '') ?></button>
   </form>
 </div>
 
