@@ -199,6 +199,17 @@ class UnblockAppeal {
                 // Atualiza a instância do Model, em caso de sucesso da operação anterior.
                 if ($result) {
                     $this->id = $this->db->lastInsertId();
+                    
+                    // Atualizar campos de data e hora
+                    $stmt = $this->db->prepare("SELECT date_, time_ FROM Unblock_Appeal WHERE id = :id");
+                    $stmt->execute([':id' => $this->id]);
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if ($row) {
+                        $this->date = $row['date_'];
+                        $this->time = $row['time_'];
+                    }
+                    
                     return true;
                 }
                 return false;
@@ -268,7 +279,7 @@ class UnblockAppeal {
             $stmt->execute([':id' => $id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Caso o resultado não seja null, cria a instância de User e retorna-a.
+            // Caso o resultado não seja null, cria a instância de UnblockAppeal e retorna-a.
             return $result ? self::createFromArray($db, $result) : null;
         } 
         
@@ -292,7 +303,7 @@ class UnblockAppeal {
             $stmt->execute([':user_id' => $userId]);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Para cada linha retornada, cria a instância de User adiciona ao array $appeals.
+            // Para cada linha retornada, cria a instância de UnblockAppeal adiciona ao array $appeals.
             $appeals = [];
             foreach ($results as $result) {
                 $appeals[] = self::createFromArray($db, $result);
@@ -402,6 +413,233 @@ class UnblockAppeal {
         $appeal->setTime($array['time_']);
         $appeal->setStatus($array['status_']);
         return $appeal;
+    }
+
+    /**
+     * Obtém estatísticas dos pedidos de desbloqueio.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @return array Estatísticas dos pedidos.
+     */
+    public static function getAppealStats($db) {
+        try {
+            $stmt = $db->prepare("
+                SELECT 
+                    COUNT(*) as total_appeals,
+                    SUM(CASE WHEN status_ = 'pending' THEN 1 ELSE 0 END) as pending_appeals,
+                    SUM(CASE WHEN status_ = 'approved' THEN 1 ELSE 0 END) as approved_appeals,
+                    SUM(CASE WHEN status_ = 'rejected' THEN 1 ELSE 0 END) as rejected_appeals
+                FROM Unblock_Appeal
+            ");
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [
+                'total_appeals' => 0,
+                'pending_appeals' => 0,
+                'approved_appeals' => 0,
+                'rejected_appeals' => 0
+            ];
+        }
+    }
+
+    /**
+     * Obtém pedidos de desbloqueio recentes (últimos 30 dias).
+     *
+     * @param PDO $db Instância da base de dados.
+     * @param int $limit Limite de resultados.
+     * @return array Lista de pedidos recentes.
+     */
+    public static function getRecentAppeals($db, $limit = 10) {
+        try {
+            $stmt = $db->prepare("
+                SELECT ua.*, u.name_, u.username
+                FROM Unblock_Appeal ua
+                JOIN User_ u ON ua.user_id = u.id
+                WHERE ua.date_ >= DATE('now', '-30 days')
+                ORDER BY ua.date_ DESC, ua.time_ DESC
+                LIMIT :limit
+            ");
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Obtém pedidos de desbloqueio por status.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @param string $status Status dos pedidos ('pending', 'approved', 'rejected').
+     * @return array Lista de pedidos com o status especificado.
+     */
+    public static function getAppealsByStatus($db, $status) {
+        try {
+            $stmt = $db->prepare("
+                SELECT ua.*, u.name_, u.username, rb.reason, rb.extra_info
+                FROM Unblock_Appeal ua
+                JOIN User_ u ON ua.user_id = u.id
+                LEFT JOIN Reason_Block rb ON u.id = rb.user_id
+                WHERE ua.status_ = :status
+                ORDER BY ua.date_ DESC, ua.time_ DESC
+            ");
+            $stmt->execute([':status' => $status]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Conta o número de pedidos por utilizador.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @param int $userId ID do utilizador.
+     * @return int Número total de pedidos do utilizador.
+     */
+    public static function countUserAppeals($db, $userId) {
+        try {
+            $stmt = $db->prepare("SELECT COUNT(*) as count FROM Unblock_Appeal WHERE user_id = :user_id");
+            $stmt->execute([':user_id' => $userId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['count'];
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Obtém o último pedido de um utilizador.
+     *
+     * @param PDO $db Instância da base de dados.
+     * @param int $userId ID do utilizador.
+     * @return UnblockAppeal|null Último pedido ou null se não existir.
+     */
+    public static function getLastUserAppeal($db, $userId) {
+        try {
+            $stmt = $db->prepare("
+                SELECT * FROM Unblock_Appeal 
+                WHERE user_id = :user_id 
+                ORDER BY date_ DESC, time_ DESC 
+                LIMIT 1
+            ");
+            $stmt->execute([':user_id' => $userId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result ? self::createFromArray($db, $result) : null;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Verifica se um pedido pode ser editado (apenas pendentes podem ser editados).
+     *
+     * @return bool True se pode ser editado, False caso contrário.
+     */
+    public function canBeEdited() {
+        return $this->status === 'pending';
+    }
+
+    /**
+     * Verifica se um pedido foi processado (aprovado ou rejeitado).
+     *
+     * @return bool True se foi processado, False caso contrário.
+     */
+    public function isProcessed() {
+        return in_array($this->status, ['approved', 'rejected']);
+    }
+
+    /**
+     * Obtém a idade do pedido em dias.
+     *
+     * @return int Número de dias desde a criação do pedido.
+     */
+    public function getAgeInDays() {
+        if (!$this->date) return 0;
+        
+        $creationDate = new DateTime($this->date);
+        $currentDate = new DateTime();
+        $interval = $currentDate->diff($creationDate);
+        
+        return $interval->days;
+    }
+
+    /**
+     * Converte o status para texto legível em português.
+     *
+     * @return string Status em português.
+     */
+    public function getStatusText() {
+        switch ($this->status) {
+            case 'pending':
+                return 'Pendente';
+            case 'approved':
+                return 'Aprovado';
+            case 'rejected':
+                return 'Rejeitado';
+            default:
+                return 'Desconhecido';
+        }
+    }
+
+    /**
+     * Obtém a cor CSS associada ao status.
+     *
+     * @return string Classe CSS para colorir o status.
+     */
+    public function getStatusColorClass() {
+        switch ($this->status) {
+            case 'pending':
+                return 'status-warning';
+            case 'approved':
+                return 'status-success';
+            case 'rejected':
+                return 'status-danger';
+            default:
+                return 'status-secondary';
+        }
+    }
+
+    /**
+     * Valida os dados do pedido antes de guardar.
+     *
+     * @return array Array com erros de validação (vazio se válido).
+     */
+    public function validate() {
+        $errors = [];
+
+        // Validar título
+        if (empty($this->title)) {
+            $errors[] = 'O título é obrigatório.';
+        } elseif (strlen($this->title) < 5) {
+            $errors[] = 'O título deve ter pelo menos 5 caracteres.';
+        } elseif (strlen($this->title) > 255) {
+            $errors[] = 'O título não pode ter mais de 255 caracteres.';
+        }
+
+        // Validar corpo
+        if (empty($this->body)) {
+            $errors[] = 'A explicação é obrigatória.';
+        } elseif (strlen($this->body) < 50) {
+            $errors[] = 'A explicação deve ter pelo menos 50 caracteres.';
+        } elseif (strlen($this->body) > 2000) {
+            $errors[] = 'A explicação não pode ter mais de 2000 caracteres.';
+        }
+
+        // Validar userId
+        if (empty($this->userId)) {
+            $errors[] = 'ID do utilizador é obrigatório.';
+        }
+
+        // Validar status
+        if (!in_array($this->status, ['pending', 'approved', 'rejected'])) {
+            $errors[] = 'Status inválido.';
+        }
+
+        return $errors;
     }
 }
 ?>

@@ -1,0 +1,454 @@
+/* Estilos específicos para a página de pedido de desbloqueio */
+
+.block-info-card {
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+    border: 2px solid #feb2b2;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.1);
+}
+
+.block-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.block-status h4 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.block-status p {
+    margin: 10px 0 0 0;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.block-reason-info {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #feb2b2;
+    text-align: left;
+}
+
+.block-reason-info h5 {
+    color: #dc3545;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.reason-display {
+    background: rgba(220, 53, 69, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+}
+
+.reason-main {
+    font-weight: 600;
+    color: #dc3545;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.reason-extra {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-top: 10px;
+}
+
+.appeal-instructions {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.appeal-instructions h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.appeal-instructions h4::before {
+    content: "📋";
+    font-size: 1.2em;
+}
+
+.appeal-instructions ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.appeal-instructions li {
+    margin-bottom: 8px;
+    color: #495057;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 20px;
+}
+
+.appeal-instructions li::before {
+    content: "✅";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.appeal-form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.appeal-form .form-group {
+    margin-bottom: 25px;
+}
+
+.appeal-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 1rem;
+}
+
+.appeal-form input[type="text"],
+.appeal-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.appeal-form input[type="text"]:focus,
+.appeal-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    transform: translateY(-1px);
+}
+
+.appeal-form textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+}
+
+.form-hint {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+#char-counter {
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 2px 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    transition: color 0.3s ease;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+.checkbox-container label {
+    line-height: 1.5;
+    color: #495057;
+    font-weight: 500;
+    margin: 0;
+    cursor: pointer;
+}
+
+.checkbox-container label a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.checkbox-container label a:hover {
+    text-decoration: underline;
+}
+
+.appeal-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 2px solid #ffd60a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 25px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+}
+
+.appeal-warning i {
+    font-size: 1.5rem;
+    color: #b8860b;
+    margin-top: 2px;
+}
+
+.appeal-warning p {
+    margin: 0;
+    color: #856404;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #f8f9fa;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
+    background: linear-gradient(135deg, #218838 0%, #1db584 100%);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(108, 117, 125, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
+}
+
+/* Alertas customizados para a página */
+.alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert::before {
+    font-size: 1.2rem;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border: 2px solid #f1aeb5;
+}
+
+.alert-error::before {
+    content: "❌";
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 2px solid #b8dacc;
+}
+
+.alert-success::before {
+    content: "✅";
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+    border: 2px solid #ffd60a;
+}
+
+.alert-warning::before {
+    content: "⚠️";
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.block-info-card,
+.appeal-instructions,
+.appeal-form {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.appeal-instructions {
+    animation-delay: 0.1s;
+}
+
+.appeal-form {
+    animation-delay: 0.2s;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .block-info-card {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .appeal-instructions {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .appeal-form {
+        padding: 20px 15px;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+    
+    .checkbox-container {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .appeal-warning {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .form-hint {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+/* Estados de foco e interação melhorados */
+.appeal-form input[type="text"]:invalid,
+.appeal-form textarea:invalid {
+    border-color: #dc3545;
+}
+
+.appeal-form input[type="text"]:valid,
+.appeal-form textarea:valid {
+    border-color: #28a745;
+}
+
+/* Estilo para o contador de caracteres com diferentes cores */
+#char-counter.warning {
+    color: #ffc107;
+    background: #fff3cd;
+}
+
+#char-counter.danger {
+    color: #dc3545;
+    background: #f8d7da;
+}
+
+/* Melhorias de acessibilidade */
+.appeal-form input:focus,
+.appeal-form textarea:focus,
+.checkbox-container input:focus {
+    outline: 3px solid rgba(74, 144, 226, 0.5);
+    outline-offset: 2px;
+}
+
+/* Indicador visual para campos obrigatórios */
+.appeal-form label::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.checkbox-container label::after {
+    display: none;
+}

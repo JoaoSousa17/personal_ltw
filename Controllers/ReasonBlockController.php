@@ -68,4 +68,34 @@ function getAllBlockReasons() {
     $db = getDatabaseConnection();
     return ReasonBlock::getAllReasonBlocks($db);
 }
+
+/**
+ * Verifica se um utilizador tem uma razão de bloqueio registrada.
+ *
+ * @param int $userId ID do utilizador.
+ * @return bool True se tiver razão de bloqueio, False caso contrário.
+ */
+function hasBlockReason($userId) {
+    $db = getDatabaseConnection();
+    $reasonBlock = ReasonBlock::findByUserId($db, $userId);
+    return $reasonBlock !== null;
+}
+
+/**
+ * Obtém todas as razões de bloqueio disponíveis no sistema.
+ *
+ * @return array Lista de razões possíveis.
+ */
+function getAvailableBlockReasons() {
+    return [
+        "Comportamento abusivo ou inapropriado",
+        "Atividades fraudulentas",
+        "Violação das regras da plataforma",
+        "Problemas recorrentes em serviços",
+        "Violação de privacidade ou segurança",
+        "Inatividade prolongada com indícios de abandono",
+        "Violação dos termos de serviço",
+        "Outra"
+    ];
+}
 ?>

@@ -266,8 +266,7 @@ Usados na página de Controlo de Users Bloqueados
  *
  * @param array $blockedUsers Lista de utilizadores bloqueados, objetos User, retornado por consulta da DB.
  */
-function drawBlockedUsersTable($blockedUsers) { 
-    $reasonBlockController = new ReasonBlockController(); ?>
+function drawBlockedUsersTable($blockedUsers) { ?>
     <div class="blocked-users-table-container">
         <!-- Caso não exista qualquer utilizador bloqueado na plataforma -->
         <?php if (empty($blockedUsers)): ?>
@@ -293,7 +292,7 @@ function drawBlockedUsersTable($blockedUsers) {
                 <!-- Preenchimento do corpo da tabela, com os dados apropriados -->
                 <tbody>
                     <?php foreach ($blockedUsers as $user): 
-                        $blockReason = $reasonBlockController->getBlockReason($user->getId());
+                        $blockReason = getBlockReason($user->getId());
                     ?>
                         <tr>
                             <!-- Gestão dos dados dos utilizadores -->

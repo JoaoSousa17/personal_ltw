@@ -796,4 +796,31 @@ function getFirstImageForService($serviceId) {
     // Se não encontrar nenhuma imagem, usar o placeholder
     return $webPathPrefix . 'placeholder.jpg';
 }
+
+/**
+ * Obter sugestões de serviços para autocompletar
+ */
+function getServiceSuggestions($keyword) {
+    $db = getDatabaseConnection();
+    
+    $query = "SELECT id, name_ as name FROM Service_ 
+              WHERE is_active = 1 AND name_ LIKE ? 
+              ORDER BY name_ LIMIT 5";
+    
+    $keyword = "%{$keyword}%";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(1, $keyword);
+    $stmt->execute();
+    
+    $suggestions = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $suggestions[] = [
+            'id' => $row['id'],
+            'name' => $row['name']
+        ];
+    }
+    
+    return $suggestions;
+}
+
 ?>

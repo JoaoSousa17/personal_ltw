@@ -164,8 +164,191 @@ function drawHeader($title, $styles){
             </div>
         </header>
     </div>
-<?php }
 
+    <!-- JavaScript para funcionalidade de pesquisa -->
+    <script>
+    // JavaScript para funcionalidade de pesquisa com AJAX
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const suggestionsContainer = document.getElementById('search-suggestions');
+        let searchTimeout;
+
+        if (searchInput && suggestionsContainer) {
+            // Evento de digitação no campo de pesquisa
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                // Limpar timeout anterior
+                if (searchTimeout) {
+                    clearTimeout(searchTimeout);
+                }
+                
+                // Se o campo estiver vazio ou muito curto, esconder sugestões
+                if (query.length < 2) {
+                    hideSuggestions();
+                    return;
+                }
+                
+                // Delay para evitar muitas requisições
+                searchTimeout = setTimeout(() => {
+                    fetchSuggestions(query);
+                }, 300);
+            });
+
+            // Esconder sugestões ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            // Mostrar sugestões ao focar no campo (se já houver texto)
+            searchInput.addEventListener('focus', function() {
+                const query = this.value.trim();
+                if (query.length >= 2) {
+                    fetchSuggestions(query);
+                }
+            });
+
+            // Navegação por teclado nas sugestões
+            searchInput.addEventListener('keydown', function(e) {
+                const suggestions = suggestionsContainer.querySelectorAll('.suggestion-item');
+                const activeSuggestion = suggestionsContainer.querySelector('.suggestion-item.active');
+                
+                if (suggestions.length === 0) return;
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (!activeSuggestion) {
+                            suggestions[0].classList.add('active');
+                        } else {
+                            const currentIndex = Array.from(suggestions).indexOf(activeSuggestion);
+                            activeSuggestion.classList.remove('active');
+                            if (currentIndex < suggestions.length - 1) {
+                                suggestions[currentIndex + 1].classList.add('active');
+                            } else {
+                                suggestions[0].classList.add('active');
+                            }
+                        }
+                        break;
+                        
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (!activeSuggestion) {
+                            suggestions[suggestions.length - 1].classList.add('active');
+                        } else {
+                            const currentIndex = Array.from(suggestions).indexOf(activeSuggestion);
+                            activeSuggestion.classList.remove('active');
+                            if (currentIndex > 0) {
+                                suggestions[currentIndex - 1].classList.add('active');
+                            } else {
+                                suggestions[suggestions.length - 1].classList.add('active');
+                            }
+                        }
+                        break;
+                        
+                    case 'Enter':
+                        if (activeSuggestion) {
+                            e.preventDefault();
+                            activeSuggestion.click();
+                        }
+                        break;
+                        
+                    case 'Escape':
+                        hideSuggestions();
+                        searchInput.blur();
+                        break;
+                }
+            });
+        }
+
+        // Função para buscar sugestões via AJAX
+        function fetchSuggestions(query) {
+            // Mostrar indicador de carregamento
+            showLoadingSuggestions();
+            
+            fetch(`/Controllers/searchBarController.php?action=suggestions&query=${encodeURIComponent(query)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displaySuggestions(data, query);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar sugestões:', error);
+                    hideSuggestions();
+                });
+        }
+
+        // Função para exibir as sugestões
+        function displaySuggestions(suggestions, query) {
+            if (!suggestions || suggestions.length === 0) {
+                hideSuggestions();
+                return;
+            }
+
+            let html = '';
+            suggestions.forEach((suggestion, index) => {
+                // Destacar o texto pesquisado
+                const highlightedName = highlightMatch(suggestion.name, query);
+                html += `<div class="suggestion-item" data-id="${suggestion.id}" data-name="${suggestion.name}">
+                            <div class="suggestion-content">
+                                <span class="suggestion-name">${highlightedName}</span>
+                            </div>
+                         </div>`;
+            });
+
+            suggestionsContainer.innerHTML = html;
+            suggestionsContainer.style.display = 'block';
+
+            // Adicionar eventos de clique às sugestões
+            const suggestionItems = suggestionsContainer.querySelectorAll('.suggestion-item');
+            suggestionItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceName = this.getAttribute('data-name');
+                    searchInput.value = serviceName;
+                    hideSuggestions();
+                    
+                    // Opcional: redirecionar automaticamente para a pesquisa
+                    // window.location.href = `/Views/searchPages/search-results.php?query=${encodeURIComponent(serviceName)}`;
+                });
+
+                // Adicionar hover effect
+                item.addEventListener('mouseenter', function() {
+                    // Remover active de todos
+                    suggestionItems.forEach(s => s.classList.remove('active'));
+                    // Adicionar active ao atual
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // Função para mostrar indicador de carregamento
+        function showLoadingSuggestions() {
+            suggestionsContainer.innerHTML = '<div class="suggestion-loading">Buscando...</div>';
+            suggestionsContainer.style.display = 'block';
+        }
+
+        // Função para esconder sugestões
+        function hideSuggestions() {
+            suggestionsContainer.style.display = 'none';
+            suggestionsContainer.innerHTML = '';
+        }
+
+        // Função para destacar o texto correspondente
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<strong>$1</strong>');
+        }
+    });
+    </script>
+<?php }
 /**
  * Desenha o rodapé da página com navegação, informações de contacto, links úteis, redes sociais e formulário de subscrição à newsletter.
  */
