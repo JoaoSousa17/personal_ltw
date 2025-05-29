@@ -2,7 +2,7 @@
 require_once("../Templates/common_elems.php");
 require_once("../Templates/product_elems.php");
 require_once("../Database/connection.php");
-require_once(dirname(__FILE__)."/../../Controllers/distancesCalculationController.php");
+require_once("../Controllers/distancesCalculationController.php");
 
 drawHeader("Product", ["../Styles/product.css"]);
 
@@ -14,7 +14,6 @@ if (!$loggedInUser) {
     exit();
 }
 
-//$serviceId = 13;                // PARA TESTAR APENAS
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<p>Serviço inválido.</p>";
     drawFooter();
@@ -26,7 +25,7 @@ $db = getDatabaseConnection();
 
 // Consulta SQL
 $query = "
-SELECT S.id, S.name_ AS title, S.description_, S.price_per_hour, S.promotion,
+SELECT S.id, S.name_ AS title, S.description_, S.price_per_hour, S.promotion, S.duration,
        U.name_ AS freelancer_name, U.profile_photo, S.freelancer_id, S.category_id,
        C.name_ AS category_name, 
        GROUP_CONCAT(M.path_) AS image_paths
@@ -60,6 +59,7 @@ if (!$service) {
 
 // Cálculos e variáveis
 $price = $service['price_per_hour'];
+$duration = isset($service['duration']) ? (int)$service['duration'] : 0;
 $discount = $service['promotion'];
 $finalPrice = $price * (1 - $discount / 100.0);
 $displayPrice = convertAndFormatPrice($finalPrice, $loggedInUser);
@@ -81,7 +81,7 @@ $date = $rawDate ? date("d \ F \ Y", strtotime($rawDate)) : "Data desconhecida";
     </div>
 
     <div class="product-info-side">
-      <?php drawProductInfo($date, $title, $displayPrice, $serviceId); ?>
+      <?php drawProductInfo($date, $title, $finalPrice, $serviceId, $hasDiscount ? $price : null, $discount, $duration); ?>
       <?php drawAdvertiserInfo($username, $profilePhotoId); ?>
     </div>
   </div>

@@ -108,7 +108,7 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                     $orderDate = date('d/m/Y', strtotime($order['date_']));
                     $orderTime = date('H:i', strtotime($order['time_']));
                 ?>
-                    <div class="order-card">
+                    <div class="order-card" data-order-id="<?php echo $order['order_id']; ?>">
                         <div class="order-header">
                             <div class="order-info">
                                 <h3 class="service-name"><?php echo htmlspecialchars($order['service_name']); ?></h3>
@@ -125,17 +125,17 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                             <div class="order-details">
                                 <div class="detail-item">
                                     <span class="detail-label">Prestador:</span>
-                                    <span class="detail-value"><?php echo htmlspecialchars($order['freelancer_name']); ?></span>
+                                    <span class="detail-value freelancer-name"><?php echo htmlspecialchars($order['freelancer_name']); ?></span>
                                 </div>
                                 
                                 <div class="detail-item">
                                     <span class="detail-label">Data do Pedido:</span>
-                                    <span class="detail-value"><?php echo $orderDate . ' às ' . $orderTime; ?></span>
+                                    <span class="detail-value order-datetime"><?php echo $orderDate . ' às ' . $orderTime; ?></span>
                                 </div>
                                 
                                 <div class="detail-item">
                                     <span class="detail-label">Duração:</span>
-                                    <span class="detail-value"><?php echo $order['duration']; ?> minutos</span>
+                                    <span class="detail-value order-duration"><?php echo $order['duration']; ?> minutos</span>
                                 </div>
                                 
                                 <?php if ($order['travel_fee'] > 0): ?>
@@ -174,6 +174,13 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                                 <i class="fas fa-info-circle"></i>
                                 Ver Detalhes
                             </button>
+                            
+                            <?php if ($order['status_'] === 'accepted'): ?>
+                                <button class="btn-add-cart" onclick="addToCart(<?php echo $order['order_id']; ?>)">
+                                    <i class="fas fa-cart-plus"></i>
+                                    Adicionar ao Carrinho
+                                </button>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -302,6 +309,54 @@ window.addEventListener('click', function(event) {
         closeFeedbackModal();
     }
 });
+
+// Função corrigida para adicionar ao carrinho usando o serviceController
+function addToCart(orderId) {
+    // Criar FormData para enviar via POST
+    const formData = new FormData();
+    formData.append('action', 'get_order_for_cart');
+    formData.append('order_id', orderId);
+    
+    // Mostrar loading no botão
+    const button = document.querySelector(`button[onclick="addToCart(${orderId})"]`);
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adicionando...';
+    button.disabled = true;
+    
+    // Enviar requisição para o serviceController
+    fetch('/Controllers/serviceController.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            alert('Pedido adicionado ao carrinho com sucesso!');
+            // Opcional: atualizar contador do carrinho na interface
+            updateCartCounter(result.total);
+        } else {
+            alert('Erro ao adicionar ao carrinho: ' + (result.message || 'Erro desconhecido'));
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao adicionar ao carrinho:', error);
+        alert('Erro inesperado ao adicionar ao carrinho.');
+    })
+    .finally(() => {
+        // Restaurar botão
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+}
+
+// Função para atualizar contador do carrinho (opcional)
+function updateCartCounter(total) {
+    const cartCounter = document.querySelector('.cart-counter');
+    if (cartCounter) {
+        cartCounter.textContent = total;
+        cartCounter.style.display = total > 0 ? 'block' : 'none';
+    }
+}
 </script>
 
 <!-- Font Awesome para ícones -->

@@ -49,7 +49,7 @@ function drawCartItems($cartItems, $currencyInfo = null) {
                         <h5><?= htmlspecialchars($item['seller']) ?></h5>
                     </div>
                 </div>
-                <button class="remove-btn" data-id="<?= $id ?>">
+                <button class="remove-btn" data-id="<?= htmlspecialchars($item['id']) ?>">
                     <img src="../../Images/site/staticPages/trash.png" alt="Remover" />
                 </button>
             </div>

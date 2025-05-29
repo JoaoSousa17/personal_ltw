@@ -15,11 +15,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         case 'toggle_status':
             handleToggleServiceStatus();
             break;
+        case 'update_service':
+            handleUpdateService();
+            break;
+        case 'get_order_for_cart':
+            handleGetOrderForCart();
+            break;
         default:
             $_SESSION['error'] = 'Ação não reconhecida.';
             header("Location: /Views/mainPage.php");
             exit();
     }
+}
+
+// ===== HANDLER PARA OBTER DADOS DO PEDIDO PARA CARRINHO =====
+function handleGetOrderForCart() {
+    header('Content-Type: application/json');
+    
+    if (!isUserLoggedIn()) {
+        echo json_encode(["status" => "error", "message" => "Utilizador não autenticado"]);
+        exit();
+    }
+    
+    $orderId = intval($_POST['order_id'] ?? 0);
+    $currentUserId = getCurrentUserId();
+    
+    if ($orderId <= 0) {
+        echo json_encode(["status" => "error", "message" => "ID do pedido inválido"]);
+        exit();
+    }
+    
+    $orderData = getOrderForCart($orderId, $currentUserId);
+    
+    if (!$orderData) {
+        echo json_encode(["status" => "error", "message" => "Pedido não encontrado ou sem permissão"]);
+        exit();
+    }
+    
+    // Adicionar ao carrinho
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+    
+    // Verificar se já existe no carrinho (usar order_id para esta verificação)
+    $existsInCart = false;
+    foreach ($_SESSION['cart'] as $item) {
+        if (isset($item['order_id']) && $item['order_id'] == $orderId && $item['type'] == 'order') {
+            $existsInCart = true;
+            break;
+        }
+    }
+    
+    if ($existsInCart) {
+        echo json_encode(["status" => "error", "message" => "Este pedido já está no carrinho"]);
+        exit();
+    }
+    
+    $product = [
+        "id" => intval($orderData['service_id']), // USAR O service_id da base de dados
+        "order_id" => $orderId,
+        "type" => "order",
+        "title" => $orderData['service_name'],
+        "price" => floatval($orderData['final_price']),
+        "image" => getFirstImageForService($orderData['service_id']),
+        "seller" => $orderData['freelancer_name'],
+        "category" => $orderData['category_name'],
+        "duration" => $orderData['duration'],
+        "date_" => $orderData['date_'],
+        "time_" => $orderData['time_']
+    ];
+    
+    $_SESSION['cart'][] = $product;
+    
+    echo json_encode([
+        "status" => "success", 
+        "message" => "Pedido adicionado ao carrinho com sucesso!",
+        "total" => count($_SESSION['cart'])
+    ]);
+    exit();
+}
+
+// ===== FUNÇÃO PARA OBTER DADOS DO PEDIDO PARA CARRINHO =====
+function getOrderForCart($orderId, $userId) {
+    $db = getDatabaseConnection();
+    
+    $query = "
+        SELECT 
+            sd.id as order_id,
+            sd.date_,
+            sd.time_,
+            sd.travel_fee,
+            sd.final_price,
+            sd.service_id,
+            r.status_,
+            s.name_ as service_name,
+            s.description_,
+            s.duration,
+            s.price_per_hour,
+            s.promotion,
+            u.name_ as freelancer_name,
+            u.username as freelancer_username,
+            c.name_ as category_name
+        FROM Service_Data sd
+        JOIN Service_ s ON sd.service_id = s.id
+        JOIN User_ u ON s.freelancer_id = u.id
+        JOIN Category c ON s.category_id = c.id
+        JOIN Request r ON r.service_data_id = sd.id
+        JOIN Message_ m ON r.message_id = m.id
+        WHERE sd.id = :order_id 
+          AND m.sender_id = :user_id
+          AND r.status_ = 'accepted'
+    ";
+    
+    $stmt = $db->prepare($query);
+    $stmt->execute([':order_id' => $orderId, ':user_id' => $userId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // ===== HANDLERS DE AÇÕES =====
@@ -442,11 +552,12 @@ function getServiceStats($userId) {
     // Estatísticas de pedidos
     $orderQuery = "
         SELECT 
-            COUNT(sd.id) as total_orders,
-            COUNT(CASE WHEN sd.status_ = 'completed' THEN 1 END) as completed_orders,
-            COALESCE(SUM(sd.final_price), 0) as total_earned
+            COUNT(r.id) as total_orders,
+            COUNT(CASE WHEN r.status_ = 'completed' THEN 1 END) as completed_orders,
+            COALESCE(SUM(CASE WHEN r.status_ IN ('paid', 'completed') THEN r.price ELSE 0 END), 0) as total_earned
         FROM Service_ s
-        LEFT JOIN Service_Data sd ON s.id = sd.service_id
+        JOIN Service_Data sd ON s.id = sd.service_id
+        JOIN Request r ON r.service_data_id = sd.id
         WHERE s.freelancer_id = :user_id
     ";
     
@@ -489,11 +600,12 @@ function getUserOrders($userId) {
     $query = "
         SELECT 
             sd.id as order_id,
+            sd.service_id,
             sd.date_,
             sd.time_,
             sd.travel_fee,
             sd.final_price,
-            sd.status_,
+            r.status_,
             s.name_ as service_name,
             s.description_,
             s.duration,
@@ -506,7 +618,9 @@ function getUserOrders($userId) {
         JOIN Service_ s ON sd.service_id = s.id
         JOIN User_ u ON s.freelancer_id = u.id
         JOIN Category c ON s.category_id = c.id
-        WHERE sd.user_id = :user_id
+        JOIN Request r ON r.service_data_id = sd.id
+        JOIN Message_ m ON r.message_id = m.id
+        WHERE m.sender_id = :user_id
         ORDER BY sd.date_ DESC, sd.time_ DESC
     ";
     
@@ -515,27 +629,31 @@ function getUserOrders($userId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
 /**
  * Obter estatísticas dos pedidos de um utilizador
  */
 function getOrderStats($userId) {
     $db = getDatabaseConnection();
-    
+
     $query = "
         SELECT 
-            COUNT(*) as total_orders,
-            COUNT(CASE WHEN status_ = 'completed' THEN 1 END) as completed_orders,
-            COUNT(CASE WHEN status_ = 'accepted' THEN 1 END) as accepted_orders,
-            COUNT(CASE WHEN status_ = 'paid' THEN 1 END) as paid_orders,
-            COALESCE(SUM(final_price), 0) as total_spent
-        FROM Service_Data 
-        WHERE user_id = :user_id
+            COUNT(*) AS total_orders,
+            COUNT(CASE WHEN r.status_ = 'completed' THEN 1 END) AS completed_orders,
+            COUNT(CASE WHEN r.status_ = 'accepted' THEN 1 END) AS accepted_orders,
+            COUNT(CASE WHEN r.status_ = 'paid' THEN 1 END) AS paid_orders,
+            COALESCE(SUM(CASE WHEN r.status_ IN ('paid', 'completed') THEN r.price ELSE 0 END), 0) AS total_spent
+        FROM Request r
+        INNER JOIN Message_ m ON r.message_id = m.id
+        WHERE m.sender_id = :user_id
+          AND m.body_ LIKE 'Pedido:%'
     ";
-    
+
     $stmt = $db->prepare($query);
     $stmt->execute([':user_id' => $userId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
 
 // ===== FUNÇÕES AUXILIARES =====
 
@@ -577,5 +695,105 @@ function calculateDiscountedPrice($price, $promotion) {
 function calculateTotalPrice($price_per_hour, $promotion, $duration) {
     $discounted_price = calculateDiscountedPrice($price_per_hour, $promotion);
     return $discounted_price * ($duration / 60); // Convertendo duração de minutos para horas
+}
+
+function handleUpdateService() {
+    if (!isUserLoggedIn()) {
+        $_SESSION['error'] = 'Deve fazer login para editar um serviço.';
+        header("Location: /Views/auth.php");
+        exit();
+    }
+
+    $currentUserId = getCurrentUserId();
+    $serviceId = intval($_POST['service_id'] ?? 0);
+    $existingService = getServiceById($serviceId);
+
+    if (!$existingService || $existingService['freelancer_id'] !== $currentUserId) {
+        $_SESSION['error'] = 'Serviço não encontrado ou não tem permissão.';
+        header("Location: /Views/orders/myServices.php");
+        exit();
+    }
+
+    $serviceData = [
+        'id' => $serviceId,
+        'freelancer_id' => $currentUserId,
+        'name' => trim($_POST['name'] ?? ''),
+        'description' => trim($_POST['description'] ?? ''),
+        'duration' => intval($_POST['duration'] ?? 0),
+        'price_per_hour' => floatval($_POST['price_per_hour'] ?? 0),
+        'promotion' => intval($_POST['promotion'] ?? 0),
+        'category_id' => intval($_POST['category_id'] ?? 0),
+        'is_active' => isset($_POST['is_active']) ? 1 : 0
+    ];
+
+    $validation = validateServiceData($serviceData);
+
+    if (!$validation['valid']) {
+        $_SESSION['error'] = implode('<br>', $validation['errors']);
+        header("Location: /Views/orders/editService.php?id=" . $serviceId);
+        exit();
+    }
+
+    $updated = updateService($serviceData);
+
+    if (!$updated) {
+        $_SESSION['error'] = 'Erro ao atualizar o serviço.';
+        header("Location: /Views/orders/editService.php?id=" . $serviceId);
+        exit();
+    }
+
+    $_SESSION['success'] = 'Serviço atualizado com sucesso.';
+    header("Location: /Views/product.php?id=" . $serviceId);
+    exit();
+}
+
+function updateService($data) {
+    $db = getDatabaseConnection();
+
+    try {
+        $query = "UPDATE Service_ SET 
+                    name_ = :name, 
+                    description_ = :description, 
+                    duration = :duration, 
+                    price_per_hour = :price_per_hour, 
+                    promotion = :promotion, 
+                    category_id = :category_id, 
+                    is_active = :is_active 
+                  WHERE id = :id AND freelancer_id = :freelancer_id";
+        
+        $stmt = $db->prepare($query);
+        return $stmt->execute([
+            ':name' => $data['name'],
+            ':description' => $data['description'],
+            ':duration' => $data['duration'],
+            ':price_per_hour' => $data['price_per_hour'],
+            ':promotion' => $data['promotion'],
+            ':category_id' => $data['category_id'],
+            ':is_active' => $data['is_active'],
+            ':id' => $data['id'],
+            ':freelancer_id' => $data['freelancer_id']
+        ]);
+    } catch (PDOException $e) {
+        error_log("Erro ao atualizar serviço: " . $e->getMessage());
+        return false;
+    }
+}
+
+function getFirstImageForService($serviceId) {
+    $directory = __DIR__ . '/../../Images/services/';
+    $webPathPrefix = '/Images/services/';
+
+    // Procurar ficheiros que comecem com service_<id>_
+    $pattern = $directory . 'service_' . $serviceId . '_*.*';
+    $files = glob($pattern);
+
+    if ($files && count($files) > 0) {
+        // Obter só o nome do ficheiro
+        $fileName = basename($files[0]);
+        return $webPathPrefix . $fileName;
+    }
+
+    // Se não encontrar nenhuma imagem, usar o placeholder
+    return $webPathPrefix . 'placeholder.jpg';
 }
 ?>

@@ -1,20 +1,21 @@
 <?php
 session_start();
 
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['cart']) || !isset($_POST['id'])) {
     echo json_encode(['success' => false, 'message' => 'Dados inválidos']);
     exit;
 }
 
-$id = $_POST['id'];
+$idToRemove = $_POST['id'];
+$cart = $_SESSION['cart'];
 
-// Procurar o item no carrinho usando o ID único
-foreach ($_SESSION['cart'] as $index => $item) {
-    $itemId = md5($item['title'] . $item['price'] . $item['seller']); // Gerar ID único
-    if ($itemId === $id) {
-        // Remover o item do carrinho
-        array_splice($_SESSION['cart'], $index, 1);
-        echo json_encode(['success' => true]);
+foreach ($cart as $index => $item) {
+    if ($item['id'] == $idToRemove) {
+        array_splice($cart, $index, 1);
+        $_SESSION['cart'] = $cart;
+        echo json_encode(['success' => true, 'message' => 'Item removido']);
         exit;
     }
 }

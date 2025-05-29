@@ -1,9 +1,10 @@
 <?php
-require_once(dirname(__FILE__)."/../../Templates/common_elems.php");
-require_once(dirname(__FILE__)."/../../Controllers/searchBarController.php");
-require_once(dirname(__FILE__)."/../../Controllers/serviceController.php");
-require_once(dirname(__FILE__)."/../../Controllers/categoriesController.php");
-require_once(dirname(__FILE__)."/../../Controllers/distancesCalculationController.php");
+require_once("../../Templates/common_elems.php");
+require_once("../../Controllers/searchBarController.php");
+require_once("../../Controllers/serviceController.php");
+require_once("../../Controllers/categoriesController.php");
+require_once("../../Controllers/distancesCalculationController.php");
+require_once("../../Utils/session.php");
 
 // Obter parâmetros da pesquisa
 $query = isset($_GET['query']) ? htmlspecialchars(strip_tags($_GET['query'])) : '';
@@ -106,7 +107,13 @@ drawHeader($pageTitle, ["/Styles/search_results.css"]);
                     <div class="service-card">
                         <div class="service-image">
                             <!-- Imagem do serviço (placeholder ou dinâmica) -->
-                            <img src="/Images/services/placeholder.jpg" alt="<?php echo $service['name']; ?>">
+                            <?php
+                                $imagePaths = explode(",", $service['image_paths'] ?? '');
+                                $firstImage = trim($imagePaths[0] ?? '');
+                                $finalImage = $firstImage !== '' ? '/Images/services/' . ltrim($firstImage, '/') : 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+                            ?>
+                            <img src="<?php echo htmlspecialchars($finalImage); ?>" alt="<?php echo htmlspecialchars($service['name']); ?>">
+
                             <?php if ($service['promotion'] > 0): ?>
                                 <div class="promotion-badge"><?php echo $service['promotion']; ?>% OFF</div>
                             <?php endif; ?>

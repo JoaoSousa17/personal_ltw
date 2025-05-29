@@ -115,7 +115,7 @@ CREATE TABLE Service_Data (
     time_ TIME NOT NULL DEFAULT (TIME('now')),
     travel_fee INTEGER NOT NULL DEFAULT 0,
     final_price REAL NOT NULL,
-    status_ TEXT NOT NULL CHECK(status_ IN ('completed', 'accepted', 'paid')),
+    status_ TEXT NOT NULL CHECK(status_ IN ('completed', 'accepted', 'paid', 'pending')),
     FOREIGN KEY (user_id) REFERENCES User_(id),
     FOREIGN KEY (service_id) REFERENCES Service_(id)
 );
@@ -152,6 +152,7 @@ CREATE TABLE Request (
     title TEXT NOT NULL,
     price REAL NOT NULL,
     duration INTEGER NOT NULL,
+    status_ TEXT NOT NULL DEFAULT 'pending' CHECK (status_ IN ('pending', 'accepted', 'refused', 'paid', 'completed')),
     FOREIGN KEY (service_data_id) REFERENCES Service_Data(id),
     FOREIGN KEY (message_id) REFERENCES Message_(id)
 );

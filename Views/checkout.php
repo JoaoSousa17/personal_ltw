@@ -52,13 +52,6 @@ $amountToPay = $total / 2;
 
       <?php if (!empty($services)) drawServiceFields($services); ?>
 
-      <?php if (count($services) <= 1): ?>
-        <li>
-          <label>Notas adicionais:</label>
-          <textarea name="notes"></textarea>
-        </li>
-      <?php endif; ?>
-
       <li>
         <label>
           <input type="checkbox" name="terms" required />

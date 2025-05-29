@@ -3,8 +3,9 @@ document.getElementById("orderBtn").addEventListener("click", (event) => {
   
     const productId = event.target.getAttribute("data-id");
     const title = document.querySelector(".product-info h2")?.textContent.trim();
-    const priceText = document.querySelector(".product-info h3")?.textContent.trim();
-    const price = priceText?.match(/\d+/)?.[0] || "0";
+
+    const price = event.target.getAttribute("data-price") || "0";
+
     const image = document.querySelector(".product-image-img")?.src;
     const seller = document.querySelector(".product-advertiser")?.textContent.trim().replace("Utilizador", "").trim();
   
@@ -35,4 +36,3 @@ document.getElementById("orderBtn").addEventListener("click", (event) => {
     })
     .catch(() => alert("Erro de rede."));
   });
-  

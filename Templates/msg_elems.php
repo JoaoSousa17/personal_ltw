@@ -26,6 +26,7 @@ function drawAllChatWindows(array $conversations, int $loggedInUserId) {
         <div class="chat-window" id="chat-with-<?= $otherId ?>" style="display:none">
             <div class="chat-header">
                 <h2><?= htmlspecialchars($conv['username']) ?></h2>
+                <button class="request-button" data-freelancer-id="<?= $otherId ?>">Pedido</button>
             </div>
 
             <div class="chat-messages">
@@ -39,6 +40,27 @@ function drawAllChatWindows(array $conversations, int $loggedInUserId) {
                 <?php endforeach; ?>
             </div>
 
+            <div class="request-modal" style="display:none">
+                <div class="request-content">
+                    <h3>Detalhes do Pedido</h3>
+                    <div class="service-row">
+                        <label for="serviceSelect"><strong>Serviço:</strong></label>
+                        <select class="serviceSelect" id="serviceSelect"></select>
+                    </div>
+
+                    <p><strong>Preço por hora:</strong> €<span class="hourlyRate">--</span></p>
+
+                    <label for="newPrice">Propor novo preço (€):</label>
+                    <input type="number" class="newPrice" placeholder="Ex: 30.00" min="0" step="0.01">
+
+                    <div class="request-actions">
+                        <button class="sendRequest">Enviar</button>
+                        <button class="closeRequest">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            
             <div class="chat-input">
                 <form class="message-form" data-receiver-id="<?= $otherId ?>">
                     <input type="text" name="message" placeholder="Escreva uma mensagem..." autocomplete="off" required>

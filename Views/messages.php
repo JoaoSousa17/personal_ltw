@@ -13,7 +13,7 @@ require_once("../Database/connection.php");
 
 drawHeader("Mensagens", ["../Styles/msg.css"]);
 
-$userId = $_SESSION['user_id'] ?? 4;
+$userId = $_SESSION['user_id'];
 
 if (!$userId) {
     $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];

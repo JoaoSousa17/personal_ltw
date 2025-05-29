@@ -12,7 +12,7 @@ function drawProductImageCarousel(array $imageUrls) { ?>
       <div class="image-container">
         <?php foreach ($imageUrls as $index => $url): ?>
           <img
-            src="<?= htmlspecialchars($url) ?>"
+            src="<?= '/' . ltrim(htmlspecialchars($url), '/') ?>"
             alt="Product"
             class="product-image-img"
             style="<?= $index > 0 ? 'display: none;' : '' ?>"
@@ -54,14 +54,37 @@ function drawProductDescription(string $description, array $categories) { ?>
  * @param float $price
  * @param int $serviceId
  */
-function drawProductInfo(string $date, string $title, float $price, $serviceId) { ?>
+function drawProductInfo(string $date, string $title, float $finalPrice, int $serviceId, ?float $originalPrice = null, int $discount = 0, int $duration = 0) { ?>
   <div class="product-info">
     <div>
       <h6>Publicado a <?= htmlspecialchars($date) ?></h6>
       <h2><?= htmlspecialchars($title) ?></h2>
-      <h3>Preço: <?= number_format($price, 2, ',', '') ?>€</h3>
+
+      <?php if ($originalPrice !== null && $discount > 0): ?>
+        <div class="discount-badge"><?= $discount ?>% OFF</div>
+      <?php endif; ?>
+
+
+      <div class="price-info">
+        <?php if ($originalPrice !== null && $discount > 0): ?>
+          <p class="original-price"><s><?= number_format($originalPrice, 2, ',', '') ?>€</s></p>
+        <?php endif; ?>
+        <h3 class="price-hour"><?= number_format($finalPrice, 2, ',', '') ?>€/h</h3>
+        <p class="duration"><?= $duration ?> hrs</p>
+      </div>
+
+
       <button onclick="openPopup()">Enviar mensagem</button>
-      <button id="orderBtn" data-id="<?= htmlspecialchars($serviceId) ?>">Encomendar</button>
+      <?php
+        $totalPrice = ($finalPrice / 60) * $duration;
+      ?>
+      <button 
+        id="orderBtn" 
+        data-id="<?= htmlspecialchars($serviceId) ?>" 
+        data-price="<?= number_format($totalPrice, 2, ',', '') ?>"
+      >
+        Encomendar
+      </button>
     </div>
   </div>
 <?php }
