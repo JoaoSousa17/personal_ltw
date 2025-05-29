@@ -1,48 +1,3 @@
-// Cart&Checkout.js
-
-// ==============================
-// GESTÃO DE ENDEREÇOS DIFERENTES
-// ==============================
-
-document.getElementById('differentAddresses').addEventListener('change', function () {
-    const commonAddress = document.getElementById('commonAddress');
-    const serviceDetails = document.querySelectorAll('.service-details');
-    const specificAddresses = document.querySelectorAll('.specific-address');
-
-    if (this.checked) {
-        commonAddress.style.display = 'none';
-        specificAddresses.forEach(address => {
-            address.style.display = 'block';
-        });
-    } else {
-        commonAddress.style.display = 'block';
-        specificAddresses.forEach(address => {
-            address.style.display = 'none';
-        });
-    }
-
-    serviceDetails.forEach(service => {
-        service.style.display = 'block';
-    });
-});
-
-// Inicializar visibilidade dos endereços ao carregar a página
-if (document.getElementById('differentAddresses').checked) {
-    document.getElementById('commonAddress').style.display = 'none';
-    document.querySelectorAll('.specific-address').forEach(address => {
-        address.style.display = 'block';
-    });
-} else {
-    document.getElementById('commonAddress').style.display = 'block';
-    document.querySelectorAll('.specific-address').forEach(address => {
-        address.style.display = 'none';
-    });
-}
-
-// ==============================
-// GESTÃO DO CARRINHO E CHECKOUT
-// ==============================
-
 document.addEventListener("DOMContentLoaded", function () {
     const artigosText = document.querySelector(".page-header h3");
     const productsContainer = document.querySelector(".products-containers");
@@ -88,16 +43,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Atualizar o número de artigos no carrinho
+    // Função para atualizar o número de artigos no carrinho
     function atualizarNumeroArtigos() {
         const totalProdutos = document.querySelectorAll(".product-item").length;
         artigosText.textContent = `${totalProdutos} artigo${totalProdutos !== 1 ? 's' : ''}`;
-
+    
         const cartCountEl = document.getElementById("cart-count");
         if (cartCountEl) {
             cartCountEl.textContent = totalProdutos;
         }
-
+    
         const cartBadge = document.getElementById("cart-badge");
         if (cartBadge) {
             if (totalProdutos === 0) {
@@ -105,15 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 cartBadge.textContent = totalProdutos;
                 cartBadge.style.display = "flex";
-
+    
                 cartBadge.classList.remove("animate");
                 void cartBadge.offsetWidth;
                 cartBadge.classList.add("animate");
             }
         }
     }
+    
 
-    // Criar mensagem de carrinho vazio
+    // Função para criar a mensagem de carrinho vazio
     function criarCarrinhoVazio() {
         const carrinhoVazioContainer = document.createElement("div");
         carrinhoVazioContainer.classList.add("carrinho-vazio");
@@ -134,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         productsContainer.appendChild(carrinhoVazioContainer);
     }
 
-    // Remover produto do carrinho
+    // Função para remover o produto do carrinho
     function removerProduto(id, productItem) {
         fetch("/Controllers/remove_from_cart.php", {
             method: "POST",
@@ -163,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Evento de clique para remover produtos
+    // Evento para remover produtos
     productsContainer.addEventListener("click", function (event) {
         const btn = event.target.closest(".remove-btn");
         if (!btn) return;
@@ -174,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         removerProduto(id, productItem);
     });
 
-    // Inicializações ao carregar
+    // Inicializações
     calcularTotais();
     atualizarNumeroArtigos();
 });

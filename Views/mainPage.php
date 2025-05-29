@@ -22,7 +22,6 @@ drawHeader("Handee - Main Page", ["/Styles/main_page.css"]);
             <a href="staticPages/services.php" class="banner-button">Descobrir Serviços</a>
         </div>
     </section>
-
     <!-- Categorias Existentes - Carrossel -->
     <section class="featured-services">
         <?php drawSectionHeader("Categorias em Destaque", "Explore nossos serviços por categoria") ?>
@@ -30,5 +29,4 @@ drawHeader("Handee - Main Page", ["/Styles/main_page.css"]);
     </section>
 </main>
 <?php drawFooter(); ?>
-
 <script src="/Scripts/carousel.js"></script>

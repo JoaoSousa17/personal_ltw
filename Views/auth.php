@@ -1,15 +1,15 @@
 <?php
-// Iniciar sessão e processar mensagens
 session_start();
 $error = $_SESSION['error'] ?? '';
 $success = $_SESSION['success'] ?? '';
 unset($_SESSION['error'], $_SESSION['success']);
 
-// Incluir elementos da página de autenticação
+// Inclua as funções do arquivo authPages_elems.php
 require_once("../Templates/authPages_elems.php");
 
-// Processar login se o formulário for enviado
+// Processa login se o formulário for enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+
     if ($user) {
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['is_admin'] = $user->getIsAdmin();
@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         header("Location: /Views/profile.php?id=" . $_SESSION['user_id']);
         exit();
     } else {
+        // Login falhou
         $_SESSION['error'] = "Nome de usuário ou senha incorretos.";
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -38,16 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     <div class="container">
         <h1>Autenticação</h1>
 
-        <!-- Mensagens de feedback -->
         <?php 
+            // Exibe mensagens de erro e sucesso
             showError($error);
             showSuccess($success);
         ?>
 
-        <!-- Formulários de autenticação -->
         <?php
+            // Exibe os tabs
             drawTabs();
+            
+            // Exibe o formulário de login
             drawLoginForm();
+            
+            // Exibe o formulário de criação de conta
             drawSignupForm();
         ?>
     </div>

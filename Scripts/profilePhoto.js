@@ -1,31 +1,30 @@
-// profile.js - JavaScript consolidado para páginas de perfil
+/**
+ * Script para gestão de fotos de perfil
+ * Funcionalidades: upload, preview e eliminação de fotos
+ */
 
-/* ==========================================
-   GESTÃO DE FOTOS DE PERFIL
-========================================== */
-
-// Configurar gestão de fotos de perfil
-function setupPhotoManagement() {
+document.addEventListener('DOMContentLoaded', function() {
     const photoUpload = document.getElementById('photo-upload');
     const deletePhotoBtn = document.getElementById('delete-photo-btn');
     const photoPreview = document.getElementById('profile-photo-preview');
     const photoMessage = document.getElementById('photo-message');
     
-    if (!photoPreview) return;
-    
     // URL da foto atual para fallback
-    const currentPhotoUrl = photoPreview.src || '/Images/site/header/genericProfile.png';
+    const currentPhotoUrl = photoPreview ? photoPreview.src : '/Images/site/header/genericProfile.png';
     
-    // Obter dados do utilizador
+    // Obter dados do utilizador (definidos na página PHP)
     const isOwnProfile = window.profilePageData ? window.profilePageData.isOwnProfile : true;
     const targetUserId = window.profilePageData ? window.profilePageData.targetUserId : null;
     
     /**
      * Mostra mensagens relacionadas com a foto de perfil
+     * @param {string} message - Mensagem a exibir
+     * @param {string} type - Tipo da mensagem (success, error, info, warning)
      */
     function showPhotoMessage(message, type) {
         if (!photoMessage) return;
         
+        // Mapear tipos para classes CSS
         const typeClasses = {
             'success': 'alert-success',
             'error': 'alert-error', 
@@ -41,6 +40,7 @@ function setupPhotoManagement() {
             </div>
         `;
         
+        // Remover mensagem após 5 segundos (exceto para erros críticos)
         if (type !== 'error') {
             setTimeout(() => {
                 photoMessage.innerHTML = '';
@@ -49,13 +49,17 @@ function setupPhotoManagement() {
     }
     
     /**
-     * Valida o ficheiro selecionado
+     * Valida o ficheiro selecionado antes do upload
+     * @param {File} file - Ficheiro a validar
+     * @returns {object} - Resultado da validação
      */
     function validateImageFile(file) {
+        // Verificar se é um ficheiro
         if (!file) {
             return { valid: false, message: 'Nenhum ficheiro selecionado.' };
         }
         
+        // Verificar tipo de ficheiro
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
             return { 
@@ -64,7 +68,8 @@ function setupPhotoManagement() {
             };
         }
         
-        const maxSize = 5 * 1024 * 1024; // 5MB
+        // Verificar tamanho (5MB máximo)
+        const maxSize = 5 * 1024 * 1024; // 5MB em bytes
         if (file.size > maxSize) {
             return { 
                 valid: false, 
@@ -77,12 +82,14 @@ function setupPhotoManagement() {
     
     /**
      * Faz o upload da foto via AJAX
+     * @param {File} file - Ficheiro a fazer upload
      */
     function uploadPhoto(file) {
         const formData = new FormData();
         formData.append('photo', file);
         formData.append('action', 'upload_photo');
         
+        // Adicionar ID do utilizador target se não for o próprio perfil
         if (!isOwnProfile && targetUserId) {
             formData.append('target_user_id', targetUserId);
         }
@@ -103,20 +110,24 @@ function setupPhotoManagement() {
             if (data.success) {
                 showPhotoMessage(data.message, 'success');
                 
+                // Atualizar preview
                 if (data.path && photoPreview) {
                     photoPreview.src = '/' + data.path;
                     photoPreview.style.border = '3px solid #4a90e2';
                 }
                 
+                // Mostrar botão de eliminar se não estiver visível
                 if (deletePhotoBtn) {
                     deletePhotoBtn.style.display = 'inline-block';
                 }
                 
+                // Recarregar página após 2 segundos para sincronizar tudo
                 setTimeout(() => {
                     location.reload();
                 }, 2000);
             } else {
                 showPhotoMessage(data.message, 'error');
+                // Reverter preview para a foto original
                 if (photoPreview) {
                     photoPreview.src = currentPhotoUrl;
                 }
@@ -126,6 +137,7 @@ function setupPhotoManagement() {
             console.error('Erro no upload:', error);
             showPhotoMessage('Erro ao carregar a foto. Tente novamente.', 'error');
             
+            // Reverter preview
             if (photoPreview) {
                 photoPreview.src = currentPhotoUrl;
             }
@@ -143,6 +155,7 @@ function setupPhotoManagement() {
         const formData = new FormData();
         formData.append('action', 'delete_photo');
         
+        // Adicionar ID do utilizador target se não for o próprio perfil
         if (!isOwnProfile && targetUserId) {
             formData.append('target_user_id', targetUserId);
         }
@@ -163,11 +176,13 @@ function setupPhotoManagement() {
             if (data.success) {
                 showPhotoMessage(data.message, 'success');
                 
+                // Atualizar preview para foto padrão
                 if (photoPreview) {
                     photoPreview.src = '/Images/site/header/genericProfile.png';
                     photoPreview.style.border = '3px solid #ccc';
                 }
                 
+                // Esconder botão de eliminar
                 if (deletePhotoBtn) {
                     deletePhotoBtn.style.display = 'none';
                 }
@@ -182,7 +197,8 @@ function setupPhotoManagement() {
     }
     
     /**
-     * Cria preview da imagem
+     * Cria preview da imagem antes do upload
+     * @param {File} file - Ficheiro para preview
      */
     function createImagePreview(file) {
         if (!photoPreview) return;
@@ -196,25 +212,34 @@ function setupPhotoManagement() {
     }
     
     // Event Listeners
+    
+    // Upload de foto
     if (photoUpload) {
         photoUpload.addEventListener('change', function(e) {
             const file = e.target.files[0];
             
             if (!file) return;
             
+            // Validar ficheiro
             const validation = validateImageFile(file);
             if (!validation.valid) {
                 showPhotoMessage(validation.message, 'error');
-                this.value = '';
+                this.value = ''; // Limpar input
                 return;
             }
             
+            // Criar preview
             createImagePreview(file);
+            
+            // Fazer upload
             uploadPhoto(file);
+            
+            // Limpar input para permitir selecionar o mesmo ficheiro novamente
             this.value = '';
         });
     }
     
+    // Eliminar foto
     if (deletePhotoBtn) {
         deletePhotoBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -222,7 +247,7 @@ function setupPhotoManagement() {
         });
     }
     
-    // Drag and Drop
+    // Drag and Drop (funcionalidade extra)
     if (photoPreview) {
         photoPreview.addEventListener('dragover', function(e) {
             e.preventDefault();
@@ -245,17 +270,20 @@ function setupPhotoManagement() {
             if (files.length > 0) {
                 const file = files[0];
                 
+                // Validar ficheiro
                 const validation = validateImageFile(file);
                 if (!validation.valid) {
                     showPhotoMessage(validation.message, 'error');
                     return;
                 }
                 
+                // Criar preview e fazer upload
                 createImagePreview(file);
                 uploadPhoto(file);
             }
         });
         
+        // Adicionar cursor pointer para indicar que é clicável
         photoPreview.style.cursor = 'pointer';
         photoPreview.addEventListener('click', function() {
             if (photoUpload) {
@@ -264,110 +292,10 @@ function setupPhotoManagement() {
         });
     }
     
-    // Função global para uso externo
+    // Função global para uso externo (se necessário)
     window.profilePhotoManager = {
         upload: uploadPhoto,
         delete: deletePhoto,
         showMessage: showPhotoMessage
     };
-}
-
-/* ==========================================
-   VALIDAÇÃO DE FORMULÁRIOS
-========================================== */
-
-// Configurar validação de passwords
-function setupPasswordValidation() {
-    const passwordField = document.getElementById('password');
-    const confirmField = document.getElementById('password_confirm');
-    const form = document.querySelector('.edit-form');
-    
-    if (!passwordField || !confirmField || !form) return;
-    
-    function validatePasswords() {
-        if (passwordField.value && confirmField.value) {
-            if (passwordField.value !== confirmField.value) {
-                confirmField.setCustomValidity('As passwords não coincidem');
-            } else {
-                confirmField.setCustomValidity('');
-            }
-        } else {
-            confirmField.setCustomValidity('');
-        }
-    }
-    
-    passwordField.addEventListener('input', validatePasswords);
-    confirmField.addEventListener('input', validatePasswords);
-    
-    form.addEventListener('submit', function(e) {
-        validatePasswords();
-        if (!confirmField.checkValidity()) {
-            e.preventDefault();
-            alert('Por favor, corrija os erros no formulário antes de submeter.');
-        }
-    });
-}
-
-/* ==========================================
-   FORMATAÇÃO DE CAMPOS
-========================================== */
-
-// Configurar formatação automática do código postal
-function setupZipCodeFormatting() {
-    const zipCodeInput = document.getElementById('zip_code');
-    if (!zipCodeInput) return;
-    
-    zipCodeInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-        if (value.length >= 4) {
-            value = value.substring(0, 4) + '-' + value.substring(4, 7);
-        }
-        e.target.value = value;
-    });
-}
-
-/* ==========================================
-   EFEITOS VISUAIS
-========================================== */
-
-// Configurar efeitos visuais nos botões
-function setupButtonEffects() {
-    const buttons = document.querySelectorAll('.btn-photo, .btn-delete, .btn-submit, .btn-cancel');
-    
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-        });
-        
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = 'none';
-        });
-    });
-}
-
-/* ==========================================
-   CONFIGURAÇÃO DE DADOS GLOBAIS
-========================================== */
-
-// Configurar dados da página de perfil para scripts externos
-function setupProfilePageData(isOwnProfile, targetUserId, currentPhotoUrl) {
-    window.profilePageData = {
-        isOwnProfile: isOwnProfile,
-        targetUserId: targetUserId,
-        currentPhotoUrl: currentPhotoUrl || "/Images/site/header/genericProfile.png"
-    };
-}
-
-/* ==========================================
-   INICIALIZAÇÃO
-========================================== */
-
-// Inicializar todas as funcionalidades quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    setupPhotoManagement();
-    setupPasswordValidation();
-    setupZipCodeFormatting();
-    setupButtonEffects();
 });

@@ -1,705 +1,428 @@
 /******************
-SEARCH RESULTS PAGE - VERSÃO MELHORADA
+SEARCH RESULTS PAGE
 ******************/
 
-/* Variáveis CSS para consistência */
-:root {
-    --primary-color: #007bff;
-    --hover-color: #0056b3;
-    --text-color: #333;
-    --light-text: #666;
-    --border-color: #ddd;
-    --bg-light: #f8f9fa;
-    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
-    --transition: all 0.3s ease;
-}
-
-/******************
-BANNER DE RESULTADOS
-******************/
-
+/* Banner de resultados */
 .results-banner {
     width: 90%;
-    max-width: 1200px;
     margin: 30px auto;
     height: 250px;
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.9), rgba(0, 86, 179, 0.9)), 
-                url('../Images/site/search/search-banner.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../Images/site/search/search-banner.jpg');
     background-position: center;
     background-size: cover;
-    border-radius: 15px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: white;
-    box-shadow: var(--shadow-light);
-    position: relative;
-    overflow: hidden;
 }
 
-.results-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-}
-
+/* Conteúdo do banner */
 .banner-content h1 {
     font-size: 2.5rem;
-    margin: 0 0 10px 0;
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
 }
 
+/* Parágrafo do banner */
 .banner-content p {
     font-size: 1.2rem;
-    margin: 5px 0;
-    opacity: 0.95;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.currency-info {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-top: 10px;
 }
 
 /******************
-SEÇÃO DE FILTROS - MELHORADA
+FILTROS SECTION
 ******************/
 
+/* Seção de filtros */
 .filters-section {
     width: 90%;
-    max-width: 1200px;
     margin: 30px auto;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: var(--shadow-light);
-    border: 1px solid rgba(0, 123, 255, 0.1);
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
 }
 
+/* Título dos filtros */
 .filters-container h2 {
-    margin: 0 0 25px 0;
+    margin-bottom: 20px;
     font-size: 1.5rem;
     color: var(--text-color);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
-.filters-container h2::before {
-    content: '🔍';
-    font-size: 1.2em;
-}
-
-/* Layout dos filtros */
-.filter-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 20px;
-    align-items: end;
-}
-
+/* Formulário de filtros */
 #filter-form {
-    display: block;
-}
-
-.filter-group {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
+/* Grupo de filtros */
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Label do filtro */
 .filter-group label {
-    font-weight: 600;
-    color: var(--text-color);
-    font-size: 0.95rem;
-    margin: 0;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
-/* Inputs melhorados */
-.filter-select,
-.price-input {
-    padding: 12px 15px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1rem;
-    background: white;
-    transition: var(--transition);
-    font-family: inherit;
+/* Inputs do filtro */
+.filter-group select,
+.filter-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.filter-select:focus,
-.price-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    transform: translateY(-1px);
-}
-
-.filter-select:hover,
-.price-input:hover {
-    border-color: var(--primary-color);
-}
-
-/* Range de preços melhorado */
-.price-filter {
-    min-width: 250px;
-}
-
+/* Range de preços */
 .price-range {
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.price-input {
-    flex: 1;
-    min-width: 80px;
-}
-
-.price-separator {
-    color: var(--light-text);
-    font-weight: 500;
-    white-space: nowrap;
-    font-size: 0.9rem;
-}
-
-/* Botões melhorados */
-.filter-actions {
-    display: flex;
     gap: 10px;
-    flex-direction: column;
 }
 
+/* Input do range de preços */
+.price-range input {
+    flex: 1;
+}
+
+/* Separador do range */
+.price-range span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Botão de filtro */
 .filter-button {
-    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+    border-radius: 5px;
+    padding: 12px 25px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 140px;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+    font-weight: bold;
+    transition: background-color 0.3s;
+    align-self: flex-end;
 }
 
+/* Hover do botão de filtro */
 .filter-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-}
-
-.filter-button:active {
-    transform: translateY(0);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, #6c757d, #545b62);
-    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
-}
-
-.btn-secondary:hover {
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
-}
-
-/* Filtros ativos */
-.active-filters {
-    grid-column: 1 / -1;
-    margin-top: 20px;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.05));
-    border-radius: 10px;
-    border-left: 4px solid var(--primary-color);
-}
-
-.active-filters-label {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-right: 12px;
-    font-size: 0.95rem;
-}
-
-.filter-tag {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-right: 8px;
-    margin-bottom: 5px;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+    background-color: var(--hover-color);
 }
 
 /******************
-SEÇÃO DE RESULTADOS
+RESULTADOS SECTION
 ******************/
 
+/* Seção de resultados */
 .search-results {
     width: 90%;
-    max-width: 1200px;
     margin: 30px auto 50px;
 }
 
-.container {
-    width: 100%;
-}
-
-/* Sem resultados melhorado */
+/* Estado sem resultados */
 .no-results {
     text-align: center;
-    padding: 60px 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: var(--shadow-light);
+    padding: 50px 0;
 }
 
-.no-results-icon {
-    font-size: 4rem;
-    color: var(--light-text);
-    margin-bottom: 20px;
-}
-
+/* Título sem resultados */
 .no-results h2 {
     font-size: 1.8rem;
     color: var(--text-color);
-    margin: 0 0 15px 0;
-    font-weight: 600;
+    margin-bottom: 15px;
 }
 
+/* Texto sem resultados */
 .no-results p {
-    color: var(--light-text);
+    color: #666;
     font-size: 1.1rem;
-    margin: 0 0 25px 0;
-    line-height: 1.6;
 }
 
-.no-results-suggestions {
-    background: var(--bg-light);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: left;
-    max-width: 500px;
-    margin: 0 auto 25px;
-}
-
-.no-results-suggestions h4 {
-    margin: 0 0 15px 0;
-    color: var(--text-color);
-    font-weight: 600;
-}
-
-.no-results-suggestions ul {
-    margin: 0;
-    padding-left: 20px;
-    line-height: 1.8;
-}
-
-.no-results-suggestions li {
-    color: var(--light-text);
-    margin-bottom: 8px;
-}
-
-/* Grid melhorado */
+/* Grid dos resultados */
 .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    margin-top: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
 }
 
 /******************
-CARDS DE SERVIÇO MELHORADOS
+SERVICE CARDS
 ******************/
 
+/* Card de serviço */
 .service-card {
-    background: white;
-    border-radius: 15px;
+    background-color: white;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: var(--shadow-light);
-    transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
+/* Hover do card de serviço */
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Imagem do serviço */
 .service-image {
     position: relative;
-    height: 220px;
+    height: 200px;
     overflow: hidden;
-    background: var(--bg-light);
 }
 
+/* Imagem dentro do container */
 .service-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s;
 }
 
+/* Hover da imagem */
 .service-card:hover .service-image img {
-    transform: scale(1.08);
+    transform: scale(1.05);
 }
 
+/* Badge de promoção */
 .promotion-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: linear-gradient(135deg, #e53935, #c62828);
+    top: 10px;
+    right: 10px;
+    background-color: #e53935;
     color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
     font-size: 0.8rem;
-    box-shadow: 0 2px 8px rgba(229, 57, 53, 0.4);
-    z-index: 2;
 }
 
+/* Informações do serviço */
 .service-info {
     padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 }
 
-.category-tag {
-    background: linear-gradient(135deg, var(--bg-light), #e9ecef);
-    color: var(--text-color);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    align-self: flex-start;
-    margin-bottom: 12px;
-    border: 1px solid rgba(0, 123, 255, 0.1);
-}
-
+/* Título do serviço */
 .service-info h3 {
-    margin: 0 0 12px 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.service-info h3 a {
+    margin-bottom: 10px;
+    font-size: 1.3rem;
     color: var(--text-color);
+}
+
+/* Link do título */
+.service-info h3 a {
+    color: inherit;
     text-decoration: none;
-    transition: color 0.3s ease;
 }
 
-.service-info h3 a:hover {
-    color: var(--primary-color);
-}
-
+/* Descrição do serviço */
 .service-description {
-    color: var(--light-text);
-    margin: 0 0 15px 0;
-    line-height: 1.6;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
     font-size: 0.95rem;
-    flex-grow: 1;
 }
 
+/* Metadados do serviço */
 .service-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 15px 0;
-    padding-top: 15px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
 
+/* Duração do serviço */
 .duration {
     display: flex;
     align-items: center;
-    color: var(--light-text);
+    color: #666;
     font-size: 0.9rem;
-    font-weight: 500;
 }
 
+/* Ícone do relógio */
 .clock-icon {
     display: inline-block;
     width: 16px;
     height: 16px;
     background-image: url('../Images/site/icons/clock.png');
     background-size: contain;
-    margin-right: 6px;
-    opacity: 0.7;
+    margin-right: 5px;
 }
 
+/* Container de preço */
 .price {
     text-align: right;
 }
 
+/* Preço original */
 .original-price {
     text-decoration: line-through;
     color: #999;
     font-size: 0.85rem;
     display: block;
-    margin-bottom: 2px;
 }
 
+/* Preço com desconto */
 .discounted-price,
 .price-value {
     color: var(--primary-color);
-    font-weight: 700;
-    font-size: 1.15rem;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
+/* Botão ver serviço */
 .view-service-btn {
     display: block;
     text-align: center;
-    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+    background-color: var(--primary-color);
     color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 5px;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: var(--transition);
-    margin-top: auto;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
+/* Hover do botão ver serviço */
 .view-service-btn:hover {
-    background: linear-gradient(135deg, var(--hover-color), #004494);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
-    text-decoration: none;
-    color: white;
+    background-color: var(--hover-color);
 }
 
 /******************
-PAGINAÇÃO MELHORADA
+PAGINAÇÃO
 ******************/
 
+/* Container da paginação */
 .pagination {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 40px 0;
-    gap: 8px;
-    flex-wrap: wrap;
+    margin-top: 40px;
 }
 
+/* Links e spans da paginação */
 .pagination a,
-.pagination .current {
+.pagination span {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 45px;
-    height: 45px;
-    padding: 0 15px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    border-radius: 5px;
     text-decoration: none;
     color: var(--text-color);
-    font-weight: 600;
-    transition: var(--transition);
-    border: 2px solid transparent;
+    font-weight: bold;
+    transition: all 0.3s;
 }
 
+/* Links da paginação */
 .pagination a {
-    background: white;
-    box-shadow: var(--shadow-light);
-    border-color: var(--border-color);
+    background-color: #f0f0f0;
 }
 
+/* Hover dos links */
 .pagination a:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
+    background-color: #ddd;
 }
 
-.pagination .current {
-    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+/* Página atual */
+.pagination span.current {
+    background-color: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-    border-color: var(--primary-color);
-}
-
-.prev-page,
-.next-page {
-    padding: 0 20px !important;
-    font-weight: 600;
 }
 
 /******************
-SUGESTÕES DE PESQUISA
+SEARCH SUGGESTIONS
 ******************/
 
+/* Container das sugestões */
 #search-suggestions {
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    background: white;
-    border: 2px solid var(--border-color);
+    background-color: white;
+    border: 1px solid #ddd;
     border-top: none;
-    border-radius: 0 0 8px 8px;
-    box-shadow: var(--shadow-hover);
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: none;
     max-height: 300px;
     overflow-y: auto;
 }
 
+/* Item de sugestão */
 .suggestion-item {
-    padding: 12px 18px;
+    padding: 10px 15px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s;
 }
 
+/* Hover e estado ativo da sugestão */
 .suggestion-item:hover,
 .suggestion-item.active {
-    background: var(--bg-light);
-    color: var(--primary-color);
+    background-color: #f5f5f5;
 }
 
-.suggestion-item:last-child {
-    border-bottom: none;
-}
+/* MEDIA QUERIES - Responsividade */
 
-/******************
-RESPONSIVIDADE MELHORADA
-******************/
-
-/* Tablets grandes */
-@media (max-width: 1024px) {
-    .filter-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
+/* Tablets */
+@media (max-width: 992px) {
+    /* Grupos de filtro responsivos */
+    .filter-group {
+        flex: 1 1 45%;
     }
     
-    .filter-actions {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        justify-content: center;
+    /* Botão de filtro responsivo */
+    .filter-button {
+        flex: 1 1 100%;
         margin-top: 15px;
     }
 }
 
-/* Tablets */
+/* Mobile */
 @media (max-width: 768px) {
+    /* Banner responsivo */
     .results-banner {
         height: 200px;
-        margin: 20px auto;
     }
     
+    /* Título do banner responsivo */
     .banner-content h1 {
         font-size: 2rem;
     }
     
-    .banner-content p {
-        font-size: 1rem;
+    /* Filtros responsivos */
+    .filter-group {
+        flex: 1 1 100%;
     }
     
-    .filters-section {
-        margin: 20px auto;
-        padding: 20px;
-    }
-    
-    .filter-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .price-range {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .price-separator {
-        text-align: center;
-        margin: 5px 0;
-    }
-    
+    /* Grid responsivo */
     .results-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-    
-    .service-meta {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .price {
-        text-align: left;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
 
-/* Mobile */
+/* Mobile pequeno */
 @media (max-width: 480px) {
+    /* Banner muito pequeno */
     .results-banner {
         height: 150px;
-        width: 95%;
     }
     
+    /* Título muito pequeno */
     .banner-content h1 {
         font-size: 1.6rem;
     }
     
-    .filters-section {
-        width: 95%;
-        padding: 15px;
-    }
-    
-    .search-results {
-        width: 95%;
-    }
-    
-    .results-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
+    /* Imagem do serviço menor */
     .service-image {
-        height: 180px;
-    }
-    
-    .service-info {
-        padding: 15px;
-    }
-    
-    .filter-button {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    
-    .pagination {
-        gap: 5px;
-    }
-    
-    .pagination a,
-    .pagination .current {
-        min-width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
+        height: 150px;
     }
 }

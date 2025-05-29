@@ -65,7 +65,7 @@ function drawHeader($title, $styles){
             </form>
 
             <!-- Botão de Categorias -->
-            <a href="/Views/searchPages/categories.php" id="categories-button">
+            <a href="/Views/categories.php" id="categories-button">
                 <img src="/Images/site/header/categories-icon.png" alt="" class="top-icons">
                 <div id="categories-label">Categorias</div>
             </a>
@@ -119,7 +119,7 @@ function drawHeader($title, $styles){
                                 <img src="/Images/site/header/editProfile.png" style="margin-right: 8px; width: 1em;">
                                 Editar Perfil
                             </a>
-                            <a href="/Views/searchPages/categories.php">
+                            <a href="/Views/categories.php">
                                 <img src="/Images/site/header/categories.png" style="margin-right: 8px; width: 1em;">
                                 Categorias
                             </a>
@@ -154,7 +154,7 @@ function drawHeader($title, $styles){
                                 <img src="/Images/site/header/register.png" style="margin-right: 8px; width: 1em;">
                                 Registar
                             </a>
-                            <a href="/Views/searchPages/categories.php">
+                            <a href="/Views/categories.php">
                                 <img src="/Images/site/header/categories.png" style="margin-right: 8px; width: 1em;">
                                 Categorias
                             </a>
@@ -363,7 +363,7 @@ function drawFooter(){ ?>
                         <li><a href="/Views/mainPage.php">Home</a></li>
                         <li><a href="/Views/staticPages/aboutUS.php">Sobre Nós</a></li>
                         <li><a href="/Views/staticPages/services.php">Serviços</a></li>
-                        <li><a href="/Views/searchPages/categories.php">Categorias</a></li>
+                        <li><a href="/Views/categories.php">Categorias</a></li>
                     </ul>
                 </div>
                 
