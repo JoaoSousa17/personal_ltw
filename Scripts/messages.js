@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
               if (message === "") return;
 
               try {
-                  const response = await fetch("/Views/Actions/send_message.php", {
+                  const response = await fetch("/Controllers/Actions/send_message.php", {
                       method: "POST",
                       headers: {
                           "Content-Type": "application/json"
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const chatMessages = chatWindow.querySelector('.chat-messages');
 
           try {
-              const response = await fetch(`/Views/Actions/get_messages.php?receiver_id=${userId}`);
+              const response = await fetch(`/Controllers/Actions/get_messages.php?receiver_id=${userId}`);
               const data = await response.json();
 
               if (data.messages && Array.isArray(data.messages)) {
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   const duration = 1; // Duração padrão (idealmente deveria ser um input)
 
                   try {
-                      const response = await fetch('/Views/Actions/send_request.php', {
+                      const response = await fetch('/Controllers/Actions/send_request.php', {
                           method: 'POST',
                           headers: {
                               'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               try {
                   console.log("Freelancer ID:", freelancerId);
-                  const response = await fetch(`/Views/Actions/get_service.php?freelancer_id=${freelancerId}`);
+                  const response = await fetch(`/Controllers/Actions/get_service.php?freelancer_id=${freelancerId}`);
                   const services = await response.json();
                   console.log("Serviços recebidos:", services);
 
@@ -328,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!text) return;
 
       try {
-          const response = await fetch("/Views/Actions/send_message.php", {
+          const response = await fetch("/Controllers/Actions/send_message.php", {
               method: "POST",
               headers: {
                   "Content-Type": "application/json"
@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function carregarMensagens(receiverId = window.receiverId) {
       if (!receiverId) return;
 
-      fetch(`/Views/Actions/get_messages.php?receiver_id=${receiverId}`)
+      fetch(`/Controllers/Actions/get_messages.php?receiver_id=${receiverId}`)
           .then(response => response.json())
           .then(messages => {
               const container = document.getElementById("messageList");
