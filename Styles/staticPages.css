@@ -1,19 +1,15 @@
-/* Estilos para as páginas estáticas */
+/******************
+ABOUT US PAGE
+******************/
 
-
-/* Ícones formatados, usados em várias páginas */
-.format-icons {
-    width: 60px;
-}
-
-/* Estilos específicos para a página Sobre Nós */
-/* Missão, Visão e Valores */
+/* Container da seção de valores */
 .values-section {
     background-color: var(--secondary-color);
     padding: 60px 0;
     width: 100%;
 }
 
+/* Container flexível dos valores */
 .values-container {
     display: flex;
     gap: 30px;
@@ -21,21 +17,24 @@
     margin: auto;
 }
 
-/* Equipe */
+/* Container da equipe */
 .team-container {
     display: flex;
     gap: 30px;
     justify-content: center;
 }
 
-/* Estilos específicos para a página de Serviços */
-/* Serviços detalhados */
+/******************
+SERVICES PAGE
+******************/
+
+/* Container dos serviços detalhados */
 .detailed-services {
     width: 90%;
     margin: 60px auto;
 }
 
-/* Metodologia */
+/* Seção de funcionalidades */
 .features-section {
     background-color: #f5f5f5;
     padding: 60px 0;
@@ -43,6 +42,7 @@
     width: 100%;
 }
 
+/* Container dos itens de funcionalidades */
 .features-items {
     display: flex;
     flex-wrap: wrap;
@@ -52,16 +52,22 @@
     margin: auto;
 }
 
-/* Estilos preparados para FAQ */
+/******************
+FAQ PAGE
+******************/
+
+/* Container principal do FAQ */
 .faq-container {
     width: 90%;
     margin: 0 auto;
 }
 
+/* Categoria do FAQ */
 .faq-category {
     margin-bottom: 40px;
 }
 
+/* Título da categoria */
 .category-title {
     color: var(--primary-color);
     font-size: 1.5rem;
@@ -70,51 +76,125 @@
     border-bottom: 1px solid #eee;
 }
 
-/* Estilos preparados para página de Contato */
+/* Links nas respostas FAQ */
+.faq-answer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Hover dos links FAQ */
+.faq-answer a:hover {
+    color: var(--hover-color);
+}
+
+/* Listas nas respostas FAQ */
+.faq-answer ul, .faq-answer ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+/* Itens de lista FAQ */
+.faq-answer li {
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+/******************
+CONTACT PAGE
+******************/
+
+/* Container principal de contato */
 .contact-container {
     display: flex;
     gap: 40px;
     margin-bottom: 60px;
 }
 
+/* Seção de informações de contato */
 .contact-info {
     flex: 1;
+    padding: 60px 20px;
+    background-color: white;
 }
 
+/* Formulário de contato */
 .contact-form {
     flex: 2;
     background-color: #f9f9f9;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Seção do formulário de contato */
+.contact-form-section {
+    padding: 60px 20px;
+    background-color: #fafafa;
+}
+
+/* Grupo do formulário de contato */
 .contact-form-group {
     margin-bottom: 20px;
 }
 
-.contact-form label {
+/* Labels do formulário */
+.contact-form label,
+.form-group label {
     display: block;
     margin-bottom: 8px;
     color: var(--text-color);
     font-weight: bold;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 14px;
 }
 
+/* Inputs e textareas */
 .contact-form input,
-.contact-form textarea {
+.contact-form textarea,
+.form-group input,
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
 }
 
-.contact-form textarea {
+/* Focus nos inputs */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+/* Textarea específico */
+.contact-form textarea,
+.form-group textarea {
     min-height: 150px;
     resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
 }
 
-.contact-submit {
+/* Botão de submissão */
+.contact-submit,
+.submit-button {
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -124,139 +204,333 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
 }
 
-.contact-submit:hover {
+/* Hover do botão submit */
+.contact-submit:hover,
+.submit-button:hover {
     background-color: var(--hover-color);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.4);
 }
 
-/* Vai ser apagado ?*/
-.map-container {
-    height: 400px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    margin-bottom: 60px;
+/* Grupo do formulário */
+.form-group {
+    margin-bottom: 20px;
 }
 
-/* Estilos para listas dentro do FAQ */
-.faq-answer ul, .faq-answer ol {
-    margin-left: 20px;
+/* Métodos de contato */
+.contact-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+/* Layout personalizado dos métodos */
+.contact-methods-custom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 30px;
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+/* Item de contato */
+.contact-item {
+    text-align: center;
+    padding: 30px 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 25px 20px;
+}
+
+/* Hover do item de contato */
+.contact-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: #4299e1;
+}
+
+/* Item de contato largo */
+.contact-item-wide {
+    grid-column: 1 / -1;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+/* Hover do item largo */
+.contact-item-wide:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-color: #4299e1;
+}
+
+/* Imagens dos itens de contato */
+.contact-item img {
+    width: 50px;
+    height: 50px;
     margin-bottom: 15px;
 }
 
-.faq-answer li {
-    margin-bottom: 8px;
-    color: var(--text-color);
+/* Imagens dos itens largos */
+.contact-item-wide img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
 }
 
-.faq-answer a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
+/* Títulos dos itens */
+.contact-item h3 {
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 
-.faq-answer a:hover {
-    color: var(--hover-color);
+/* Títulos dos itens largos */
+.contact-item-wide h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
 }
 
-/* Estilos adicionais para a página de Contato */
-/* Checkbox personalizado no formulário */
+/* Parágrafos dos itens */
+.contact-item p {
+    color: #4a5568;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Parágrafos dos itens largos */
+.contact-item-wide p {
+    color: #4a5568;
+    margin: 8px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Checkbox personalizado */
 .form-checkbox {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
+/* Input do checkbox */
 .form-checkbox input {
     margin-right: 10px;
 }
 
+/* Label do checkbox */
 .form-checkbox label {
     font-size: 0.9rem;
     font-weight: normal;
 }
 
+/* Link do checkbox */
 .form-checkbox a {
     color: var(--primary-color);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
+/* Hover do link checkbox */
 .form-checkbox a:hover {
     color: var(--hover-color);
 }
 
-/* Horário de funcionamento - Ver se fará sentido */
+/* Seção de horários */
+.schedule-section {
+    padding: 60px 20px;
+    background-color: #fafafa;
+}
+
+/* Container dos horários */
 .schedule-container {
     display: flex;
     gap: 30px;
     justify-content: center;
     margin-top: 40px;
+    max-width: 400px;
+    margin: 40px auto 0;
 }
 
+/* Card de horário */
 .schedule-card {
     background-color: white;
     border-radius: 10px;
     padding: 30px;
     flex: 1;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
 }
 
+/* Hover do card de horário */
+.schedule-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Título do card de horário */
 .schedule-card h3 {
     color: var(--primary-color);
     font-size: 1.5rem;
     margin-bottom: 20px;
     text-align: center;
+    color: #2d3748;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 10px;
 }
 
+/* Lista de horários */
 .schedule-list {
     list-style: none;
     padding: 0;
     margin-bottom: 20px;
+    margin: 0 0 20px 0;
 }
 
+/* Itens da lista de horários */
 .schedule-list li {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px dashed #eee;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    transition: all 0.3s ease;
 }
 
+/* Último item da lista */
+.schedule-list li:last-child {
+    border-bottom: none;
+}
+
+/* Hover dos itens de horário */
+.schedule-list li:hover {
+    background-color: #f8fafc;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 6px;
+}
+
+/* Dia da semana */
 .day {
     font-weight: bold;
     color: var(--text-color);
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
 }
 
+/* Horários */
 .hours {
     color: var(--text-color);
+    color: #4a5568;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
-.schedule-note, .schedule-info {
+/* Nota dos horários */
+.schedule-note {
     font-size: 0.9rem;
     color: #666;
     font-style: italic;
+    font-size: 0.85rem;
+    color: #718096;
+    text-align: center;
+    padding: 10px;
+    background-color: #f7fafc;
+    border-radius: 6px;
+    border-left: 4px solid #4299e1;
 }
 
+/* Informação dos horários */
 .schedule-info {
+    font-size: 0.9rem;
+    color: #666;
     font-style: normal;
     line-height: 1.6;
 }
 
-/* Estilos para páginas legais (Termos e Política de Privacidade) */
+/* FAQ rápido */
+.quick-faq {
+    padding: 60px 20px;
+    background-color: white;
+}
 
-/* Conteúdo legal */
+/* Itens do FAQ */
+.faq-items {
+    max-width: 800px;
+    margin: 40px auto 0;
+    display: grid;
+    gap: 25px;
+}
+
+/* Item individual do FAQ */
+.faq-item {
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border-left: 4px solid #4299e1;
+}
+
+/* Título do item FAQ */
+.faq-item h3 {
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Parágrafo do item FAQ */
+.faq-item p {
+    color: #4a5568;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/******************
+LEGAL PAGES
+******************/
+
+/* Seção legal */
 .legal-section {
     margin-bottom: 80px;
 }
 
+/* Conteúdo legal */
 .legal-content {
     max-width: 1000px;
     margin: 0 auto;
 }
 
+/* Introdução legal */
 .legal-intro {
     margin-bottom: 30px;
     font-size: 1.1rem;
@@ -264,7 +538,7 @@
     color: var(--text-color);
 }
 
-/* Índice */
+/* Índice legal */
 .legal-toc {
     background-color: #f5f5f5;
     padding: 25px;
@@ -272,12 +546,14 @@
     margin-bottom: 40px;
 }
 
+/* Título do índice */
 .legal-toc h3 {
     color: var(--primary-color);
     margin-bottom: 15px;
     font-size: 1.3rem;
 }
 
+/* Lista do índice */
 .legal-toc ul {
     list-style: none;
     padding: 0;
@@ -285,50 +561,58 @@
     column-gap: 30px;
 }
 
+/* Itens do índice */
 .legal-toc li {
     margin-bottom: 10px;
 }
 
+/* Links do índice */
 .legal-toc a {
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
+/* Hover dos links do índice */
 .legal-toc a:hover {
     color: var(--primary-color);
 }
 
-/* Seções de conteúdo */
+/* Conteúdo das seções legais */
 .legal-section-content {
     margin-bottom: 40px;
     padding-bottom: 30px;
     border-bottom: 1px solid #eee;
 }
 
+/* Títulos das seções legais */
 .legal-section-content h3 {
     color: var(--primary-color);
     font-size: 1.5rem;
     margin-bottom: 20px;
 }
 
+/* Parágrafos das seções legais */
 .legal-section-content p {
     margin-bottom: 15px;
     line-height: 1.6;
     color: var(--text-color);
 }
 
+/* Listas das seções legais */
 .legal-section-content ul, .legal-section-content ol {
     margin-bottom: 20px;
     margin-left: 20px;
 }
 
+/* Itens das listas legais */
 .legal-section-content li {
     margin-bottom: 10px;
     line-height: 1.6;
     color: var(--text-color);
 }
 
+/* Texto em negrito legal */
 .legal-section-content strong {
     color: var(--text-color);
 }
@@ -340,21 +624,24 @@
     margin-top: 15px;
 }
 
+/* Itens da lista de contato */
 .contact-list li {
     margin-bottom: 10px;
 }
 
+/* Links da lista de contato */
 .contact-list a {
     color: var(--primary-color);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
+/* Hover dos links de contato */
 .contact-list a:hover {
     color: var(--hover-color);
 }
 
-/* Conclusão */
+/* Conclusão legal */
 .legal-conclusion {
     background-color: #f9f9f9;
     padding: 25px;
@@ -362,149 +649,21 @@
     margin-top: 40px;
 }
 
+/* Parágrafos da conclusão */
 .legal-conclusion p {
     margin-bottom: 15px;
     line-height: 1.6;
     color: var(--text-color);
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .legal-toc ul {
-        columns: 1;
-    }
-}
+/******************
+GENERAL ELEMENTS
+******************/
 
-/* Responsividade específica para página de contato */
-@media (max-width: 992px) {
-    .schedule-container {
-        flex-direction: column;
-    }
+/* Ícones formatados */
+.format-icons {
+    width: 60px;
 }
-
-@media (max-width: 768px) {
-    .social-contact {
-        text-align: center;
-    }
-    
-    .social-icons {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .schedule-list li {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .day {
-        margin-bottom: 5px;
-    }
-}
-
-/* Responsividade para os cards de contato */
-@media (max-width: 768px) {
-    .contact-card {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-}
-
-/* Responsividade geral para todas as páginas */
-@media (max-width: 992px) {
-    .main-content,
-    .vices-intro,
-    .contact-container,
-    .service-item,
-    .service-item.reverse {
-        flex-direction: column;
-    }
-    
-    .values-container {
-        flex-direction: column;
-    }
-    
-    .service-content {
-        text-align: center;
-    }
-    
-    .service-features {
-        display: inline-block;
-        text-align: left;
-    }
-    
-    .contact-form {
-        margin-top: 40px;
-    }
-}
-
-@media (max-width: 768px) {
-    .about-banner, .services-banner, .contact-banner, .faq-banner, .blog-banner {
-        height: 300px;
-    }
-    
-    .banner-content h1 {
-        font-size: 2.2rem;
-    }
-    
-    .banner-content p {
-        font-size: 1.1rem;
-    }
-    
-    .section-header h2 {
-        font-size: 1.8rem;
-    }
-    
-    .team-member,
-    .category-card,
-    .feature-item {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-    
-    .blog-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .about-banner, .services-banner, .contact-banner, .faq-banner, .blog-banner {
-        height: 250px;
-    }
-    
-    .banner-content h1 {
-        font-size: 1.8rem;
-    }
-    
-    .partner-logo {
-        flex: 0 0 100%;
-    }
-    
-    .service-item {
-        padding: 20px;
-    }
-    
-    .cta-content h2 {
-        font-size: 2rem;
-    }
-    
-    .cta-content p {
-        font-size: 1rem;
-    }
-    
-    .contact-icon {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .contact-icon img {
-        width: 20px;
-        height: 20px;
-    }
-}
-
-/* Estilos para o formulário de contacto - adicionar ao staticPages.css */
 
 /* Alerts de feedback */
 .alert {
@@ -513,377 +672,235 @@
     border-radius: 8px;
     font-size: 14px;
     line-height: 1.4;
+    font-weight: bold;
 }
 
+/* Alert de erro */
 .alert-error {
     background-color: #fdf2f2;
     border: 1px solid #f56565;
     color: #c53030;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
+/* Alert de sucesso */
 .alert-success {
     background-color: #f0fff4;
     border: 1px solid #48bb78;
     color: #2f855a;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
-/* Formulário de contacto */
-.contact-form-section {
-    padding: 60px 20px;
-    background-color: #fafafa;
+/******************
+MEDIA QUERIES
+******************/
+
+@media (max-width: 992px) {
+    /* Containers em coluna */
+    .main-content,
+    .vices-intro,
+    .contact-container,
+    .service-item,
+    .service-item.reverse {
+        flex-direction: column;
+    }
+    
+    /* Values container em coluna */
+    .values-container {
+        flex-direction: column;
+    }
+    
+    /* Conteúdo de serviço centralizado */
+    .service-content {
+        text-align: center;
+    }
+    
+    /* Features inline */
+    .service-features {
+        display: inline-block;
+        text-align: left;
+    }
+    
+    /* Margem do formulário */
+    .contact-form {
+        margin-top: 40px;
+    }
+    
+    /* Schedule container em coluna */
+    .schedule-container {
+        flex-direction: column;
+    }
 }
 
-.contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #2d3748;
-    font-size: 14px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
-}
-
-.submit-button {
-    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-    color: white;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.submit-button:hover {
-    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.4);
-}
-
-/* Informações de contacto direto */
-.contact-info {
-    padding: 60px 20px;
-    background-color: white;
-}
-
-.contact-methods {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    max-width: 800px;
-    margin: 40px auto 0;
-}
-
-.contact-item {
-    text-align: center;
-    padding: 30px 20px;
-    background: #f8fafc;
-    border-radius: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.contact-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.contact-item img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 15px;
-}
-
-.contact-item h3 {
-    color: #2d3748;
-    margin-bottom: 10px;
-    font-size: 18px;
-}
-
-.contact-item p {
-    color: #4a5568;
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-/* Horários */
-.schedule-section {
-    padding: 60px 20px;
-    background-color: #fafafa;
-}
-
-.schedule-container {
-    max-width: 400px;
-    margin: 40px auto 0;
-}
-
-/* FAQ Rápido */
-.quick-faq {
-    padding: 60px 20px;
-    background-color: white;
-}
-
-.faq-items {
-    max-width: 800px;
-    margin: 40px auto 0;
-    display: grid;
-    gap: 25px;
-}
-
-.faq-item {
-    padding: 25px;
-    background: #f8fafc;
-    border-radius: 12px;
-    border-left: 4px solid #4299e1;
-}
-
-.faq-item h3 {
-    color: #2d3748;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.faq-item p {
-    color: #4a5568;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-/* Responsividade */
 @media (max-width: 768px) {
+    /* Altura dos banners */
+    .about-banner, .services-banner, .contact-banner, .faq-banner, .blog-banner {
+        height: 300px;
+    }
+    
+    /* Tamanho do título do banner */
+    .banner-content h1 {
+        font-size: 2.2rem;
+    }
+    
+    /* Tamanho do parágrafo do banner */
+    .banner-content p {
+        font-size: 1.1rem;
+    }
+    
+    /* Tamanho do header da seção */
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    /* Cards em full width */
+    .team-member,
+    .category-card,
+    .feature-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    
+    /* Grid de blog em coluna */
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Contato social centralizado */
+    .social-contact {
+        text-align: center;
+    }
+    
+    /* Ícones sociais centralizados */
+    .social-icons {
+        justify-content: center;
+    }
+    
+    /* Índice em coluna única */
+    .legal-toc ul {
+        columns: 1;
+    }
+    
+    /* Card de contato full width */
+    .contact-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    
+    /* Formulário de contato responsivo */
     .contact-form {
         padding: 30px 20px;
         margin: 0 10px;
     }
     
+    /* Métodos de contato em coluna */
     .contact-methods {
         grid-template-columns: 1fr;
         gap: 20px;
     }
     
-    .contact-item {
-        padding: 20px 15px;
-    }
-}
-
-/* CSS adicional para a página de contacto - adicionar ao staticPages.css */
-
-/* Layout personalizado para a secção de contactos */
-.contact-methods-custom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 30px;
-    max-width: 800px;
-    margin: 40px auto 0;
-}
-
-.contact-item-wide {
-    grid-column: 1 / -1; /* Ocupa toda a largura (ambas as colunas) */
-    text-align: center;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border: 1px solid #e2e8f0;
-    border-radius: 15px;
-    padding: 25px;
-    transition: all 0.3s ease;
-}
-
-.contact-item-wide:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border-color: #4299e1;
-}
-
-.contact-item-wide img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-}
-
-.contact-item-wide h3 {
-    color: #2d3748;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-
-.contact-item-wide p {
-    color: #4a5568;
-    margin: 8px 0;
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-/* Melhorar o estilo dos outros itens de contacto */
-.contact-methods-custom .contact-item:not(.contact-item-wide) {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 25px 20px;
-    transition: all 0.3s ease;
-}
-
-.contact-methods-custom .contact-item:not(.contact-item-wide):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #4299e1;
-}
-
-/* Estilos para o cartão de horários */
-.schedule-card {
-    background: white;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
-}
-
-.schedule-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.schedule-card h3 {
-    color: #2d3748;
-    margin-bottom: 20px;
-    font-size: 1.3rem;
-    text-align: center;
-    border-bottom: 2px solid #4299e1;
-    padding-bottom: 10px;
-}
-
-.schedule-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
-}
-
-.schedule-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px dashed #e2e8f0;
-    transition: all 0.3s ease;
-}
-
-.schedule-list li:last-child {
-    border-bottom: none;
-}
-
-.schedule-list li:hover {
-    background-color: #f8fafc;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 6px;
-}
-
-.day {
-    font-weight: 600;
-    color: #2d3748;
-    font-size: 0.95rem;
-}
-
-.hours {
-    color: #4a5568;
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-.schedule-note {
-    font-size: 0.85rem;
-    color: #718096;
-    font-style: italic;
-    text-align: center;
-    padding: 10px;
-    background-color: #f7fafc;
-    border-radius: 6px;
-    border-left: 4px solid #4299e1;
-}
-
-/* Responsividade para dispositivos móveis */
-@media (max-width: 768px) {
+    /* Contact methods custom em coluna */
     .contact-methods-custom {
         grid-template-columns: 1fr;
         gap: 20px;
     }
     
+    /* Item de contato menor */
+    .contact-item {
+        padding: 20px 15px;
+    }
+    
+    /* Item largo responsivo */
     .contact-item-wide {
         grid-column: 1;
         padding: 20px;
     }
     
+    /* Imagem do item largo menor */
     .contact-item-wide img {
         width: 50px;
         height: 50px;
         margin-bottom: 15px;
     }
     
+    /* Título do item largo menor */
     .contact-item-wide h3 {
         font-size: 1.2rem;
         margin-bottom: 10px;
     }
+}
+
+@media (max-width: 480px) {
+    /* Altura reduzida dos banners */
+    .about-banner, .services-banner, .contact-banner, .faq-banner, .blog-banner {
+        height: 250px;
+    }
     
+    /* Título do banner menor */
+    .banner-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    /* Logo de parceiro full width */
+    .partner-logo {
+        flex: 0 0 100%;
+    }
+    
+    /* Padding do item de serviço */
+    .service-item {
+        padding: 20px;
+    }
+    
+    /* Título do CTA menor */
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+    
+    /* Parágrafo do CTA menor */
+    .cta-content p {
+        font-size: 1rem;
+    }
+    
+    /* Ícone de contato menor */
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Imagem do ícone menor */
+    .contact-icon img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Lista de horários em coluna */
     .schedule-list li {
         flex-direction: column;
         text-align: center;
         padding: 10px 0;
     }
     
+    /* Margem do dia */
     .day {
         margin-bottom: 5px;
         font-size: 1rem;
     }
     
+    /* Tamanho das horas */
     .hours {
         font-size: 0.9rem;
     }
-}
-
-@media (max-width: 480px) {
+    
+    /* Item largo com menos padding */
     .contact-item-wide {
         padding: 15px;
     }
     
+    /* Card de horário com menos padding */
     .schedule-card {
         padding: 20px;
     }
