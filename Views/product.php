@@ -4,7 +4,7 @@ require_once("../Templates/product_elems.php");
 require_once("../Database/connection.php");
 require_once("../Controllers/distancesCalculationController.php");
 
-drawHeader("Product", ["../Styles/product.css"]);
+drawHeader("Product", ["../Styles/Categories&Product.css"]);
 
 $loggedInUser = $_SESSION['user_id'] ?? null;
 

@@ -1,3 +1,8 @@
+/******************
+MESSAGES PAGE
+******************/
+
+/* Body da página de mensagens */
 body {
   margin: 0;
   padding: 0;
@@ -11,6 +16,7 @@ body {
   flex-direction: column;
 }
 
+/* Container principal da página */
 .messages-page-container {
   width: 100vw;
   height: 80vh;
@@ -20,6 +26,7 @@ body {
   box-sizing: border-box;
 }
 
+/* Container das mensagens */
 .messages-container {
   display: flex;
   width: 100vw;
@@ -34,6 +41,11 @@ body {
   align-items: stretch;
 }
 
+/******************
+CONVERSATION LIST
+******************/
+
+/* Lista de conversas */
 .conversation-list {
   flex: 0 0 35%;
   max-width: 35%;
@@ -46,12 +58,14 @@ body {
   box-sizing: border-box;
 }
 
+/* Itens da conversa */
 .conversation-items {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* Item individual da conversa */
 .conversation-item {
   display: flex;
   align-items: center;
@@ -62,14 +76,17 @@ body {
   gap: 12px;
 }
 
+/* Hover do item da conversa */
 .conversation-item:hover {
   background-color: #f0f0f0;
 }
 
+/* Item ativo da conversa */
 .conversation-item.active {
   background-color: #e6e6e6;
 }
 
+/* Foto do perfil */
 .profile-photo {
   width: 50px;
   height: 50px;
@@ -77,37 +94,46 @@ body {
   object-fit: cover;
 }
 
-.user-icon{
+/* Ícone do usuário */
+.user-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
 }
 
+/* Informações da conversa */
 .conversation-info {
   display: flex;
   flex-direction: column;
 }
 
+/* Username da conversa */
 .conversation-info .username {
   font-weight: 600;
   color: #4a90e2;
 }
 
+/* Nome da conversa */
 .conversation-info .name {
   font-size: 0.9em;
   color: #777;
 }
 
+/******************
+CHAT WINDOW
+******************/
+
+/* Container da janela de chat */
 .chat-window-container {
-  flex: 0 0 65%; /* 65% da largura fixa do container */
+  flex: 0 0 65%;
   height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
-/* Chat Window */
+/* Janela de chat */
 .chat-window {
   width: 100%;
   height: 100%;
@@ -120,6 +146,7 @@ body {
   overflow: hidden;
 }
 
+/* Header do chat */
 .chat-header {
   flex-shrink: 0;
   padding-bottom: 10px;
@@ -129,12 +156,14 @@ body {
   align-items: center;
 }
 
+/* Título do header do chat */
 .chat-header h2 {
   margin: 0;
   font-size: 1.2em;
   color: #4a90e2;
 }
 
+/* Container das mensagens */
 .chat-messages {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -145,6 +174,7 @@ body {
   height: 80%;
 }
 
+/* Mensagem individual */
 .message {
   padding: 10px 15px;
   border-radius: 12px;
@@ -154,18 +184,21 @@ body {
   position: relative;
 }
 
+/* Mensagem enviada */
 .message.sent {
   align-self: flex-end;
   background-color: #e1f0ff;
   text-align: right;
 }
 
+/* Mensagem recebida */
 .message.received {
   align-self: flex-start;
   background-color: #b1d7fc;
   text-align: left;
 }
 
+/* Hora da mensagem */
 .message-time {
   display: block;
   font-size: 9px;
@@ -174,14 +207,21 @@ body {
   text-align: right;
 }
 
+/* Hora da mensagem enviada */
 .message.sent .message-time {
   text-align: right;
 }
 
+/* Hora da mensagem recebida */
 .message.received .message-time {
   text-align: left;
 }
 
+/******************
+CHAT INPUT
+******************/
+
+/* Input do chat */
 .chat-input {
   flex-shrink: 0;
   border-top: 1px solid #ddd;
@@ -192,11 +232,13 @@ body {
   border-bottom-right-radius: 12px;
 }
 
+/* Formulário da mensagem */
 .message-form {
   display: flex;
   gap: 10px;
 }
 
+/* Input de texto da mensagem */
 .message-form input[type="text"] {
   flex-grow: 1;
   padding: 10px;
@@ -209,10 +251,12 @@ body {
   box-sizing: border-box;
 }
 
+/* Focus do input de texto */
 .message-form input[type="text"]:focus {
   border-color: #4a90e2;
 }
 
+/* Botão do formulário de mensagem */
 .message-form button {
   background-color: #4a90e2;
   color: white;
@@ -224,52 +268,17 @@ body {
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+/* Hover do botão de mensagem */
 .message-form button:hover {
   background-color: #3a7bc8;
   transform: scale(1.03);
 }
 
-/* Responsivo */
-@media (max-width: 900px) {
-  .messages-page-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
+/******************
+REQUEST SYSTEM
+******************/
 
-  .messages-container {
-    flex-direction: column;
-    flex: 1;
-    display: flex;
-    width: 100vw;
-    min-height: 50px;
-    gap: 20px;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .conversation-list {
-    flex: 0 0 20vh;
-    max-width: 92%;
-    padding-bottom: 20px;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-
-  .chat-window-container {
-    flex: 0 0 65%;
-    height: 60vh;
-    max-width: 88.7%;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-  }
-}
-
+/* Botão de pedido */
 .request-button {
   background-color: #4a90e2;
   color: white;
@@ -281,11 +290,13 @@ body {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Hover do botão de pedido */
 .request-button:hover {
   background-color: #3a7bc8;
   transform: scale(1.05);
 }
 
+/* Modal de pedido */
 .request-modal {
   position: fixed;
   top: 0;
@@ -299,6 +310,7 @@ body {
   z-index: 1000;
 }
 
+/* Conteúdo do modal de pedido */
 .request-content {
   background: white;
   padding: 30px;
@@ -311,11 +323,13 @@ body {
   gap: 15px;
 }
 
+/* Título do modal de pedido */
 .request-content h3 {
   margin-top: 0;
   color: #4a90e2;
 }
 
+/* Input numérico do pedido */
 .request-content input[type="number"] {
   padding: 10px;
   border-radius: 8px;
@@ -324,12 +338,14 @@ body {
   box-sizing: border-box;
 }
 
+/* Ações do pedido */
 .request-actions {
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
 
+/* Botões das ações */
 .request-actions button {
   padding: 10px 20px;
   border-radius: 8px;
@@ -340,22 +356,26 @@ body {
   font-size: 14px;
 }
 
+/* Hover dos botões de ação */
 .request-actions button:hover {
   background-color: #3a7bc8;
 }
 
+/* Linha do serviço */
 .service-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Label da linha do serviço */
 .service-row label {
   white-space: nowrap;
   color: #121638;
   font-size: 14px;
 }
 
+/* Select do serviço */
 .serviceSelect {
   padding: 10px 12px;
   border: 1px solid #ccc;
@@ -377,8 +397,56 @@ body {
   cursor: pointer;
 }
 
+/* Focus do select de serviço */
 .serviceSelect:focus {
   border-color: #4a90e2;
   outline: none;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* MEDIA QUERIES - Responsividade */
+
+/* Mobile */
+@media (max-width: 900px) {
+  /* Container da página responsivo */
+  .messages-page-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+  }
+
+  /* Container das mensagens responsivo */
+  .messages-container {
+      flex-direction: column;
+      flex: 1;
+      display: flex;
+      width: 100vw;
+      min-height: 50px;
+      gap: 20px;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  /* Lista de conversas responsiva */
+  .conversation-list {
+      flex: 0 0 20vh;
+      max-width: 92%;
+      padding-bottom: 20px;
+      overflow-y: auto;
+      box-sizing: border-box;
+  }
+
+  /* Container da janela de chat responsivo */
+  .chat-window-container {
+      flex: 0 0 65%;
+      height: 60vh;
+      max-width: 88.7%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+  }
 }

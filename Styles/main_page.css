@@ -1,204 +1,77 @@
-/* Estilos para a página principal */
+/******************
+MAIN PAGE
+******************/
 
-/*----------------
-Banner Principal
-----------------*/
+/* Banner principal da página inicial */
 .main-banner {
-    width: 90%;
-    margin: 30px auto;
-    height: 700px;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../Images/site/mainPage/banner.png');
-    background-position: center;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
+  width: 90%;
+  margin: 30px auto;
+  height: 700px;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../Images/site/mainPage/banner.png');
+  background-position: center;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
 }
 
+/* Título principal do banner */
 .banner-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
 }
 
+/* Texto descritivo do banner */
 .banner-content p {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
+  font-size: 1.2rem;
+  margin-bottom: 25px;
 }
 
+/* Botão de call-to-action do banner */
 .banner-button {
-    display: inline-block;
-    padding: 12px 30px;
-    background-color: var(--primary-color);
-    border-radius: 30px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: var(--primary-color);
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
+/* Efeito hover do botão do banner */
 .banner-button:hover {
-    background-color: var(--hover-color);
-    transform: translateY(-3px);
+  background-color: var(--hover-color);
+  transform: translateY(-3px);
 }
 
-/*----------------
-Títulos de Secção
-----------------*/
+/* Container da seção de serviços em destaque */
 .featured-services {
-    width: 90%;
-    margin: 50px auto;
+  width: 90%;
+  margin: 50px auto;
 }
 
+/* Cabeçalho das seções */
 .section-header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
+/* Título das seções */
 .section-header h2 {
-    font-size: 2rem;
-    color: var(--text-color);
-    margin-bottom: 10px;
+  font-size: 2rem;
+  color: var(--text-color);
+  margin-bottom: 10px;
 }
 
+/* Subtítulo das seções */
 .section-header p {
-    color: #666;
-    font-size: 1.1rem;
+  color: #666;
+  font-size: 1.1rem;
 }
 
-/*----------------
-Carrosseis
-----------------
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-  
-  .items {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    user-select: none;
-  }
-  
-  .items .item {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    overflow: hidden;
-    transition: all 300ms ease-in-out;
-    z-index: -1;
-    opacity: 0;
-  }
-  
-  .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .item.active {
-    opacity: 1;
-    z-index: 99;
-    box-shadow: 0px 0px 105px -35px rgba(0, 0, 0, 0.75);
-  }
-  
-  .item.prev {
-    z-index: 2;
-    opacity: 0.25;
-    transform: translate(-125%, -50%);
-  }
-  
-  .item.next {
-    z-index: 2;
-    opacity: 0.25;
-    transform: translate(25%, -50%);
-  }
-  
-  .items .button-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 275px;
-    z-index: 100;
-  }
-  
-  .button-container .button {
-    color: #fff;
-    font-size: 32px;
-    cursor: pointer;
-    position: relative;
-    opacity: 0.75;
-    transition: all 300ms ease-in-out;
-  }
-  
-  .button-container .button:hover {
-    opacity: 1;
-  }
-  
-  .button-container .button:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
-    background-color: rgba(0, 0, 0, 1);
-    border-radius: 50%;
-    z-index: -99;
-  }
-  
-  .button-container .button:nth-child(1) {
-    float: left;
-  }
-  
-  .button-container .button:nth-child(2) {
-    float: right;
-  }*/
-
-/* Responsividade */
-@media (max-width: 992px) {
-    .carousel-item {
-        flex: 0 0 50%;
-    }
-}
-
-@media (max-width: 768px) {
-    .main-banner {
-        height: 300px;
-    }
-    
-    .banner-content h1 {
-        font-size: 2rem;
-    }
-    
-    .banner-content p {
-        font-size: 1rem;
-    }
-    
-    .carousel-item {
-        flex: 0 0 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-banner {
-        height: 250px;
-    }
-    
-    .banner-content h1 {
-        font-size: 1.8rem;
-    }
-}
-
-.aux{
+/* Elemento auxiliar com destaque */
+.aux {
   color: white;
   border-radius: 10px;
   background-color: var(--primary-color);
@@ -206,8 +79,238 @@ body {
   padding: 10px 0;
 }
 
-.a-aux{
+/* Container do elemento auxiliar */
+.a-aux {
   margin: -70px auto 50px auto;
   display: block;
   width: 15%;
+}
+
+/* MEDIA QUERIES - Responsividade */
+
+/* Tablets */
+@media (max-width: 992px) {
+  /* Item do carrossel em tablets */
+  .carousel-item {
+      flex: 0 0 50%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  /* Banner reduzido para mobile */
+  .main-banner {
+      height: 300px;
+  }
+  
+  /* Título menor em mobile */
+  .banner-content h1 {
+      font-size: 2rem;
+  }
+  
+  /* Texto menor em mobile */
+  .banner-content p {
+      font-size: 1rem;
+  }
+  
+  /* Item do carrossel em mobile */
+  .carousel-item {
+      flex: 0 0 100%;
+  }
+}
+
+/* Mobile pequeno */
+@media (max-width: 480px) {
+  /* Banner ainda menor para mobile pequeno */
+  .main-banner {
+      height: 250px;
+  }
+  
+  /* Título ajustado para mobile pequeno */
+  .banner-content h1 {
+      font-size: 1.8rem;
+  }
+}
+
+/******************
+CAROUSEL SECTION
+******************/
+
+/* Container principal do carrossel */
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Container dos itens do carrossel */
+.items {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  user-select: none;
+}
+
+/* Item individual do carrossel */
+.items .item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 300ms ease-in-out;
+  z-index: -1;
+  opacity: 0;
+  box-shadow: 0px 0px 20px var(--boxShadow-color, rgba(0, 0, 0, 0.2));
+}
+
+/* Imagem do item */
+.item img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+/* Informações do item */
+.item-info {
+  padding: 10px;
+  background-color: #fff;
+  height: 20%;
+  text-align: center;
+}
+
+/* Título do item */
+.item-info h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Parágrafo do item */
+.item-info p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Item ativo (centro) */
+.item.active {
+  opacity: 1;
+  z-index: 99;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0px 0px 30px var(--boxShadow-color, rgba(0, 0, 0, 0.3));
+}
+
+/* Item anterior (esquerda) */
+.item.prev {
+  z-index: 2;
+  opacity: 0.6;
+  transform: translate(-140%, -50%);
+}
+
+/* Item seguinte (direita) */
+.item.next {
+  z-index: 2;
+  opacity: 0.6;
+  transform: translate(40%, -50%);
+}
+
+/* Segundo item seguinte */
+.item.next-2 {
+  z-index: 1;
+  opacity: 0.3;
+  transform: translate(120%, -50%);
+}
+
+/* Segundo item anterior */
+.item.prev-2 {
+  z-index: 1;
+  opacity: 0.3;
+  transform: translate(-220%, -50%);
+}
+
+/* Container dos botões de navegação */
+.items .button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+/* Botão individual habilitado */
+.items .button-container .button {
+  pointer-events: auto;
+}
+
+/* Estilo dos botões de navegação */
+.button-container .button {
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  position: relative;
+  opacity: 0.85;
+  transition: all 300ms ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+}
+
+/* Hover dos botões */
+.button-container .button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Fundo circular dos botões */
+.button-container .button:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color, #333);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Ícone da seta */
+.button-container .button .arrow-icon {
+  color: white;
+  font-size: 24px;
+  z-index: 1;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+/* MEDIA QUERIES - Responsividade do Carousel */
+
+/* Mobile - simplificar carrossel */
+@media (max-width: 768px) {
+  /* Ocultar itens laterais em mobile */
+  .item.prev,
+  .item.next,
+  .item.prev-2,
+  .item.next-2 {
+      opacity: 0;
+  }
+  
+  /* Item ativo sem escala em mobile */
+  .item.active {
+      transform: translate(-50%, -50%) scale(1);
+  }
 }

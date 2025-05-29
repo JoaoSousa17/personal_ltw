@@ -11,7 +11,7 @@ require_once("../Templates/common_elems.php");
 require_once("../Templates/msg_elems.php");
 require_once("../Database/connection.php");
 
-drawHeader("Mensagens", ["../Styles/msg.css"]);
+drawHeader("Mensagens", ["../Styles/messages.css"]);
 
 $userId = $_SESSION['user_id'];
 

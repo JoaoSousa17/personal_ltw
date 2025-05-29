@@ -1,8 +1,8 @@
-/* 
-* Meus Pedidos & Meus Serviços - CSS Melhorado
-* Mantendo coerência com o design do site
-*/
+/******************
+MY REQUESTS & ITEMS - VARIABLES
+******************/
 
+/* Variáveis CSS para páginas de pedidos e serviços */
 :root {
     --primary-color: #4a90e2;
     --secondary-color: #f8f9fa;
@@ -18,7 +18,11 @@
     --transition: all 0.3s ease;
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
+/******************
+LAYOUT PRINCIPAL
+******************/
+
+/* Container principal */
 .my-requests-container,
 .my-items-container {
     max-width: 1200px;
@@ -27,13 +31,14 @@
     min-height: 70vh;
 }
 
-/* ===== HEADER DA PÁGINA ===== */
+/* Header da página */
 .section-header {
     text-align: center;
     margin-bottom: 3rem;
     position: relative;
 }
 
+/* Título da seção */
 .section-header h2 {
     font-size: 2.2rem;
     margin-bottom: 10px;
@@ -42,6 +47,7 @@
     display: inline-block;
 }
 
+/* Linha decorativa do título */
 .section-header h2::after {
     content: '';
     position: absolute;
@@ -53,13 +59,18 @@
     background-color: var(--primary-color);
 }
 
+/* Subtítulo da seção */
 .section-header p {
     color: #666;
     font-size: 1.1rem;
     margin-top: 20px;
 }
 
-/* ===== ALERTS ===== */
+/******************
+ALERTS
+******************/
+
+/* Alerta base */
 .alert {
     padding: 15px 20px;
     margin-bottom: 25px;
@@ -70,24 +81,31 @@
     margin-right: auto;
 }
 
+/* Alerta de sucesso */
 .alert-success {
     background-color: rgba(40, 167, 69, 0.1);
     color: var(--success-color);
     border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
+/* Alerta de erro */
 .alert-error {
     background-color: rgba(220, 53, 69, 0.1);
     color: var(--danger-color);
     border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
-/* ===== ESTATÍSTICAS ===== */
+/******************
+ESTATÍSTICAS
+******************/
+
+/* Seção de estatísticas */
 .orders-stats,
 .services-stats {
     margin-bottom: 3rem;
 }
 
+/* Container das estatísticas */
 .stats-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -96,6 +114,7 @@
     margin: 0 auto;
 }
 
+/* Card de estatística */
 .stat-card {
     background-color: white;
     padding: 30px 25px;
@@ -104,13 +123,18 @@
     text-align: center;
     transition: var(--transition);
     border-left: 4px solid var(--primary-color);
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
+/* Hover do card de estatística */
 .stat-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Ícone da estatística */
 .stat-icon {
     background-color: var(--primary-color);
     color: white;
@@ -124,6 +148,7 @@
     font-size: 1.5rem;
 }
 
+/* Número da estatística */
 .stat-info h3 {
     font-size: 2rem;
     font-weight: 700;
@@ -131,6 +156,7 @@
     margin: 0 0 8px 0;
 }
 
+/* Descrição da estatística */
 .stat-info p {
     font-size: 0.9rem;
     color: #666;
@@ -139,11 +165,16 @@
     letter-spacing: 0.5px;
 }
 
-/* ===== AÇÕES RÁPIDAS ===== */
+/******************
+AÇÕES RÁPIDAS
+******************/
+
+/* Seção de ações rápidas */
 .quick-actions {
     margin-bottom: 3rem;
 }
 
+/* Container das ações */
 .actions-container {
     display: flex;
     gap: 15px;
@@ -153,6 +184,7 @@
     margin: 0 auto;
 }
 
+/* Botões base */
 .btn-primary,
 .btn-secondary,
 .btn-explore {
@@ -169,28 +201,33 @@
     font-size: 14px;
 }
 
+/* Botão primário */
 .btn-primary {
     background-color: var(--primary-color);
     color: white;
 }
 
+/* Hover do botão primário */
 .btn-primary:hover {
     background-color: var(--hover-color);
     transform: translateY(-2px);
 }
 
+/* Botão secundário */
 .btn-secondary {
     background-color: transparent;
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
 }
 
+/* Hover do botão secundário */
 .btn-secondary:hover {
     background-color: var(--primary-color);
     color: white;
     transform: translateY(-2px);
 }
 
+/* Botão explorar */
 .btn-explore {
     background-color: var(--success-color);
     color: white;
@@ -198,19 +235,31 @@
     padding: 15px 30px;
 }
 
+/* Hover do botão explorar */
 .btn-explore:hover {
     background-color: #218838;
     transform: translateY(-2px);
 }
 
-/* ===== SEÇÕES DE CONTEÚDO ===== */
+/******************
+SEÇÕES DE CONTEÚDO
+******************/
+
+/* Seções de pedidos e serviços */
 .orders-section,
 .services-section {
     max-width: 1200px;
     margin: 0 auto;
+    min-height: 50vh;
+    padding-bottom: 20px;
+    box-sizing: border-box;
 }
 
-/* ===== ESTADOS VAZIOS ===== */
+/******************
+ESTADOS VAZIOS
+******************/
+
+/* Estado sem pedidos */
 .no-orders,
 .no-services {
     text-align: center;
@@ -220,6 +269,7 @@
     box-shadow: 0 4px 15px var(--boxShadow-color);
 }
 
+/* Ícones dos estados vazios */
 .no-orders-icon,
 .no-services-icon {
     font-size: 4rem;
@@ -227,6 +277,7 @@
     margin-bottom: 25px;
 }
 
+/* Títulos dos estados vazios */
 .no-orders h3,
 .no-services h3 {
     color: var(--text-color);
@@ -234,6 +285,7 @@
     font-size: 1.5rem;
 }
 
+/* Descrições dos estados vazios */
 .no-orders p,
 .no-services p {
     color: #666;
@@ -241,29 +293,59 @@
     font-size: 1.1rem;
 }
 
-/* ===== LISTAS DE ITEMS ===== */
-.orders-list,
+/******************
+LISTAS DE ITEMS
+******************/
+
+/* Lista de pedidos */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Lista de serviços */
 .services-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 25px;
 }
 
-/* ===== CARDS DE PEDIDOS ===== */
+/******************
+CARDS DE PEDIDOS
+******************/
+
+/* Card de pedido */
 .order-card {
-    background-color: white;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px var(--boxShadow-color);
-    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     transition: var(--transition);
     border: 1px solid #f0f0f0;
 }
 
+/* Hover do card de pedido */
 .order-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Título do pedido */
+.order-card h3 {
+    margin-top: 0;
+    color: #121638;
+}
+
+/* Parágrafo do pedido */
+.order-card p {
+    margin: 6px 0;
+    color: #444;
+}
+
+/* Header do pedido */
 .order-header {
     padding: 20px 25px 15px;
     background-color: #fafafa;
@@ -273,6 +355,7 @@
     align-items: flex-start;
 }
 
+/* Informações do pedido */
 .order-info h3.service-name {
     margin: 0 0 8px 0;
     font-size: 1.2rem;
@@ -280,12 +363,14 @@
     color: var(--text-color);
 }
 
+/* Nome da categoria */
 .order-info .category-name {
     margin: 0;
     color: #666;
     font-size: 0.9rem;
 }
 
+/* Badge de status */
 .order-status .status-badge {
     display: inline-block;
     padding: 6px 15px;
@@ -296,38 +381,45 @@
     letter-spacing: 0.5px;
 }
 
+/* Status pendente */
 .status-pending {
     background-color: rgba(255, 193, 7, 0.2);
     color: #856404;
     border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
+/* Status aceite */
 .status-accepted {
     background-color: rgba(23, 162, 184, 0.2);
     color: #0c5460;
     border: 1px solid rgba(23, 162, 184, 0.3);
 }
 
+/* Status concluído */
 .status-completed {
     background-color: rgba(40, 167, 69, 0.2);
     color: #155724;
     border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
+/* Status pago */
 .status-paid {
     background-color: rgba(40, 167, 69, 0.2);
     color: #155724;
     border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
+/* Corpo do pedido */
 .order-body {
     padding: 20px 25px;
 }
 
+/* Detalhes do pedido */
 .order-details {
     margin-bottom: 20px;
 }
 
+/* Item de detalhe */
 .detail-item {
     display: flex;
     justify-content: space-between;
@@ -336,22 +428,26 @@
     font-size: 0.9rem;
 }
 
+/* Label do detalhe */
 .detail-label {
     font-weight: 600;
     color: var(--text-color);
 }
 
+/* Valor do detalhe */
 .detail-value {
     color: #666;
     text-align: right;
 }
 
+/* Preço destacado */
 .price-highlight {
     color: var(--primary-color);
     font-weight: 700;
     font-size: 1.1rem;
 }
 
+/* Descrição do serviço */
 .service-description {
     background-color: #f8f9fa;
     padding: 15px;
@@ -360,12 +456,14 @@
     border-left: 4px solid var(--primary-color);
 }
 
+/* Título da descrição */
 .service-description h4 {
     margin: 0 0 10px 0;
     color: var(--primary-color);
     font-size: 1rem;
 }
 
+/* Parágrafo da descrição */
 .service-description p {
     margin: 0;
     color: var(--text-color);
@@ -373,6 +471,7 @@
     font-size: 0.9rem;
 }
 
+/* Ações do pedido */
 .order-actions {
     display: flex;
     gap: 10px;
@@ -382,7 +481,11 @@
     background-color: #fafafa;
 }
 
-/* ===== CARDS DE SERVIÇOS ===== */
+/******************
+CARDS DE SERVIÇOS
+******************/
+
+/* Card de serviço */
 .service-card {
     background-color: white;
     border-radius: var(--border-radius);
@@ -393,20 +496,24 @@
     position: relative;
 }
 
+/* Hover do card de serviço */
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Serviço inativo */
 .service-card.service-inactive {
     opacity: 0.7;
     border-left: 4px solid #6c757d;
 }
 
+/* Serviço ativo */
 .service-card.service-active {
     border-left: 4px solid var(--success-color);
 }
 
+/* Header do serviço */
 .service-header {
     padding: 20px 25px 15px;
     background-color: #fafafa;
@@ -416,6 +523,7 @@
     align-items: flex-start;
 }
 
+/* Informações do serviço */
 .service-info h3.service-name {
     margin: 0 0 8px 0;
     font-size: 1.2rem;
@@ -423,39 +531,46 @@
     color: var(--text-color);
 }
 
+/* Nome da categoria do serviço */
 .service-info .category-name {
     margin: 0;
     color: #666;
     font-size: 0.9rem;
 }
 
+/* Status ativo */
 .status-active {
     background-color: rgba(40, 167, 69, 0.2);
     color: #155724;
     border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
+/* Status inativo */
 .status-inactive {
     background-color: rgba(108, 117, 125, 0.2);
     color: #495057;
     border: 1px solid rgba(108, 117, 125, 0.3);
 }
 
+/* Corpo do serviço */
 .service-body {
     padding: 20px 25px;
 }
 
-.service-description {
+/* Descrição do serviço no corpo */
+.service-body .service-description {
     margin-bottom: 20px;
 }
 
-.service-description p {
+/* Parágrafo da descrição do serviço */
+.service-body .service-description p {
     color: #666;
     line-height: 1.5;
     font-size: 0.9rem;
     margin: 0;
 }
 
+/* Preços do serviço */
 .service-pricing {
     display: flex;
     justify-content: space-between;
@@ -466,18 +581,21 @@
     border-radius: 8px;
 }
 
+/* Informações de preço */
 .price-info {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
+/* Preço original */
 .original-price {
     text-decoration: line-through;
     color: #999;
     font-size: 0.9rem;
 }
 
+/* Preço com desconto */
 .discounted-price,
 .current-price {
     color: var(--primary-color);
@@ -485,6 +603,7 @@
     font-size: 1.2rem;
 }
 
+/* Badge de desconto */
 .discount-badge {
     background-color: var(--danger-color);
     color: white;
@@ -494,6 +613,7 @@
     font-weight: 600;
 }
 
+/* Informações de duração */
 .duration-info {
     display: flex;
     align-items: center;
@@ -502,12 +622,14 @@
     font-size: 0.9rem;
 }
 
+/* Estatísticas do serviço */
 .service-stats {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
+/* Item de estatística */
 .stat-item {
     display: flex;
     align-items: center;
@@ -516,10 +638,12 @@
     font-size: 0.8rem;
 }
 
+/* Ícone do item de estatística */
 .stat-item i {
     color: var(--primary-color);
 }
 
+/* Ações do serviço */
 .service-actions {
     display: flex;
     gap: 8px;
@@ -529,7 +653,11 @@
     background-color: #fafafa;
 }
 
-/* ===== BOTÕES DE AÇÃO ===== */
+/******************
+BOTÕES DE AÇÃO
+******************/
+
+/* Botões de ação base */
 .btn-feedback,
 .btn-contact,
 .btn-details,
@@ -551,92 +679,152 @@
     white-space: nowrap;
 }
 
+/* Botão feedback */
 .btn-feedback {
     background-color: var(--warning-color);
     color: #856404;
 }
 
+/* Hover do botão feedback */
 .btn-feedback:hover {
     background-color: #e0a800;
     color: white;
 }
 
+/* Botão contacto */
 .btn-contact {
     background-color: var(--info-color);
     color: white;
 }
 
+/* Hover do botão contacto */
 .btn-contact:hover {
     background-color: #138496;
 }
 
+/* Botão detalhes */
 .btn-details {
     background-color: transparent;
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
 }
 
+/* Hover do botão detalhes */
 .btn-details:hover {
     background-color: var(--primary-color);
     color: white;
 }
 
+/* Botão toggle */
 .btn-toggle {
     background-color: transparent;
     border: 1px solid;
 }
 
+/* Botão ativar */
 .btn-activate {
     color: var(--success-color);
     border-color: var(--success-color);
 }
 
+/* Hover do botão ativar */
 .btn-activate:hover {
     background-color: var(--success-color);
     color: white;
 }
 
+/* Botão desativar */
 .btn-deactivate {
     color: var(--warning-color);
     border-color: var(--warning-color);
 }
 
+/* Hover do botão desativar */
 .btn-deactivate:hover {
     background-color: var(--warning-color);
     color: #856404;
 }
 
+/* Botão editar */
 .btn-edit {
     background-color: var(--info-color);
     color: white;
 }
 
+/* Hover do botão editar */
 .btn-edit:hover {
     background-color: #138496;
 }
 
+/* Botão ver */
 .btn-view {
     background-color: transparent;
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
 }
 
+/* Hover do botão ver */
 .btn-view:hover {
     background-color: var(--primary-color);
     color: white;
 }
 
+/* Botão estatísticas */
 .btn-stats {
     background-color: var(--warning-color);
     color: #856404;
 }
 
+/* Hover do botão estatísticas */
 .btn-stats:hover {
     background-color: #e0a800;
     color: white;
 }
 
-/* ===== MODAL DE FEEDBACK ===== */
+/******************
+FORMULÁRIOS
+******************/
+
+/* Formulário de status */
+.status-form select {
+    padding: 6px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 130px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px;
+}
+
+/* Hover do select */
+.status-form select:hover {
+    border-color: #007BFF;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+/* Focus do select */
+.status-form select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.7);
+}
+
+/******************
+MODAL DE FEEDBACK
+******************/
+
+/* Modal base */
 .modal {
     position: fixed;
     top: 0;
@@ -650,6 +838,7 @@
     z-index: 1000;
 }
 
+/* Conteúdo do modal */
 .modal-content {
     background-color: white;
     border-radius: var(--border-radius);
@@ -661,6 +850,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+/* Header do modal */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -670,12 +860,14 @@
     border-bottom: 1px solid #eee;
 }
 
+/* Título do modal */
 .modal-header h3 {
     margin: 0;
     color: var(--text-color);
     font-size: 1.3rem;
 }
 
+/* Botão fechar modal */
 .modal-close {
     font-size: 24px;
     color: #aaa;
@@ -683,14 +875,17 @@
     transition: color 0.3s;
 }
 
+/* Hover do botão fechar */
 .modal-close:hover {
     color: var(--danger-color);
 }
 
+/* Grupo de formulário */
 .form-group {
     margin-bottom: 20px;
 }
 
+/* Label do formulário */
 .form-group label {
     display: block;
     margin-bottom: 8px;
@@ -698,6 +893,7 @@
     color: var(--text-color);
 }
 
+/* Inputs do formulário */
 .form-group input,
 .form-group textarea {
     width: 100%;
@@ -709,6 +905,7 @@
     box-sizing: border-box;
 }
 
+/* Focus dos inputs */
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
@@ -716,18 +913,20 @@
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
 }
 
+/* Textarea */
 .form-group textarea {
     resize: vertical;
     min-height: 100px;
 }
 
-/* Sistema de Avaliação por Estrelas */
+/* Sistema de avaliação por estrelas */
 .rating-stars {
     display: flex;
     gap: 5px;
     margin: 10px 0;
 }
 
+/* Estrela */
 .star {
     font-size: 2rem;
     color: #ddd;
@@ -736,12 +935,14 @@
     user-select: none;
 }
 
+/* Estados da estrela */
 .star:hover,
 .star.hover,
 .star.active {
     color: #ffc107;
 }
 
+/* Ações do formulário */
 .form-actions {
     display: flex;
     gap: 15px;
@@ -751,6 +952,7 @@
     border-top: 1px solid #eee;
 }
 
+/* Botões do formulário */
 .btn-cancel,
 .btn-submit {
     padding: 12px 24px;
@@ -761,119 +963,62 @@
     transition: var(--transition);
 }
 
+/* Botão cancelar */
 .btn-cancel {
     background-color: #f8f9fa;
     color: #495057;
     border: 1px solid #dee2e6;
 }
 
+/* Hover do botão cancelar */
 .btn-cancel:hover {
     background-color: #e9ecef;
 }
 
+/* Botão submeter */
 .btn-submit {
     background-color: var(--primary-color);
     color: white;
 }
 
+/* Hover do botão submeter */
 .btn-submit:hover {
     background-color: var(--hover-color);
 }
 
-.orders-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
-}
+/* MEDIA QUERIES - Responsividade */
 
-.order-card {
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.order-card h3 {
-  margin-top: 0;
-  color: #121638;
-}
-
-.order-card p {
-  margin: 6px 0;
-  color: #444;
-}
-
-.services-section {
-    min-height: 50vh;
-    padding-bottom: 20px;
-    box-sizing: border-box;
-}
-
-.status-form select {
-    padding: 6px 12px;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    min-width: 130px;
-    outline: none;
-}
-
-.status-form select:hover {
-    border-color: #007BFF; /* azul suave */
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
-}
-
-.status-form select:focus {
-    border-color: #0056b3;
-    box-shadow: 0 0 8px rgba(0, 86, 179, 0.7);
-}
-
-/* Opcional: colocar um ícone tipo seta personalizada */
-.status-form select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    padding-right: 30px;
-}
-
-
-
-/* ===== RESPONSIVIDADE ===== */
+/* Tablets grandes */
 @media (max-width: 1200px) {
+    /* Listas responsivas */
     .orders-list,
     .services-list {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 }
 
+/* Tablets */
 @media (max-width: 992px) {
+    /* Container de estatísticas */
     .stats-container {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 20px;
     }
     
+    /* Container de ações */
     .actions-container {
         flex-direction: column;
         align-items: center;
     }
     
+    /* Ações responsivas */
     .actions-container > * {
         width: 100%;
         max-width: 300px;
         justify-content: center;
     }
     
+    /* Listas em coluna única */
     .orders-list,
     .services-list {
         grid-template-columns: 1fr;
@@ -881,24 +1026,30 @@
     }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
+    /* Containers principais */
     .my-requests-container,
     .my-items-container {
         padding: 1rem 0.5rem 3rem;
     }
     
+    /* Título responsivo */
     .section-header h2 {
         font-size: 1.8rem;
     }
     
+    /* Subtítulo responsivo */
     .section-header p {
         font-size: 1rem;
     }
     
+    /* Card de estatística responsivo */
     .stat-card {
         padding: 20px 15px;
     }
     
+    /* Ícone responsivo */
     .stat-icon {
         width: 50px;
         height: 50px;
@@ -906,10 +1057,12 @@
         margin-bottom: 15px;
     }
     
+    /* Número responsivo */
     .stat-info h3 {
         font-size: 1.5rem;
     }
     
+    /* Headers responsivos */
     .order-header,
     .service-header {
         flex-direction: column;
@@ -917,67 +1070,81 @@
         gap: 10px;
     }
     
+    /* Ações responsivas */
     .order-actions,
     .service-actions {
         flex-direction: column;
     }
     
+    /* Botões responsivos */
     .order-actions > *,
     .service-actions > * {
         width: 100%;
         justify-content: center;
     }
     
+    /* Detalhes responsivos */
     .detail-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
     }
     
+    /* Valor do detalhe */
     .detail-value {
         text-align: left;
     }
     
+    /* Preços responsivos */
     .service-pricing {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
     
+    /* Estatísticas responsivas */
     .service-stats {
         flex-direction: column;
         gap: 10px;
     }
     
+    /* Modal responsivo */
     .modal-content {
         padding: 20px;
         margin: 20px;
     }
     
+    /* Ações do formulário responsivas */
     .form-actions {
         flex-direction: column;
     }
     
+    /* Botões do formulário responsivos */
     .btn-cancel,
     .btn-submit {
         width: 100%;
     }
 }
 
+/* Mobile pequeno */
 @media (max-width: 480px) {
+    /* Título muito pequeno */
     .section-header h2 {
         font-size: 1.5rem;
     }
     
+    /* Número da estatística pequeno */
     .stat-info h3 {
         font-size: 1.3rem;
     }
     
+    /* Cards com margem */
     .order-card,
     .service-card {
         margin: 0 10px;
     }
     
+    /* Padding reduzido */
     .order-header,
     .order-body,
     .order-actions,
@@ -987,16 +1154,19 @@
         padding: 15px 20px;
     }
     
+    /* Estados vazios compactos */
     .no-orders,
     .no-services {
         padding: 60px 15px;
     }
     
+    /* Ícones menores */
     .no-orders-icon,
     .no-services-icon {
         font-size: 3rem;
     }
     
+    /* Estrelas menores */
     .rating-stars .star {
         font-size: 1.5rem;
     }

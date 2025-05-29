@@ -2,7 +2,7 @@
 // Include necessary files
 require_once(dirname(__FILE__)."/../Templates/common_elems.php");
 require_once(dirname(__FILE__)."/../Controllers/categoriesController.php");
-drawHeader("Handee - Main Page", ["/Styles/main_page.css", "/Styles/carousel.css", "/Styles/categories.css"]);
+drawHeader("Handee - Categories", ["/Styles/Categories&Product.css"]);
 
 // Get all categories
 $categories = getAllCategories();
@@ -16,17 +16,6 @@ if (!is_array($categories)) {
 $total = count($categories);
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias</title>
-    <link rel="stylesheet" href="assets/css/categories.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
 <body>
     <!-- Header will be included from header.php -->
     

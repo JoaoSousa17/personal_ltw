@@ -1,0 +1,540 @@
+/******************
+CART & CHECKOUT - VARIABLES
+******************/
+
+/* Variáveis CSS para páginas de carrinho e checkout */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --text-color: #333;
+    --hover-color: #3a7bc8;
+    --detail-color: #97AED4;
+    --light-gray: #666;
+    --border-color: #ccc;
+    --shadow-color: rgba(0, 0, 0, 0.13);
+    --border-radius: 10px;
+}
+
+/******************
+CART PAGE
+******************/
+
+/* Body da página do carrinho */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--secondary-color);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+}
+
+/* Container principal da página */
+.page-container {
+    width: 90%;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 40px 20px;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Linha do cabeçalho */
+.header-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+/* Cabeçalho da página */
+.page-header {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Espaçador em branco */
+.blank {
+    width: 30%;
+}
+
+/* Linha do conteúdo */
+.content-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+/* Título principal */
+.page-container h1 {
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+/* Container dos produtos */
+.products-containers {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Item individual do produto */
+.product-item {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    position: relative;
+    gap: 15px;
+}
+
+/* Imagem do produto */
+.product-item img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+/* Descrição do produto */
+.description {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título da descrição */
+.description h2 {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+}
+
+/* Subtítulo da descrição */
+.description h3 {
+    margin: 0 0 4px;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Texto secundário da descrição */
+.description h5 {
+    margin: 0;
+    color: var(--light-gray);
+    font-size: 0.9rem;
+}
+
+/* Informações do vendedor */
+.vendedor-info {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* Botão remover item */
+.remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+/* Imagem do botão remover */
+.remove-btn img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+/* Hover do botão remover */
+.remove-btn:hover img {
+    transform: scale(1.3);
+}
+
+/* Container dos preços */
+.price-container {
+    width: 30%;
+    height: 180px;
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Linhas de preço */
+.subtotal,
+.custos-deslocacao,
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Títulos dos preços */
+.price-container h4,
+.price-container h1 {
+    margin: 0;
+}
+
+/* Total final */
+.total h1 {
+    color: var(--primary-color);
+}
+
+/* Preço final destacado */
+.Preco-final {
+    font-weight: bold;
+}
+
+/* Botão de comprar */
+.price-container button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover do botão comprar */
+.price-container button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+/* Estado ativo do botão */
+.price-container button:active {
+    transform: scale(0.98);
+}
+
+/* Decimais dos preços */
+.decimais {
+    font-size: 0.7em;
+    vertical-align: super;
+}
+
+/* Estado do carrinho vazio */
+.carrinho-vazio {
+    width: 90%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/******************
+CHECKOUT PAGE
+******************/
+
+/* Body específico do checkout */
+body {
+    background-color: #f2f2f2;
+    font-family: 'Montserrat', sans-serif;
+    color: #121638;
+}
+
+/* Container da página de checkout */
+.page-container {
+    width: 100%;
+    max-width: 60%;
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Título do checkout */
+.page-container h1 {
+    margin-bottom: 30px;
+    color: #4a90e2;
+    text-align: center;
+}
+
+/* Formulário de checkout */
+.page-container .checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Lista do formulário */
+.page-container .form-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Itens da lista */
+.page-container .form-list li {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels do formulário */
+.page-container .form-list label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs e textareas */
+.page-container .form-list input,
+.page-container .form-list textarea {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+/* Focus dos inputs */
+.page-container .form-list input:focus,
+.page-container .form-list textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* Textarea específico */
+.page-container .form-list textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Resumo do pagamento */
+.page-container .resumo-pagamento {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Parágrafos do resumo */
+.page-container .resumo-pagamento p {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Texto destacado do resumo */
+.page-container .resumo-pagamento p strong {
+    color: #4a90e2;
+}
+
+/* Botão do checkout */
+.page-container .checkout-form button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+/* Hover do botão checkout */
+.page-container .checkout-form button:hover {
+    background-color: #3a7bc8;
+    transform: scale(1.02);
+}
+
+/* Estado ativo do botão */
+.page-container .checkout-form button:active {
+    transform: scale(0.98);
+}
+
+/* Links do checkout */
+.page-container a {
+    color: #4a90e2;
+    text-decoration: underline;
+}
+
+/* Hover dos links */
+.page-container a:hover {
+    color: #3a7bc8;
+}
+
+/* Endereço comum */
+#commonAddress,
+.specific-address {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+/* Labels dos endereços */
+#commonAddress label,
+.specific-address label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs dos endereços */
+#commonAddress input,
+.specific-address input {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Focus dos inputs de endereço */
+#commonAddress input:focus,
+.specific-address input:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* Detalhes do serviço */
+.service-details {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+}
+
+/* Título dos detalhes */
+.service-details h3 {
+    color: #4a90e2;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+/* Separador de serviços */
+.service-separator {
+    border: none;
+    height: 1px;
+    background-color: #4a90e2;
+    margin: 24px 0 16px 0;
+}
+
+/* Divisões dos detalhes */
+.service-details > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+/* Labels dos detalhes */
+.service-details label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs dos detalhes */
+.service-details input,
+.service-details textarea {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+/* Focus dos inputs de detalhes */
+.service-details input:focus,
+.service-details textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* Textarea dos detalhes */
+.service-details textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* MEDIA QUERIES - Responsividade */
+
+/* Tablets */
+@media (max-width: 992px) {
+    /* Containers do carrinho */
+    .products-containers,
+    .price-container {
+        width: 100%;
+    }
+
+    /* Espaçamento do container de preço */
+    .price-container {
+        margin-top: 30px;
+    }
+
+    /* Header responsivo */
+    .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Header e blank responsivos */
+    .page-header,
+    .blank {
+        width: 100%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    /* Item de produto responsivo */
+    .product-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    /* Descrição responsiva */
+    .description {
+        width: 100%;
+    }
+
+    /* Container do checkout responsivo */
+    .page-container {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    /* Resumo responsivo */
+    .page-container .resumo-pagamento {
+        font-size: 14px;
+    }
+
+    /* Botão responsivo */
+    .page-container .checkout-form button {
+        font-size: 15px;
+    }
+}

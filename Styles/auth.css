@@ -1,3 +1,8 @@
+/******************
+AUTH PAGE
+******************/
+
+/* Body da página de autenticação */
 body {
     display: flex;
     justify-content: center;
@@ -7,6 +12,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
 }
+
+/* Container principal da autenticação */
 .container {
     background: white;
     padding: 40px;
@@ -17,6 +24,8 @@ body {
     max-width: 350px;
     box-sizing: border-box;
 }
+
+/* Container dos tabs */
 .tabs {
     display: flex;
     justify-content: space-around;
@@ -24,6 +33,7 @@ body {
     position: relative;
 }
 
+/* Tab individual */
 .tab {
     position: relative;
     cursor: pointer;
@@ -34,10 +44,12 @@ body {
     flex: 1;
 }
 
+/* Tab ativo */
 .tab.active {
     font-weight: bold;
 }
 
+/* Sublinhado do tab */
 .tab-underline {
     position: absolute;
     bottom: 0;
@@ -50,6 +62,7 @@ body {
     pointer-events: none;
 }
 
+/* Input box padrão */
 .input-box {
     width: 85%;
     padding: 10px;
@@ -57,6 +70,8 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+/* Input box para password */
 .pass-box {
     width: 78%;
     padding: 10px;
@@ -64,6 +79,8 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+/* Botão principal */
 .btn {
     width: 90%;
     margin-top: 10px;
@@ -78,35 +95,45 @@ body {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Hover do botão */
 .btn:hover {
     background-color: var(--hover-color, #0056b3);
     transform: translateY(-3px);
 }
 
+/* Estado ativo do botão */
 .btn:active {
     transform: scale(0.98);
 }
+
+/* Classe para ocultar elementos */
 .hidden {
     display: none;
 }
-p{
+
+/* Parágrafo de texto pequeno */
+p {
     font-size: 12px;
     display: flex;
     justify-content: right;
     padding-right: 20px;
 }
 
-.fa-eye, .fa-eye-slash {
+/* Ícones de olho para mostrar/ocultar password */
+.fa-eye,
+.fa-eye-slash {
     cursor: pointer;
     transition: color 0.4s ease, transform 0.3s ease;
     color: #333;
 }
 
+/* Hover dos ícones de olho */
 .fa-eye:hover,
 .fa-eye-slash:hover {
     color: #888;
 }
 
+/* Estado ativo dos ícones de olho */
 .fa-eye:active,
 .fa-eye-slash:active {
     transform: scale(1.3);

@@ -10,7 +10,7 @@ $isLoggedIn = isUserLoggedIn();
 $isAdmin = isUserAdmin();
 $cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
 
-drawHeader("Handee - Main Page", ["/Styles/main_page.css", "/Styles/carousel.css"]);
+drawHeader("Handee - Main Page", ["/Styles/main_page.css"]);
 
 ?>
 <main>

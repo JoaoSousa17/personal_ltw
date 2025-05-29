@@ -37,9 +37,8 @@ drawHeader("Handee - Painel de Admin", ["/Styles/admin.css"]);
         
         <!-- Contactos; Disputas; Controlo Admin -->
         <div class="admin-row">   
-            <?php drawAdminCard("Contactos", "contacts", "admin_contacts.php"); ?>
-            <?php drawAdminCard("Disputas", "disputes", "disputas.php"); ?>
-            <?php drawAdminCard("Controlo Admin", "admin", "adminUsers.php"); ?>
+            <?php drawAdminCard("Contactos", "contacts", "admin_contacts.php", false, "wide"); ?>
+            <?php drawAdminCard("Controlo Admin", "admin", "adminUsers.php", false, "narrow"); ?>
         </div>
         
         <!-- Data Analysis -->

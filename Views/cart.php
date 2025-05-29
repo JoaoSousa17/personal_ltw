@@ -4,7 +4,7 @@ require_once("../Templates/common_elems.php");
 require_once("../Templates/cart_elems.php");
 require_once("../Controllers/distancesCalculationController.php");
 
-drawHeader("O meu carrinho", ["../Styles/cart.css"], ["../Scripts/cart_scripts.js"]);
+drawHeader("O meu carrinho", ["../Styles/Cart&Checkout.css"], ["../Scripts/cart_scripts.js"]);
 
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];

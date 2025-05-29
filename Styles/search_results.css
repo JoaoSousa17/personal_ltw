@@ -1,6 +1,8 @@
-/* Estilos para a página de resultados de pesquisa */
+/******************
+SEARCH RESULTS PAGE
+******************/
 
-/* Banner de Resultados */
+/* Banner de resultados */
 .results-banner {
     width: 90%;
     margin: 30px auto;
@@ -16,16 +18,22 @@
     color: white;
 }
 
+/* Conteúdo do banner */
 .banner-content h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
+/* Parágrafo do banner */
 .banner-content p {
     font-size: 1.2rem;
 }
 
-/* Seção de Filtros */
+/******************
+FILTROS SECTION
+******************/
+
+/* Seção de filtros */
 .filters-section {
     width: 90%;
     margin: 30px auto;
@@ -34,29 +42,34 @@
     padding: 20px;
 }
 
+/* Título dos filtros */
 .filters-container h2 {
     margin-bottom: 20px;
     font-size: 1.5rem;
     color: var(--text-color);
 }
 
+/* Formulário de filtros */
 #filter-form {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
+/* Grupo de filtros */
 .filter-group {
     flex: 1;
     min-width: 200px;
 }
 
+/* Label do filtro */
 .filter-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
 
+/* Inputs do filtro */
 .filter-group select,
 .filter-group input[type="number"] {
     width: 100%;
@@ -65,21 +78,25 @@
     border-radius: 5px;
 }
 
+/* Range de preços */
 .price-range {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+/* Input do range de preços */
 .price-range input {
     flex: 1;
 }
 
+/* Separador do range */
 .price-range span {
     font-size: 0.9rem;
     color: #666;
 }
 
+/* Botão de filtro */
 .filter-button {
     background-color: var(--primary-color);
     color: white;
@@ -92,39 +109,52 @@
     align-self: flex-end;
 }
 
+/* Hover do botão de filtro */
 .filter-button:hover {
     background-color: var(--hover-color);
 }
 
-/* Resultados da Pesquisa */
+/******************
+RESULTADOS SECTION
+******************/
+
+/* Seção de resultados */
 .search-results {
     width: 90%;
     margin: 30px auto 50px;
 }
 
+/* Estado sem resultados */
 .no-results {
     text-align: center;
     padding: 50px 0;
 }
 
+/* Título sem resultados */
 .no-results h2 {
     font-size: 1.8rem;
     color: var(--text-color);
     margin-bottom: 15px;
 }
 
+/* Texto sem resultados */
 .no-results p {
     color: #666;
     font-size: 1.1rem;
 }
 
+/* Grid dos resultados */
 .results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
 }
 
-/* Cartão de Serviço */
+/******************
+SERVICE CARDS
+******************/
+
+/* Card de serviço */
 .service-card {
     background-color: white;
     border-radius: 10px;
@@ -133,17 +163,20 @@
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
+/* Hover do card de serviço */
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Imagem do serviço */
 .service-image {
     position: relative;
     height: 200px;
     overflow: hidden;
 }
 
+/* Imagem dentro do container */
 .service-image img {
     width: 100%;
     height: 100%;
@@ -151,10 +184,12 @@
     transition: transform 0.5s;
 }
 
+/* Hover da imagem */
 .service-card:hover .service-image img {
     transform: scale(1.05);
 }
 
+/* Badge de promoção */
 .promotion-badge {
     position: absolute;
     top: 10px;
@@ -167,21 +202,25 @@
     font-size: 0.8rem;
 }
 
+/* Informações do serviço */
 .service-info {
     padding: 20px;
 }
 
+/* Título do serviço */
 .service-info h3 {
     margin-bottom: 10px;
     font-size: 1.3rem;
     color: var(--text-color);
 }
 
+/* Link do título */
 .service-info h3 a {
     color: inherit;
     text-decoration: none;
 }
 
+/* Descrição do serviço */
 .service-description {
     color: #666;
     margin-bottom: 15px;
@@ -189,6 +228,7 @@
     font-size: 0.95rem;
 }
 
+/* Metadados do serviço */
 .service-meta {
     display: flex;
     justify-content: space-between;
@@ -196,6 +236,7 @@
     margin-bottom: 15px;
 }
 
+/* Duração do serviço */
 .duration {
     display: flex;
     align-items: center;
@@ -203,6 +244,7 @@
     font-size: 0.9rem;
 }
 
+/* Ícone do relógio */
 .clock-icon {
     display: inline-block;
     width: 16px;
@@ -212,10 +254,12 @@
     margin-right: 5px;
 }
 
+/* Container de preço */
 .price {
     text-align: right;
 }
 
+/* Preço original */
 .original-price {
     text-decoration: line-through;
     color: #999;
@@ -223,6 +267,7 @@
     display: block;
 }
 
+/* Preço com desconto */
 .discounted-price,
 .price-value {
     color: var(--primary-color);
@@ -230,6 +275,7 @@
     font-size: 1.1rem;
 }
 
+/* Botão ver serviço */
 .view-service-btn {
     display: block;
     text-align: center;
@@ -242,17 +288,23 @@
     transition: background-color 0.3s;
 }
 
+/* Hover do botão ver serviço */
 .view-service-btn:hover {
     background-color: var(--hover-color);
 }
 
-/* Paginação */
+/******************
+PAGINAÇÃO
+******************/
+
+/* Container da paginação */
 .pagination {
     display: flex;
     justify-content: center;
     margin-top: 40px;
 }
 
+/* Links e spans da paginação */
 .pagination a,
 .pagination span {
     display: flex;
@@ -268,20 +320,27 @@
     transition: all 0.3s;
 }
 
+/* Links da paginação */
 .pagination a {
     background-color: #f0f0f0;
 }
 
+/* Hover dos links */
 .pagination a:hover {
     background-color: #ddd;
 }
 
+/* Página atual */
 .pagination span.current {
     background-color: var(--primary-color);
     color: white;
 }
 
-/* Estilo para o container de sugestões de pesquisa */
+/******************
+SEARCH SUGGESTIONS
+******************/
+
+/* Container das sugestões */
 #search-suggestions {
     position: absolute;
     top: 100%;
@@ -298,56 +357,71 @@
     overflow-y: auto;
 }
 
+/* Item de sugestão */
 .suggestion-item {
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
+/* Hover e estado ativo da sugestão */
 .suggestion-item:hover,
 .suggestion-item.active {
     background-color: #f5f5f5;
 }
 
-/* Responsividade */
+/* MEDIA QUERIES - Responsividade */
+
+/* Tablets */
 @media (max-width: 992px) {
+    /* Grupos de filtro responsivos */
     .filter-group {
         flex: 1 1 45%;
     }
     
+    /* Botão de filtro responsivo */
     .filter-button {
         flex: 1 1 100%;
         margin-top: 15px;
     }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
+    /* Banner responsivo */
     .results-banner {
         height: 200px;
     }
     
+    /* Título do banner responsivo */
     .banner-content h1 {
         font-size: 2rem;
     }
     
+    /* Filtros responsivos */
     .filter-group {
         flex: 1 1 100%;
     }
     
+    /* Grid responsivo */
     .results-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
 
+/* Mobile pequeno */
 @media (max-width: 480px) {
+    /* Banner muito pequeno */
     .results-banner {
         height: 150px;
     }
     
+    /* Título muito pequeno */
     .banner-content h1 {
         font-size: 1.6rem;
     }
     
+    /* Imagem do serviço menor */
     .service-image {
         height: 150px;
     }

@@ -1,4 +1,8 @@
-/* Estilos gerais */
+/******************
+COMMON ELEMENTS - VARIABLES
+******************/
+
+/* Variáveis CSS globais do site */
 :root {
   --primary-color: #4a90e2;
   --secondary-color: #f8f9fa;
@@ -8,29 +12,35 @@
   --boxShadow-color: #EEEEEE;
 }
 
+/* Estilos base do body */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
 }
 
-a{
+/* Links globais */
+a {
   color: white;
   text-decoration: none;
 }
 
+/* Ícones do topo */
 .top-icons {
   width: 40px;
 }
 
-/*----------------
-Estilos do header
-----------------*/
+/******************
+HEADER SECTION
+******************/
+
+/* Container principal do header */
 #site-header {
   background-color: var(--primary-color);
   color: white;
 }
 
+/* Header principal */
 #main-header {
   display: flex;
   justify-content: space-between;
@@ -39,979 +49,33 @@ Estilos do header
   margin: 0 auto;
 }
 
-/* Logo */
-#logo-icon{
+/* Ícone do logo */
+#logo-icon {
   width: 50px;
   align-items: center;
 }
 
-/* Barra de pesquisa */
+/* Container da pesquisa */
 #search-container {
   flex-grow: 1;
   max-width: 550px;
   display: flex;
+  position: relative;
+  align-items: center;
+  margin: 0 20px;
 }
 
+/* Formulário de pesquisa */
 #search-container form {
   display: flex;
   position: relative;
   align-items: center;
   width: 100%;
-}  
+}
 
+/* Input de pesquisa */
 #search-input {
   width: 100%;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
-#search-button {
-  position: absolute;
-  right: 0;
-  background: transparent;
-  border: none;
-  padding: 0 15px;
-  cursor: pointer;
-  border-left: 1px solid grey;
-}
-
-#search-icon {
-  width: 20px;
-}
-
-/* Botão Categorias */
-#categories-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 10px;
-}
-
-#categories-label, #notification-label{
-  font-size: 12px;
-  margin-top: 10px;
-}
-
-/* Secção Ações do user */
-#user-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-#carrinho-button {
-  filter: invert(1);
-  position: relative;
-  margin-right: 10px;
-  margin-left: 10px;
-  margin-top: 7px;
-}
-
-#cart-badge {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  background-color: rgb(0, 255, 255);
-  color: black;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 12px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@keyframes pulse-badge {
-  0% {
-    transform: scale(1);
-    background-color: rgb(0, 255, 255);
-  }
-  50% {
-    transform: scale(1.4);
-    background-color: rgb(0, 200, 200);
-  }
-  100% {
-    transform: scale(1);
-    background-color: rgb(0, 255, 255);
-  }
-}
-
-#cart-badge.animate {
-  animation: pulse-badge 0.4s ease;
-}
-
-#cart-label {
-  filter: invert(1);
-  font-size: 12px;
-  margin-top: 0px;
-  padding: 0px;
-}
-
-/* Botão Notificações */
-#notifications-button {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-}
-
-.inverted-icon {
-  filter: invert(1);
-}
-
-#notifications-button img {
-  position: relative;
-  top: 7px;
-  display: block;
-  margin: 0 auto;
-}
-
-#notifications-dropdown {
-  position: relative;
-  z-index: 1000;
-}
-
-#notifications-content {
-  display: none;
-  position: absolute;
-  top: 72px;
-  right: 0;
-  min-width: 200px;
-  background-color: white;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  padding: 10px;
-  z-index: 1001;
-  font-size: 14px;
-}
-
-#notifications-dropdown:hover #notifications-content {
-  display: block;
-}
-
-#new-messages-message {
-  font-weight: bold;
-  color: #d60000;
-}
-
-#notifications-label{
-  position: relative;
-  top: -50px;
-}
-
-/* Botão Perfil */
-#profile-button{
-  width: 50px;
-  height: 50px;
-  background-image: url(../Images/site/header/genericProfile.png);
-  background-size: cover;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-#profile-button a{
-  display: block;
-  width: 50px;
-  height: 50px;
-}
-
-/* Botão Dropdown */
-#menu-dropdown {
-  position: relative;
-  z-index: 1000;
-}
-
-#icon-dropdown {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-
-#hover-buffer { /*serve para o hover funcionar corretamente*/
-  position: absolute;
-  top: 48px;
-  right: 0;
-  height: 20px;
-  width: 100%;
-  background: transparent;
-  z-index: 1001;
-}
-
-#dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 68px;
-  min-width: 180px;
-  background-color: white;
-  border-radius: 5px;
-  border: 1px solid lightgray;
-}
-
-#menu-dropdown:hover #dropdown-content,
-#menu-dropdown:hover #hover-buffer {
-  display: block;
-}
-
-#dropdown-content a {
-  color: var(--text-color);
-  padding: 12px 16px;
-  display: block;
-  font-size: 14px;
-}
-
-#dropdown-content a:hover {
-  background-color: var(--secondary-color);
-}
-
-/*----------------
-Estilos do footer 
-----------------*/
-#site-footer {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 40px 0 20px;
-}
-
-#footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-}
-
-.footer-section {
-  flex: 1 1 250px;
-  margin-bottom: 30px;
-}
-
-.footer-section h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  position: relative;
-  padding-bottom: 10px;
-}
-
-.footer-section h3::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background-color: var(--detail-color);
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 8px;
-}
-
-.footer-section a:hover {
-  color: aliceblue;
-  text-decoration: underline;
-}
-
-.footer-section p {
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-}
-
-#icon-email, #icon-phone{
-  width: 25px;
-  margin-right: 10px;
-}
-
-.social-media {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  
-  background-color: var(--detail-color);
-  border-radius: 50%;
-}
-
-.newsletter-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.newsletter-form input {
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-}
-
-.newsletter-form button {
-  padding: 10px;
-  background-color: white;
-  color: var(--primary-color);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.newsletter-form button:hover {
-  background-color: #f0f0f0;
-}
-
-.footer-bottom {
-  text-align: center;
-  padding-top: 20px;
-  margin-top: 20px;
-  border-top: 1px solid var(--detail-color);
-}
-
-/* Responsividade do Footer */
-@media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
-  }
-  
-  .footer-section {
-    margin-bottom: 30px;
-  }
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  header {
-    flex-wrap: wrap;
-  }
-  
-  #search-container {
-    order: 3;
-    margin: 10px 0;
-    max-width: 100%;
-    width: 100%;
-  }
-  
-  #user-actions {
-    margin-left: auto;
-  }
-}
-
-/*----------------
-Estilos do banner 
-----------------*/
-.banner{
-  width: 90%;
-  margin: 30px auto;
-  height: 400px;
-  background-position: center;
-  background-size: cover;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Images/site/mainPage/banner.png');
-}
-
-.banner-content {
-  padding: 20px;
-  max-width: 800px;
-}
-
-.banner-content h1 {
-  font-size: 3rem;
-  margin-bottom: 15px;
-}
-
-.banner-content p {
-  font-size: 1.3rem;
-  margin-bottom: 25px;
-}
-
-/*-------------------------------------
-Estilos do título das páginas estáticas 
---------------------------------------*/
-.section-header {
-  text-align: center;
-  position: relative; /* Adicionado para que o posicionamento absoluto funcione corretamente */
-  width: 90%;
-  margin: 0 auto 40px auto;
-}
-
-.section-header h2 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
-  position: relative;
-  display: inline-block;
-}
-
-.section-header h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background-color: var(--primary-color);
-}
-
-.section-header p {
-  color: #666;
-  font-size: 1.1rem;
-  width: 60%;
-  margin: 15px auto 0 auto;
-}
-
-.back-button {
-  width: 40px;
-}
-
-#link-back-button {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/*---------------------------------------------
-Estilos da secção inicial das páginas estáticas 
-----------------------------------------------*/
-.main-section {
-  width: 90%;
-  margin: 60px auto;
-}
-
-.main-content {
-  display: flex;
-  gap: 40px;
-  align-items: center;
-}
-
-.main-image {
-  flex: 1;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.main-image img {
-  width: 100%;
-  display: block;
-}
-
-.main-text {
-  flex: 1;
-  margin-bottom: 20px;
-  line-height: 1.6;
-  text-align: justify;
-}
-
-/*---------------------
-Estilos dos Value Card
----------------------*/
-.value-card {
-  background-color: white;
-  border-radius: 18px;
-  padding: 30px;
-  flex: 1;
-  text-align: center;
-  box-shadow: 0 5px 15px var(--boxShadow-color);
-  transition: transform 0.3s ease;
-}
-
-.value-card:hover {
-  transform: translateY(-10px);
-}
-
-.value-card h3 {
-  color: var(--primary-color);
-  font-size: 1.5rem;
-}
-
-.value-card ul {
-  list-style: none;
-  padding: 0;
-  text-align: left;
-}
-
-.value-card ul li {
-  margin-bottom: 10px;
-  padding-left: 20px;
-  position: relative;
-}
-
-.value-card ul li::before {
-  content: "✓";
-  color: var(--primary-color);
-  position: absolute;
-  left: 0;
-}
-
-/*----------------------
-Estilos dos Team Members
-----------------------*/
-.team-member {
-  max-width: 300px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px var(--boxShadow-color);
-  transition: transform 0.3s ease;
-  margin-bottom: 70px;
-}
-
-.team-member:hover {
-  transform: translateY(-10px);
-}
-
-.member-photo {
-  height: 250px;
-  overflow: hidden;
-}
-
-.member-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.team-member:hover .member-photo img {
-  transform: scale(1.1);
-}
-
-.team-member h3 {
-  padding: 20px 20px 5px;
-  margin: 0;
-  color: var(--text-color);
-  font-size: 1.3rem;
-}
-
-.member-role {
-  padding: 0 20px;
-  margin: 0 0 10px;
-  color: var(--primary-color);
-  font-weight: bold;
-}
-
-/*------------------------
-Estilos dos Category Cards
-------------------------*/
-
-.service-item {
-  display: flex;
-  gap: 40px;
-  align-items: center;
-  margin-bottom: 80px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.service-item.reverse {
-  flex-direction: row-reverse;
-}
-
-.service-image {
-  flex: 1;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.service-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.service-content {
-  flex: 1;
-}
-
-.service-content h3 {
-  color: var(--primary-color);
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-}
-
-.service-features {
-  margin-bottom: 20px;
-  padding-left: 20px;
-}
-
-.service-features li {
-  margin-bottom: 10px;
-  color: var(--text-color);
-  position: relative;
-  padding-left: 10px;
-}
-
-.service-features li::before {
-  content: "•";
-  color: var(--primary-color);
-  font-weight: bold;
-  position: absolute;
-  left: -10px;
-}
-
-.service-content p {
-  margin-bottom: 25px;
-  line-height: 1.6;
-  color: var(--text-color);
-}
-
-.service-button {
-  display: inline-block;
-  padding: 10px 25px;
-  background-color: transparent;
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
-  text-decoration: none;
-  border-radius: 30px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.service-button:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-/*------------------------
-Estilos dos Feature Items
-------------------------*/
-
-.feature-item {
-  background-color: white;
-  border-radius: 10px;
-  padding: 30px;
-  flex: 1 1 250px;
-  max-width: 300px;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  position: relative;
-  transition: transform 0.3s ease;
-}
-
-.feature-item:hover {
-  transform: translateY(-10px);
-}
-
-.feature-number {
-  width: 50px;
-  height: 50px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0 auto 20px;
-}
-
-.feature-item h3 {
-  color: var(--primary-color);
-  margin-bottom: 15px;
-  font-size: 1.3rem;
-}
-
-.feature-item p {
-  color: var(--text-color);
-  line-height: 1.6;
-}
-
-/*-------------------
-Estilos dos FAQ Items
---------------------*/
-.faq-item {
-  margin-bottom: 20px;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.faq-question {
-  padding: 20px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.faq-question h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: var(--text-color);
-}
-
-.toggle-icon {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--primary-color);
-  transition: all 0.3s ease;
-}
-
-.faq-item.active .toggle-icon {
-  transform: rotate(45deg);
-}
-
-.faq-answer {
-  padding: 0 20px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-}
-
-.faq-answer p {
-  margin: 0;
-  padding: 10px 0;
-  color: var(--text-color);
-  line-height: 1.6;
-}
-
-.faq-item.active .faq-question {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.faq-item.active .faq-question h3 {
-  color: white;
-}
-
-.faq-item.active .faq-answer {
-  max-height: 500px;
-  padding: 20px;
-}
-
-/*-----------------------
-Estilos dos Contact Cards
-------------------------*/
-.contact-info-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 25px;
-}
-
-.contact-icon {
-  width: 50px;
-  height: 50px;
-  background-color: var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-}
-
-.contact-icon img {
-  width: 30px;
-}
-
-.contact-detail h4 {
-  color: var(--primary-color);
-  margin-bottom: 5px;
-  font-size: 1.2rem;
-}
-
-.contact-detail p {
-  color: var(--text-color);
-  line-height: 1.5;
-}
-
-/* CSS para o menu dropdown - adicionar/atualizar no common_elements.css */
-
-/* Botão Menu DropDown */
-#menu-dropdown {
-  position: relative;
-}
-
-#icon-dropdown {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-#icon-dropdown:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-#dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 65px;
-  min-width: 200px;
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  overflow: hidden;
-}
-
-#menu-dropdown:hover #dropdown-content {
-  display: block;
-  animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-#dropdown-content a {
-  color: var(--text-color);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-#dropdown-content a:last-child {
-  border-bottom: none;
-}
-
-#dropdown-content a:hover {
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-  padding-left: 20px;
-}
-
-#dropdown-content a i {
-  color: var(--primary-color);
-  font-size: 14px;
-  width: 16px;
-  text-align: center;
-}
-
-#dropdown-content hr {
-  margin: 8px 0;
-  border: none;
-  border-top: 1px solid #e2e8f0;
-}
-
-/* Separador visual para itens especiais */
-#dropdown-content a[href*="logout"] {
-  color: #e53e3e;
-  background-color: #fed7d7;
-  margin-top: 4px;
-}
-
-#dropdown-content a[href*="logout"]:hover {
-  background-color: #feb2b2;
-  color: #c53030;
-}
-
-#dropdown-content a[href*="logout"] i {
-  color: #e53e3e;
-}
-
-#dropdown-content a[href*="admin"] {
-  background-color: #fef5e7;
-  color: #975a16;
-}
-
-#dropdown-content a[href*="admin"]:hover {
-  background-color: #fbd38d;
-  color: #744210;
-}
-
-#dropdown-content a[href*="admin"] i {
-  color: #ed8936;
-}
-
-/* Responsividade para dispositivos móveis */
-@media (max-width: 768px) {
-  #dropdown-content {
-    min-width: 180px;
-    right: -10px;
-  }
-  
-  #dropdown-content a {
-    padding: 14px 16px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  #dropdown-content {
-    min-width: 160px;
-    right: -20px;
-  }
-  
-  #dropdown-content a {
-    padding: 12px 14px;
-    font-size: 14px;
-  }
-}
-
-/* Melhorar a visibilidade do dropdown em telas pequenas */
-@media (max-width: 768px) {
-  header {
-    flex-wrap: wrap;
-  }
-  
-  #search-container {
-    order: 3;
-    margin: 10px 0;
-    max-width: 100%;
-    width: 100%;
-  }
-  
-  #user-actions {
-    margin-left: auto;
-  }
-  
-  /* Ajustar posição do dropdown em telas pequenas */
-  #dropdown-content {
-    top: 60px;
-  }
-}
-
-/* ===== ESTILOS PARA BARRA DE PESQUISA COM SUGESTÕES ===== */
-
-/* Ajustes no container de pesquisa */
-#search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-  max-width: 500px;
-  margin: 0 20px;
-}
-
-#search-input {
-  flex: 1;
   padding: 12px 45px 12px 15px;
   border: 2px solid #ddd;
   border-radius: 25px;
@@ -1019,14 +83,15 @@ Estilos dos Contact Cards
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff;
-  width: 100%;
 }
 
+/* Focus do input de pesquisa */
 #search-input:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+/* Botão de pesquisa */
 #search-button {
   position: absolute;
   right: 5px;
@@ -1042,17 +107,19 @@ Estilos dos Contact Cards
   z-index: 10;
 }
 
+/* Hover do botão de pesquisa */
 #search-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Ícone de pesquisa */
 #search-icon {
   width: 20px;
   height: 20px;
   opacity: 0.7;
 }
 
-/* Container das sugestões */
+/* Container das sugestões de pesquisa */
 #search-suggestions {
   position: absolute;
   top: 100%;
@@ -1067,6 +134,19 @@ Estilos dos Contact Cards
   display: none;
   max-height: 300px;
   overflow-y: auto;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Animação das sugestões */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-5px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
 
 /* Item individual de sugestão */
@@ -1079,25 +159,36 @@ Estilos dos Contact Cards
   align-items: center;
 }
 
+/* Última sugestão sem borda */
 .suggestion-item:last-child {
   border-bottom: none;
 }
 
+/* Hover e estado ativo das sugestões */
 .suggestion-item:hover,
 .suggestion-item.active {
   background-color: #f8f9fa;
 }
 
+/* Focus das sugestões */
+.suggestion-item:focus {
+  outline: 2px solid #007bff;
+  outline-offset: -2px;
+}
+
+/* Conteúdo da sugestão */
 .suggestion-content {
   flex: 1;
 }
 
+/* Nome da sugestão */
 .suggestion-name {
   font-size: 14px;
   color: #333;
   line-height: 1.4;
 }
 
+/* Texto destacado na sugestão */
 .suggestion-name strong {
   color: #007bff;
   font-weight: 600;
@@ -1112,23 +203,7 @@ Estilos dos Contact Cards
   font-style: italic;
 }
 
-/* Animação suave para mostrar/esconder sugestões */
-#search-suggestions {
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-      opacity: 0;
-      transform: translateY(-5px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
-}
-
-/* Scrollbar personalizada para as sugestões */
+/* Scrollbar das sugestões */
 #search-suggestions::-webkit-scrollbar {
   width: 6px;
 }
@@ -1146,35 +221,986 @@ Estilos dos Contact Cards
   background: #a8a8a8;
 }
 
-/* Responsividade para dispositivos móveis */
+/* Botão de categorias */
+#categories-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+}
+
+/* Labels de categorias e notificações */
+#categories-label,
+#notification-label {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* Ações do usuário */
+#user-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Botão do carrinho */
+#carrinho-button {
+  filter: invert(1);
+  position: relative;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 7px;
+}
+
+/* Badge do carrinho */
+#cart-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: rgb(0, 255, 255);
+  color: black;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animação do badge */
+@keyframes pulse-badge {
+  0% {
+      transform: scale(1);
+      background-color: rgb(0, 255, 255);
+  }
+  50% {
+      transform: scale(1.4);
+      background-color: rgb(0, 200, 200);
+  }
+  100% {
+      transform: scale(1);
+      background-color: rgb(0, 255, 255);
+  }
+}
+
+/* Badge com animação */
+#cart-badge.animate {
+  animation: pulse-badge 0.4s ease;
+}
+
+/* Label do carrinho */
+#cart-label {
+  filter: invert(1);
+  font-size: 12px;
+  margin-top: 0px;
+  padding: 0px;
+}
+
+/* Botão de notificações */
+#notifications-button {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Ícone invertido */
+.inverted-icon {
+  filter: invert(1);
+}
+
+/* Imagem do botão de notificações */
+#notifications-button img {
+  position: relative;
+  top: 7px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Dropdown das notificações */
+#notifications-dropdown {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Conteúdo das notificações */
+#notifications-content {
+  display: none;
+  position: absolute;
+  top: 72px;
+  right: 0;
+  min-width: 200px;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1001;
+  font-size: 14px;
+}
+
+/* Hover do dropdown de notificações */
+#notifications-dropdown:hover #notifications-content {
+  display: block;
+}
+
+/* Mensagem de novas mensagens */
+#new-messages-message {
+  font-weight: bold;
+  color: #d60000;
+}
+
+/* Label de notificações */
+#notifications-label {
+  position: relative;
+  top: -50px;
+}
+
+/* Botão do perfil */
+#profile-button {
+  width: 50px;
+  height: 50px;
+  background-image: url(../Images/site/header/genericProfile.png);
+  background-size: cover;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Link do perfil */
+#profile-button a {
+  display: block;
+  width: 50px;
+  height: 50px;
+}
+
+/* Menu dropdown */
+#menu-dropdown {
+  position: relative;
+}
+
+/* Ícone do dropdown */
+#icon-dropdown {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover do ícone dropdown */
+#icon-dropdown:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Buffer para hover */
+#hover-buffer {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  height: 20px;
+  width: 100%;
+  background: transparent;
+  z-index: 1001;
+}
+
+/* Conteúdo do dropdown */
+#dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 65px;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Hover do menu */
+#menu-dropdown:hover #dropdown-content {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+/* Hover do buffer */
+#menu-dropdown:hover #hover-buffer {
+  display: block;
+}
+
+/* Animação do dropdown */
+@keyframes slideDown {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Links do dropdown */
+#dropdown-content a {
+  color: var(--text-color);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Último link sem borda */
+#dropdown-content a:last-child {
+  border-bottom: none;
+}
+
+/* Hover dos links */
+#dropdown-content a:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding-left: 20px;
+}
+
+/* Ícones dos links */
+#dropdown-content a i {
+  color: var(--primary-color);
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+}
+
+/* Separador horizontal */
+#dropdown-content hr {
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Link de logout */
+#dropdown-content a[href*="logout"] {
+  color: #e53e3e;
+  background-color: #fed7d7;
+  margin-top: 4px;
+}
+
+/* Hover do logout */
+#dropdown-content a[href*="logout"]:hover {
+  background-color: #feb2b2;
+  color: #c53030;
+}
+
+/* Ícone do logout */
+#dropdown-content a[href*="logout"] i {
+  color: #e53e3e;
+}
+
+/* Link de admin */
+#dropdown-content a[href*="admin"] {
+  background-color: #fef5e7;
+  color: #975a16;
+}
+
+/* Hover do admin */
+#dropdown-content a[href*="admin"]:hover {
+  background-color: #fbd38d;
+  color: #744210;
+}
+
+/* Ícone do admin */
+#dropdown-content a[href*="admin"] i {
+  color: #ed8936;
+}
+
+/******************
+FOOTER SECTION
+******************/
+
+/* Footer principal */
+#site-footer {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 40px 0 20px;
+}
+
+/* Container do footer */
+#footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+}
+
+/* Seção do footer */
+.footer-section {
+  flex: 1 1 250px;
+  margin-bottom: 30px;
+}
+
+/* Título da seção */
+.footer-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+/* Linha decorativa do título */
+.footer-section h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--detail-color);
+}
+
+/* Lista do footer */
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Itens da lista */
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+/* Hover dos links do footer */
+.footer-section a:hover {
+  color: aliceblue;
+  text-decoration: underline;
+}
+
+/* Parágrafos do footer */
+.footer-section p {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Ícones de email e telefone */
+#icon-email,
+#icon-phone {
+  width: 25px;
+  margin-right: 10px;
+}
+
+/* Redes sociais */
+.social-media {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Ícone social */
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  background-color: var(--detail-color);
+  border-radius: 50%;
+}
+
+/* Formulário da newsletter */
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Input da newsletter */
+.newsletter-form input {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Botão da newsletter */
+.newsletter-form button {
+  padding: 10px;
+  background-color: white;
+  color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Hover do botão newsletter */
+.newsletter-form button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Rodapé inferior */
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--detail-color);
+}
+
+/******************
+BANNERS & HEADERS
+******************/
+
+/* Banner principal */
+.banner {
+  width: 90%;
+  margin: 30px auto;
+  height: 400px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Images/site/mainPage/banner.png');
+}
+
+/* Conteúdo do banner */
+.banner-content {
+  padding: 20px;
+  max-width: 800px;
+}
+
+/* Título do banner */
+.banner-content h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+/* Parágrafo do banner */
+.banner-content p {
+  font-size: 1.3rem;
+  margin-bottom: 25px;
+}
+
+/* Header das seções */
+.section-header {
+  text-align: center;
+  position: relative;
+  width: 90%;
+  margin: 0 auto 40px auto;
+}
+
+/* Título da seção */
+.section-header h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Linha decorativa do título */
+.section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+/* Parágrafo do header */
+.section-header p {
+  color: #666;
+  font-size: 1.1rem;
+  width: 60%;
+  margin: 15px auto 0 auto;
+}
+
+/* Botão de voltar */
+.back-button {
+  width: 40px;
+}
+
+/* Link do botão voltar */
+#link-back-button {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/******************
+MAIN CONTENT SECTIONS
+******************/
+
+/* Seção principal */
+.main-section {
+  width: 90%;
+  margin: 60px auto;
+}
+
+/* Conteúdo principal */
+.main-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Imagem principal */
+.main-image {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Imagem dentro do container */
+.main-image img {
+  width: 100%;
+  display: block;
+}
+
+/* Texto principal */
+.main-text {
+  flex: 1;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/******************
+COMPONENT CARDS
+******************/
+
+/* Card de valor */
+.value-card {
+  background-color: white;
+  border-radius: 18px;
+  padding: 30px;
+  flex: 1;
+  text-align: center;
+  box-shadow: 0 5px 15px var(--boxShadow-color);
+  transition: transform 0.3s ease;
+}
+
+/* Hover do card de valor */
+.value-card:hover {
+  transform: translateY(-10px);
+}
+
+/* Título do card */
+.value-card h3 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+/* Lista do card */
+.value-card ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+/* Itens da lista */
+.value-card ul li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+/* Marcador da lista */
+.value-card ul li::before {
+  content: "✓";
+  color: var(--primary-color);
+  position: absolute;
+  left: 0;
+}
+
+/* Membro da equipe */
+.team-member {
+  max-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px var(--boxShadow-color);
+  transition: transform 0.3s ease;
+  margin-bottom: 70px;
+}
+
+/* Hover do membro */
+.team-member:hover {
+  transform: translateY(-10px);
+}
+
+/* Foto do membro */
+.member-photo {
+  height: 250px;
+  overflow: hidden;
+}
+
+/* Imagem da foto */
+.member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* Hover da foto */
+.team-member:hover .member-photo img {
+  transform: scale(1.1);
+}
+
+/* Nome do membro */
+.team-member h3 {
+  padding: 20px 20px 5px;
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.3rem;
+}
+
+/* Função do membro */
+.member-role {
+  padding: 0 20px;
+  margin: 0 0 10px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Item de serviço */
+.service-item {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 80px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Item reverso */
+.service-item.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Imagem do serviço */
+.service-image {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Imagem dentro do container */
+.service-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Conteúdo do serviço */
+.service-content {
+  flex: 1;
+}
+
+/* Título do serviço */
+.service-content h3 {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+/* Características do serviço */
+.service-features {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+/* Itens das características */
+.service-features li {
+  margin-bottom: 10px;
+  color: var(--text-color);
+  position: relative;
+  padding-left: 10px;
+}
+
+/* Marcador das características */
+.service-features li::before {
+  content: "•";
+  color: var(--primary-color);
+  font-weight: bold;
+  position: absolute;
+  left: -10px;
+}
+
+/* Parágrafo do serviço */
+.service-content p {
+  margin-bottom: 25px;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+/* Botão do serviço */
+.service-button {
+  display: inline-block;
+  padding: 10px 25px;
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Hover do botão */
+.service-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Item de funcionalidade */
+.feature-item {
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  flex: 1 1 250px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* Hover da funcionalidade */
+.feature-item:hover {
+  transform: translateY(-10px);
+}
+
+/* Número da funcionalidade */
+.feature-number {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+/* Título da funcionalidade */
+.feature-item h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+/* Parágrafo da funcionalidade */
+.feature-item p {
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/******************
+FAQ & CONTACT COMPONENTS
+******************/
+
+/* Item de FAQ */
+.faq-item {
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Pergunta do FAQ */
+.faq-question {
+  padding: 20px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* Título da pergunta */
+.faq-question h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+/* Ícone de toggle */
+.toggle-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+/* FAQ ativo */
+.faq-item.active .toggle-icon {
+  transform: rotate(45deg);
+}
+
+/* Resposta do FAQ */
+.faq-answer {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+/* Parágrafo da resposta */
+.faq-answer p {
+  margin: 0;
+  padding: 10px 0;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* FAQ ativo - pergunta */
+.faq-item.active .faq-question {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* FAQ ativo - título */
+.faq-item.active .faq-question h3 {
+  color: white;
+}
+
+/* FAQ ativo - resposta */
+.faq-item.active .faq-answer {
+  max-height: 500px;
+  padding: 20px;
+}
+
+/* Item de informação de contato */
+.contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+/* Ícone de contato */
+.contact-icon {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+/* Imagem do ícone */
+.contact-icon img {
+  width: 30px;
+}
+
+/* Detalhe do contato */
+.contact-detail h4 {
+  color: var(--primary-color);
+  margin-bottom: 5px;
+  font-size: 1.2rem;
+}
+
+/* Parágrafo do detalhe */
+.contact-detail p {
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* MEDIA QUERIES - Responsividade */
+
+/* Tablets */
 @media (max-width: 768px) {
+  /* Header responsivo */
+  header {
+      flex-wrap: wrap;
+  }
+  
+  /* Container de pesquisa */
   #search-container {
-      margin: 0 10px;
-      max-width: none;
+      order: 3;
+      margin: 10px 0;
+      max-width: 100%;
+      width: 100%;
   }
   
-  #search-input {
-      font-size: 16px; /* Evita zoom no iOS */
-      padding: 10px 40px 10px 12px;
+  /* Ações do usuário */
+  #user-actions {
+      margin-left: auto;
   }
   
+  /* Dropdown responsivo */
+  #dropdown-content {
+      min-width: 180px;
+      right: -10px;
+      top: 60px;
+  }
+  
+  /* Links do dropdown */
+  #dropdown-content a {
+      padding: 14px 16px;
+      font-size: 15px;
+  }
+  
+  /* Footer responsivo */
+  .footer-container {
+      flex-direction: column;
+  }
+  
+  /* Seção do footer */
+  .footer-section {
+      margin-bottom: 30px;
+  }
+  
+  /* Sugestões de pesquisa */
   #search-suggestions {
       left: -10px;
       right: -10px;
       border-radius: 0 0 10px 10px;
   }
   
+  /* Item de sugestão */
   .suggestion-item {
       padding: 15px 12px;
   }
   
+  /* Nome da sugestão */
   .suggestion-name {
       font-size: 15px;
   }
 }
 
-/* Estados de foco e acessibilidade */
-.suggestion-item:focus {
-  outline: 2px solid #007bff;
-  outline-offset: -2px;
+/* Mobile pequeno */
+@media (max-width: 480px) {
+  /* Dropdown muito pequeno */
+  #dropdown-content {
+      min-width: 160px;
+      right: -20px;
+  }
+  
+  /* Links menores */
+  #dropdown-content a {
+      padding: 12px 14px;
+      font-size: 14px;
+  }
+
+  /* Input de pesquisa mobile */
+  #search-input {
+      font-size: 16px;
+      padding: 10px 40px 10px 12px;
+  }
 }

@@ -4,7 +4,7 @@ require_once("../Templates/common_elems.php");
 require_once("../Templates/checkout_elems.php");
 require_once("../Controllers/distancesCalculationController.php");
 
-drawHeader("Finalizar compra", ["../Styles/checkout.css"]);
+drawHeader("Finalizar compra", ["../Styles/Cart&Checkout.css"]);
 
 if (!isset($_POST['total'])) {
     echo "<p>Erro: total em falta.</p>";
