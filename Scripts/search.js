@@ -1,183 +1,112 @@
-// search.js - JavaScript consolidado para páginas de pesquisa
+// search.js - Versão simples que funciona com qualquer CSS
 
-/* ==========================================
-   FILTROS DE PESQUISA
-========================================== */
-
-// Configurar auto-submit de filtros (opcional)
-function setupFilterAutoSubmit() {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando filtros...');
+    
+    // Configurar auto-submit para categoria
     const categorySelect = document.getElementById('category');
     const filterForm = document.getElementById('filter-form');
     
-    if (!categorySelect || !filterForm) return;
+    if (categorySelect && filterForm) {
+        categorySelect.addEventListener('change', function() {
+            console.log('Categoria mudou para:', this.value);
+            filterForm.submit();
+        });
+    }
     
-    // Opcional: submeter automaticamente quando categoria muda
-    // categorySelect.addEventListener('change', function() {
-    //     filterForm.submit();
-    // });
-}
-
-/* ==========================================
-   PAGINAÇÃO DE CATEGORIAS
-========================================== */
-
-// Configurar navegação de paginação para categorias
-function setupCategoriesPagination() {
-    const paginationBtns = document.querySelectorAll('.pagination-btn');
-    
-    paginationBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.disabled) return;
+    // Configurar botão de reset
+    const resetBtn = document.getElementById('reset-filters');
+    if (resetBtn && filterForm) {
+        resetBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             
-            // Implementar lógica de paginação aqui
-            // Por enquanto apenas placeholder
-            console.log('Pagination clicked');
+            // Limpar campos
+            const categorySelect = document.getElementById('category');
+            const minPrice = document.getElementById('min_price');
+            const maxPrice = document.getElementById('max_price');
+            
+            if (categorySelect) categorySelect.selectedIndex = 0;
+            if (minPrice) minPrice.value = '';
+            if (maxPrice) maxPrice.value = '';
+            
+            // Submeter formulário
+            filterForm.submit();
         });
-    });
-}
-
-/* ==========================================
-   ANIMAÇÕES E EFEITOS
-========================================== */
-
-// Configurar efeitos visuais nos cards
-function setupCardEffects() {
-    const serviceCards = document.querySelectorAll('.service-card');
-    const categoryCards = document.querySelectorAll('.category-card');
+    }
     
-    // Efeitos para cards de serviços
-    serviceCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-            this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '';
-        });
-    });
-    
-    // Efeitos para cards de categorias
-    categoryCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-3px)';
-            this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '';
-        });
-    });
-}
-
-/* ==========================================
-   VALIDAÇÃO DE FILTROS
-========================================== */
-
-// Validar campos de preço
-function setupPriceValidation() {
+    // Auto-submit para preços (com delay)
     const minPriceInput = document.getElementById('min_price');
     const maxPriceInput = document.getElementById('max_price');
+    let priceTimeout;
     
-    if (!minPriceInput || !maxPriceInput) return;
+    function handlePriceChange() {
+        clearTimeout(priceTimeout);
+        priceTimeout = setTimeout(() => {
+            if (filterForm) {
+                filterForm.submit();
+            }
+        }, 1500); // 1.5 segundos de delay
+    }
     
-    function validatePriceRange() {
-        const minPrice = parseFloat(minPriceInput.value) || 0;
-        const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+    if (minPriceInput) {
+        minPriceInput.addEventListener('input', handlePriceChange);
+    }
+    
+    if (maxPriceInput) {
+        maxPriceInput.addEventListener('input', handlePriceChange);
+    }
+    
+    // Validação simples de preços
+    function validatePrices() {
+        if (!minPriceInput || !maxPriceInput) return;
         
-        if (minPrice > maxPrice && maxPrice !== Infinity) {
-            maxPriceInput.setCustomValidity('O preço máximo deve ser maior que o mínimo');
+        const minPrice = parseFloat(minPriceInput.value) || 0;
+        const maxPrice = parseFloat(maxPriceInput.value) || 0;
+        
+        if (minPrice < 0) {
+            minPriceInput.setCustomValidity('Preço mínimo não pode ser negativo');
+        } else {
+            minPriceInput.setCustomValidity('');
+        }
+        
+        if (maxPrice < 0) {
+            maxPriceInput.setCustomValidity('Preço máximo não pode ser negativo');
+        } else if (maxPrice > 0 && minPrice > maxPrice) {
+            maxPriceInput.setCustomValidity('Preço máximo deve ser maior que o mínimo');
         } else {
             maxPriceInput.setCustomValidity('');
         }
     }
     
-    minPriceInput.addEventListener('input', validatePriceRange);
-    maxPriceInput.addEventListener('input', validatePriceRange);
-}
-
-/* ==========================================
-   LAZY LOADING DE IMAGENS
-========================================== */
-
-// Configurar lazy loading para imagens
-function setupLazyLoading() {
-    const images = document.querySelectorAll('img[data-src]');
-    
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.remove('lazy');
-                    imageObserver.unobserve(img);
-                }
-            });
-        });
-        
-        images.forEach(img => imageObserver.observe(img));
-    } else {
-        // Fallback para browsers sem suporte
-        images.forEach(img => {
-            img.src = img.dataset.src;
-        });
+    if (minPriceInput && maxPriceInput) {
+        minPriceInput.addEventListener('blur', validatePrices);
+        maxPriceInput.addEventListener('blur', validatePrices);
     }
-}
-
-/* ==========================================
-   FUNCIONALIDADES DE PESQUISA AVANÇADA
-========================================== */
-
-// Configurar limpeza de filtros
-function setupFilterReset() {
-    const resetBtn = document.getElementById('reset-filters');
-    const filterForm = document.getElementById('filter-form');
     
-    if (!resetBtn || !filterForm) return;
-    
-    resetBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Limpar todos os campos exceto a query
-        const inputs = filterForm.querySelectorAll('input:not([name="query"]), select');
-        inputs.forEach(input => {
-            if (input.type === 'number') {
-                input.value = '';
-            } else if (input.tagName === 'SELECT') {
-                input.selectedIndex = 0;
-            }
+    // Efeitos simples nos cards (hover)
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.transition = 'transform 0.3s ease';
         });
         
-        // Submeter o formulário limpo
-        filterForm.submit();
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     });
-}
-
-/* ==========================================
-   NAVEGAÇÃO E HISTÓRICO
-========================================== */
-
-// Configurar navegação com histórico do browser
-function setupBrowserHistory() {
-    const filterForm = document.getElementById('filter-form');
     
-    if (!filterForm) return;
-}
-
-/* ==========================================
-   INICIALIZAÇÃO
-========================================== */
-
-// Inicializar todas as funcionalidades quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    setupFilterAutoSubmit();
-    setupCategoriesPagination();
-    setupCardEffects();
-    setupPriceValidation();
-    setupLazyLoading();
-    setupFilterReset();
-    setupBrowserHistory();
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    console.log('Filtros inicializados com sucesso');
 });
