@@ -21,11 +21,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         case 'get_order_for_cart':
             handleGetOrderForCart();
             break;
+        case 'mark_completed':
+            handleMarkCompleted();
+            break;
         default:
             $_SESSION['error'] = 'Ação não reconhecida.';
             header("Location: /Views/mainPage.php");
             exit();
     }
+}
+
+/**
+ * Marca um pedido como completo
+ */
+function markOrderAsCompleted($orderId, $userId) {
+    $db = getDatabaseConnection();
+    
+    try {
+        // Verificar se o pedido pertence ao utilizador e está com status 'paid'
+        $checkStmt = $db->prepare("
+            SELECT sd.id, r.status_ 
+            FROM Service_Data sd
+            LEFT JOIN Request r ON r.service_data_id = sd.id
+            WHERE sd.id = :order_id AND sd.user_id = :user_id
+        ");
+        $checkStmt->execute([':order_id' => $orderId, ':user_id' => $userId]);
+        $order = $checkStmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$order) {
+            return ['success' => false, 'message' => 'Pedido não encontrado ou sem permissão.'];
+        }
+        
+        // Verificar se o status atual permite completar (deve estar 'paid')
+        if ($order['status_'] !== 'paid') {
+            return ['success' => false, 'message' => 'Apenas pedidos pagos podem ser marcados como completos.'];
+        }
+        
+        // Atualizar o status na tabela Request para 'completed'
+        $updateStmt = $db->prepare("
+            UPDATE Request 
+            SET status_ = 'completed' 
+            WHERE service_data_id = :order_id
+        ");
+        
+        $result = $updateStmt->execute([':order_id' => $orderId]);
+        
+        if ($result) {
+            return ['success' => true, 'message' => 'Pedido marcado como completo com sucesso!'];
+        } else {
+            return ['success' => false, 'message' => 'Erro ao atualizar o status do pedido.'];
+        }
+        
+    } catch (PDOException $e) {
+        error_log("Erro ao marcar pedido como completo: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Erro interno do sistema.'];
+    }
+}
+
+function handleMarkCompleted() {
+    header('Content-Type: application/json');
+    
+    if (!isUserLoggedIn()) {
+        echo json_encode(["status" => "error", "message" => "Utilizador não autenticado"]);
+        exit();
+    }
+    
+    $orderId = intval($_POST['order_id'] ?? 0);
+    $currentUserId = getCurrentUserId();
+    
+    if ($orderId <= 0) {
+        echo json_encode(["status" => "error", "message" => "ID do pedido inválido"]);
+        exit();
+    }
+    
+    $result = markOrderAsCompleted($orderId, $currentUserId);
+    
+    if ($result['success']) {
+        echo json_encode(["status" => "success", "message" => $result['message']]);
+    } else {
+        echo json_encode(["status" => "error", "message" => $result['message']]);
+    }
+    exit();
 }
 
 // ===== HANDLER PARA OBTER DADOS DO PEDIDO PARA CARRINHO =====
@@ -240,6 +316,8 @@ function getAllServices() {
  * Obter serviço por ID
  */
 function getServiceById($id) {
+    error_log("DEBUG SERVICE: Procurando serviço com ID = $id");
+    
     $db = getDatabaseConnection();
     $query = "SELECT * FROM Service_ WHERE id = ?";
     $stmt = $db->prepare($query);
@@ -247,6 +325,8 @@ function getServiceById($id) {
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    error_log("DEBUG SERVICE: Resultado = " . print_r($row, true));
 
     if ($row) {
         return [

@@ -82,16 +82,15 @@ function hasUserContractedService($userId, $serviceId) {
     try {
         $db = getDatabaseConnection();
         
-        // Verificar se existe alguma Service_Data com status 'completed' ou 'paid'
-        // para este utilizador e serviço
+        error_log("DEBUG CONTRACT: Verificando User ID = $userId, Service ID = $serviceId");
+        
+        // Verificar diretamente se o utilizador tem Service_Data para este serviço
         $stmt = $db->prepare("
-            SELECT COUNT(*) as count 
+            SELECT COUNT(*) as count, sd.id, sd.status_ as sd_status, r.status_ as r_status
             FROM Service_Data sd
-            JOIN Request r ON r.service_data_id = sd.id
-            JOIN Message_ m ON r.message_id = m.id
+            LEFT JOIN Request r ON r.service_data_id = sd.id
             WHERE sd.service_id = :service_id 
-              AND m.sender_id = :user_id 
-              AND r.status_ IN ('completed', 'paid')
+              AND sd.user_id = :user_id
         ");
         
         $stmt->execute([
@@ -100,10 +99,12 @@ function hasUserContractedService($userId, $serviceId) {
         ]);
         
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        error_log("DEBUG CONTRACT: Resultado query = " . print_r($result, true));
+        
         return $result['count'] > 0;
         
     } catch (PDOException $e) {
-        error_log("Erro ao verificar se utilizador contratou serviço: " . $e->getMessage());
+        error_log("DEBUG CONTRACT: Erro = " . $e->getMessage());
         return false;
     }
 }
@@ -260,7 +261,6 @@ function getServiceFeedbackStats($serviceId) {
 // ===== PROCESSAMENTO DE REQUISIÇÕES HTTP =====
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    session_start();
     $action = $_POST['action'];
 
     switch ($action) {
@@ -283,9 +283,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 /**
  * Handler para criação de feedback.
  */
-function handleCreateFeedback() {
+function handleCreateFeedback(){
+    // DEBUG TEMPORÁRIO
+    error_log("=== DEBUG FEEDBACK DETALHADO ===");
+    error_log("POST data: " . print_r($_POST, true));
+    
     // Verificar autenticação
     if (!isUserLoggedIn()) {
+        error_log("DEBUG: Utilizador não logado");
         $_SESSION['error'] = 'Deve fazer login para deixar feedback.';
         header("Location: /Views/auth.php");
         exit();
@@ -293,39 +298,57 @@ function handleCreateFeedback() {
 
     $userId = getCurrentUserId();
     $serviceId = intval($_POST['service_id'] ?? 0);
+    
+    error_log("DEBUG: User ID = " . $userId);
+    error_log("DEBUG: Service ID = " . $serviceId);
 
     // Validar dados
     $validation = validateFeedbackData($_POST);
+    error_log("DEBUG: Validação = " . print_r($validation, true));
+    
     if (!$validation['valid']) {
+        error_log("DEBUG: Dados inválidos");
         $_SESSION['error'] = implode('<br>', $validation['errors']);
-        $_SESSION['feedback_form_data'] = $_POST;
-        header("Location: /Views/feedback/createFeedback.php?service_id=" . $serviceId);
+        header("Location: /Views/orders/myOrders.php");
         exit();
     }
 
     // Verificar se o serviço existe
     require_once(dirname(__FILE__) . '/serviceController.php');
     $service = getServiceById($serviceId);
+    error_log("DEBUG: Serviço encontrado = " . ($service ? 'SIM' : 'NÃO'));
+    
     if (!$service) {
+        error_log("DEBUG: Serviço não encontrado");
         $_SESSION['error'] = 'Serviço não encontrado.';
-        header("Location: /Views/mainPage.php");
+        header("Location: /Views/orders/myOrders.php");
         exit();
     }
 
     // Verificar se já deixou feedback
-    if (hasUserFeedback($userId, $serviceId)) {
+    $hasFeedback = hasUserFeedback($userId, $serviceId);
+    error_log("DEBUG: Já tem feedback = " . ($hasFeedback ? 'SIM' : 'NÃO'));
+    
+    if ($hasFeedback) {
+        error_log("DEBUG: Já deixou feedback");
         $_SESSION['error'] = 'Já deixou feedback para este serviço.';
-        header("Location: /Views/product.php?id=" . $serviceId);
+        header("Location: /Views/orders/myOrders.php");
         exit();
     }
 
     // Verificar se contratou o serviço
-    if (!hasUserContractedService($userId, $serviceId)) {
+    $hasContracted = hasUserContractedService($userId, $serviceId);
+    error_log("DEBUG: Contratou serviço = " . ($hasContracted ? 'SIM' : 'NÃO'));
+    
+    if (!$hasContracted) {
+        error_log("DEBUG: Não contratou o serviço");
         $_SESSION['error'] = 'Só pode deixar feedback para serviços que contratou.';
-        header("Location: /Views/product.php?id=" . $serviceId);
+        header("Location: /Views/orders/myOrders.php");
         exit();
     }
 
+    error_log("DEBUG: Tentando criar feedback...");
+    
     // Criar feedback
     $result = createFeedback(
         $userId,
@@ -335,14 +358,17 @@ function handleCreateFeedback() {
         floatval($_POST['evaluation'])
     );
 
+    error_log("DEBUG: Resultado da criação = " . ($result ? 'SUCESSO' : 'FALHA'));
+
     if ($result) {
+        error_log("DEBUG: Feedback criado com sucesso");
         $_SESSION['success'] = 'Feedback enviado com sucesso! Obrigado pela sua avaliação.';
-        header("Location: /Views/product.php?id=" . $serviceId);
     } else {
+        error_log("DEBUG: Falha ao criar feedback");
         $_SESSION['error'] = 'Erro ao enviar o feedback. Tente novamente.';
-        $_SESSION['feedback_form_data'] = $_POST;
-        header("Location: /Views/feedback/createFeedback.php?service_id=" . $serviceId);
     }
+    
+    header("Location: /Views/orders/myOrders.php");
     exit();
 }
 

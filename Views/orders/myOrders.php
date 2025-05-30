@@ -63,7 +63,7 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                     <i class="fas fa-euro-sign"></i>
                 </div>
                 <div class="stat-info">
-                    <h3><?php echo number_format($stats['total_spent'] / 60, 2); ?>€</h3>
+                    <h3><?php echo number_format($stats['total_spent'], 2); ?>€</h3>
                     <p>Total Gasto</p>
                 </div>
             </div>
@@ -151,7 +151,7 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                                 
                                 <div class="detail-item">
                                     <span class="detail-label">Preço Final:</span>
-                                    <span class="detail-value price-highlight"><?php echo number_format($order['final_price'] /60, 2); ?>€</span>
+                                    <span class="detail-value price-highlight"><?php echo number_format($order['final_price'], 2); ?>€</span>
                                 </div>
                             </div>
                             
@@ -173,6 +173,13 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                                 <i class="fas fa-envelope"></i>
                                 Contactar Prestador
                             </a>
+                            
+                            <?php if ($order['status_'] === 'paid'): ?>
+                                <button class="btn-complete" onclick="markAsCompleted(<?php echo $order['order_id']; ?>)">
+                                    <i class="fas fa-check"></i>
+                                    Completa
+                                </button>
+                            <?php endif; ?>
                             
                             <?php if ($order['status_'] === 'accepted'): ?>
                                 <button class="btn-add-cart" onclick="addToCart(<?php echo $order['order_id']; ?>)">
@@ -367,6 +374,49 @@ function updateCartCounter(total) {
         cartCounter.textContent = total;
         cartCounter.style.display = total > 0 ? 'block' : 'none';
     }
+}
+
+// Função para marcar pedido como completo
+function markAsCompleted(orderId) {
+    if (!confirm('Tem certeza que deseja marcar este pedido como completo?')) {
+        return;
+    }
+    
+    // Criar FormData para enviar via POST
+    const formData = new FormData();
+    formData.append('action', 'mark_completed');
+    formData.append('order_id', orderId);
+    
+    // Mostrar loading no botão
+    const button = document.querySelector(`button[onclick="markAsCompleted(${orderId})"]`);
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+    button.disabled = true;
+    
+    // Enviar requisição para o serviceController
+    fetch('/Controllers/serviceController.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            alert('Pedido marcado como completo com sucesso!');
+            // Recarregar a página para atualizar o status
+            window.location.reload();
+        } else {
+            alert('Erro ao marcar pedido como completo: ' + (result.message || 'Erro desconhecido'));
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao marcar pedido como completo:', error);
+        alert('Erro inesperado ao processar pedido.');
+    })
+    .finally(() => {
+        // Restaurar botão
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
 }
 </script>
 
