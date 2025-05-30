@@ -589,72 +589,6 @@ function toggleServiceStatus($serviceId, $userId) {
     return false;
 }
 
-// ===== FUNÇÕES DE PEDIDOS =====
-
-/**
- * Obter pedidos de um utilizador específico
- */
-function getUserOrders($userId) {
-    $db = getDatabaseConnection();
-    
-    $query = "
-        SELECT 
-            sd.id as order_id,
-            sd.service_id,
-            sd.date_,
-            sd.time_,
-            sd.travel_fee,
-            sd.final_price,
-            r.status_,
-            s.name_ as service_name,
-            s.description_,
-            s.duration,
-            s.price_per_hour,
-            s.promotion,
-            u.name_ as freelancer_name,
-            u.username as freelancer_username,
-            c.name_ as category_name
-        FROM Service_Data sd
-        JOIN Service_ s ON sd.service_id = s.id
-        JOIN User_ u ON s.freelancer_id = u.id
-        JOIN Category c ON s.category_id = c.id
-        JOIN Request r ON r.service_data_id = sd.id
-        JOIN Message_ m ON r.message_id = m.id
-        WHERE m.sender_id = :user_id
-        ORDER BY sd.date_ DESC, sd.time_ DESC
-    ";
-    
-    $stmt = $db->prepare($query);
-    $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-
-/**
- * Obter estatísticas dos pedidos de um utilizador
- */
-function getOrderStats($userId) {
-    $db = getDatabaseConnection();
-
-    $query = "
-        SELECT 
-            COUNT(*) AS total_orders,
-            COUNT(CASE WHEN r.status_ = 'completed' THEN 1 END) AS completed_orders,
-            COUNT(CASE WHEN r.status_ = 'accepted' THEN 1 END) AS accepted_orders,
-            COUNT(CASE WHEN r.status_ = 'paid' THEN 1 END) AS paid_orders,
-            COALESCE(SUM(CASE WHEN r.status_ IN ('paid', 'completed') THEN r.price ELSE 0 END), 0) AS total_spent
-        FROM Request r
-        INNER JOIN Message_ m ON r.message_id = m.id
-        WHERE m.sender_id = :user_id
-          AND m.body_ LIKE 'Pedido:%'
-    ";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-
 // ===== FUNÇÕES AUXILIARES =====
 
 /**
@@ -821,6 +755,79 @@ function getServiceSuggestions($keyword) {
     }
     
     return $suggestions;
+}
+
+/**
+ * Obtém pedidos de um utilizador específico
+ */
+function getUserOrders($userId) {
+    $db = getDatabaseConnection();
+    
+    $query = "
+        SELECT 
+            sd.id as order_id,
+            sd.service_id,
+            sd.date_,
+            sd.time_,
+            sd.travel_fee,
+            sd.final_price,
+            sd.status_ as service_status,
+            r.status_ as request_status,
+            r.title as request_title,
+            r.price as request_price,
+            r.duration,
+            s.name_ as service_name,
+            s.description_,
+            s.price_per_hour,
+            s.promotion,
+            u.name_ as freelancer_name,
+            u.username as freelancer_username,
+            c.name_ as category_name,
+            COALESCE(r.status_, sd.status_) as status_
+        FROM Service_Data sd
+        JOIN Service_ s ON sd.service_id = s.id
+        JOIN User_ u ON s.freelancer_id = u.id
+        JOIN Category c ON s.category_id = c.id
+        LEFT JOIN Request r ON r.service_data_id = sd.id
+        WHERE sd.user_id = :user_id
+        ORDER BY sd.date_ DESC, sd.time_ DESC
+    ";
+    
+    $stmt = $db->prepare($query);
+    $stmt->execute([':user_id' => $userId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Obtém estatísticas dos pedidos de um utilizador
+ */
+function getOrderStats($userId) {
+    $db = getDatabaseConnection();
+
+    $query = "
+        SELECT 
+            COUNT(sd.id) AS total_orders,
+            COUNT(CASE WHEN COALESCE(r.status_, sd.status_) = 'completed' THEN 1 END) AS completed_orders,
+            COUNT(CASE WHEN COALESCE(r.status_, sd.status_) = 'accepted' THEN 1 END) AS accepted_orders,
+            COUNT(CASE WHEN COALESCE(r.status_, sd.status_) = 'paid' THEN 1 END) AS paid_orders,
+            COALESCE(SUM(CASE WHEN COALESCE(r.status_, sd.status_) IN ('paid', 'completed') THEN sd.final_price ELSE 0 END), 0) AS total_spent
+        FROM Service_Data sd
+        LEFT JOIN Request r ON r.service_data_id = sd.id
+        WHERE sd.user_id = :user_id
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([':user_id' => $userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Garantir que todos os valores são numéricos
+    return [
+        'total_orders' => (int)$result['total_orders'],
+        'completed_orders' => (int)$result['completed_orders'],
+        'accepted_orders' => (int)$result['accepted_orders'],
+        'paid_orders' => (int)$result['paid_orders'],
+        'total_spent' => (float)$result['total_spent']
+    ];
 }
 
 ?>

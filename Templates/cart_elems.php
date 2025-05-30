@@ -95,11 +95,6 @@ function drawCartSummary($total, $cartItems, $currencyInfo = null) {
             <h4 class="subtotal-value"><?= $currencyInfo['symbol'] ?><?= number_format($validTotal, 2, ',', '') ?></h4>
         </div>
 
-        <div class="custos-deslocação">
-            <h4>Custos de Deslocação</h4>
-            <h4><?= $currencyInfo['symbol'] ?>0,<span class="decimais">00</span></h4>
-        </div>
-
         <div class="total">
             <h1>Total</h1>
             <h1 class="Preco-final"><?= $currencyInfo['symbol'] ?><?= number_format($validTotal, 2, ',', '') ?></h1>
@@ -107,6 +102,8 @@ function drawCartSummary($total, $cartItems, $currencyInfo = null) {
 
         <form method="post" action="/Views/checkout.php">
             <input type="hidden" name="total" value="<?= number_format($validTotal, 2, '.', '') ?>">
+            <input type="hidden" name="total_price" value="<?= number_format($validTotal, 2, '.', '') ?>">
+            <input type="hidden" name="amount_paid" value="<?= number_format($validTotal / 2, 2, '.', '') ?>">
             <input type="hidden" name="currency_code" value="<?= htmlspecialchars($currencyInfo['code']) ?>">
             <input type="hidden" name="currency_symbol" value="<?= htmlspecialchars($currencyInfo['symbol']) ?>">
 

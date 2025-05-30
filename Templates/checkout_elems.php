@@ -65,7 +65,6 @@ function drawServiceFields($services) {
  */
 function drawPaymentSummary($total, $amountToPay, $currencySymbol = '€') { ?>
   <div class="resumo-pagamento">
-    <p><strong>Total:</strong> <?= $currencySymbol ?><?= number_format($total, 2, ',', '') ?></p>
-    <p><strong>A pagar agora (50%):</strong> <?= $currencySymbol ?><?= number_format($amountToPay, 2, ',', '') ?></p>
+    <p><strong>Total:</strong> <?= $currencySymbol ?><?= number_format($amountToPay, 2, ',', '') ?></p>
   </div>
 <?php }

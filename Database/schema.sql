@@ -172,7 +172,7 @@ CREATE TABLE Message_ (
 CREATE TABLE Request (
     id INTEGER PRIMARY KEY,
     service_data_id INTEGER,
-    message_id INTEGER NOT NULL,
+    message_id INTEGER,
     title TEXT NOT NULL,
     price REAL NOT NULL,
     duration INTEGER NOT NULL,

@@ -3,33 +3,48 @@ session_start();
 require_once("../Templates/common_elems.php");
 require_once("../Templates/checkout_elems.php");
 require_once("../Controllers/distancesCalculationController.php");
+require_once("../Utils/session.php");
 
-drawHeader("Finalizar compra", ["../Styles/Cart&Checkout.css"]);
-
-if (!isset($_POST['total'])) {
-    echo "<p>Erro: total em falta.</p>";
-    drawFooter();
+// Verificar se o utilizador está logado
+if (!isUserLoggedIn()) {
+    $_SESSION['error'] = "Deve fazer login para finalizar a compra.";
+    header("Location: auth.php");
     exit;
 }
 
-$services = $_POST['services'] ?? [];
-$total = floatval($_POST['total']);
-$currencyCode = $_POST['currency_code'] ?? 'eur';
-$currencySymbol = $_POST['currency_symbol'] ?? '€';
+// Verificar se há itens no carrinho
+if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+    $_SESSION['error'] = "Carrinho vazio. Adicione itens antes de finalizar a compra.";
+    header("Location: cart.php");
+    exit;
+}
 
-// Se não há informação de moeda, obter do utilizador atual
-if (!isset($_POST['currency_code'])) {
-    $currencyInfo = getUserCurrencyInfo();
+$cartItems = $_SESSION['cart'];
+$currencyInfo = getUserCurrencyInfo();
+
+// Calcular total do carrinho
+$total = 0;
+$services = [];
+foreach ($cartItems as $item) {
+    $total += floatval($item['price']);
+    $services[] = $item['title'];
+}
+
+// Se vier de POST (do formulário do carrinho), usar esses dados
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['total'])) {
+    $total = floatval($_POST['total']);
+    $currencyCode = $_POST['currency_code'] ?? $currencyInfo['code'];
+    $currencySymbol = $_POST['currency_symbol'] ?? $currencyInfo['symbol'];
+    $services = $_POST['services'] ?? $services;
+} else {
+    // Usar dados do carrinho direto
     $currencyCode = $currencyInfo['code'];
     $currencySymbol = $currencyInfo['symbol'];
-    
-    // Converter o total se necessário (caso venha em EUR)
-    if ($currencyCode !== 'eur') {
-        $total = convertCurrency($total, $currencyCode);
-    }
 }
 
 $amountToPay = $total / 2;
+
+drawHeader("Finalizar compra", ["../Styles/Cart&Checkout.css"]);
 ?>
 
 <div class="page-container">
@@ -62,10 +77,14 @@ $amountToPay = $total / 2;
 
     <?php drawPaymentSummary($total, $amountToPay, $currencySymbol); ?>
 
-    <input type="hidden" name="total_price" value="<?= $total ?>" />
-    <input type="hidden" name="amount_paid" value="<?= $amountToPay ?>" />
-    <input type="hidden" name="currency_code" value="<?= $currencyCode ?>" />
-    <input type="hidden" name="currency_symbol" value="<?= $currencySymbol ?>" />
+    <!-- Campos ocultos com dados do checkout -->
+    <input type="hidden" name="total_price" value="<?= number_format($total, 2, '.', '') ?>" />
+    <input type="hidden" name="amount_paid" value="<?= number_format($amountToPay, 2, '.', '') ?>" />
+    <input type="hidden" name="currency_code" value="<?= htmlspecialchars($currencyCode) ?>" />
+    <input type="hidden" name="currency_symbol" value="<?= htmlspecialchars($currencySymbol) ?>" />
+
+    <!-- Serializar dados do carrinho para processamento -->
+    <input type="hidden" name="cart_data" value="<?= htmlspecialchars(json_encode($cartItems)) ?>" />
 
     <?php foreach ($services as $s): ?>
       <input type="hidden" name="services[]" value="<?= htmlspecialchars($s) ?>">

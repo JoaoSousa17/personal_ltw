@@ -27,7 +27,7 @@ drawHeader("Handee - Criar Novo Serviço", ["/Styles/product.css"]);
         <h2>Criar Novo Serviço</h2>
         <p>Publique o seu serviço e comece a ganhar dinheiro hoje mesmo</p>
         <a href="/Views/orders/myServices.php" id="link-back-button">
-            <img src="/Images/site/otherPages/back-icon.png" alt="Voltar" class="back-button">
+            <img src="/Images/site/admin/backArrow.png" alt="Voltar" class="back-button">
         </a>
     </section>
 

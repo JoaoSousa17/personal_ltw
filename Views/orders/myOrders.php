@@ -12,7 +12,7 @@ if (!isUserLoggedIn()) {
 
 $currentUserId = getCurrentUserId();
 
-// Obter pedidos do utilizador (será implementado no serviceController)
+// Obter pedidos do utilizador
 $orders = getUserOrders($currentUserId);
 $stats = getOrderStats($currentUserId);
 
@@ -63,7 +63,7 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                     <i class="fas fa-euro-sign"></i>
                 </div>
                 <div class="stat-info">
-                    <h3><?php echo number_format($stats['total_spent'], 2); ?>€</h3>
+                    <h3><?php echo number_format($stats['total_spent'] / 60, 2); ?>€</h3>
                     <p>Total Gasto</p>
                 </div>
             </div>
@@ -100,9 +100,13 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                             $statusClass = 'status-paid';
                             $statusText = 'Pago';
                             break;
-                        default:
+                        case 'pending':
                             $statusClass = 'status-pending';
                             $statusText = 'Pendente';
+                            break;
+                        default:
+                            $statusClass = 'status-unknown';
+                            $statusText = 'Estado Desconhecido';
                     }
                     
                     $orderDate = date('d/m/Y', strtotime($order['date_']));
@@ -147,7 +151,7 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                                 
                                 <div class="detail-item">
                                     <span class="detail-label">Preço Final:</span>
-                                    <span class="detail-value price-highlight"><?php echo number_format($order['final_price'], 2); ?>€</span>
+                                    <span class="detail-value price-highlight"><?php echo number_format($order['final_price'] /60, 2); ?>€</span>
                                 </div>
                             </div>
                             
@@ -159,21 +163,16 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
                         
                         <div class="order-actions">
                             <?php if ($order['status_'] === 'completed'): ?>
-                                <button class="btn-feedback" onclick="openFeedbackModal(<?php echo $order['order_id']; ?>)">
+                                <button class="btn-feedback" onclick="openFeedbackModal(<?php echo $order['service_id']; ?>, '<?php echo htmlspecialchars($order['service_name']); ?>')">
                                     <i class="fas fa-star"></i>
                                     Avaliar Serviço
                                 </button>
                             <?php endif; ?>
                             
-                            <a href="/Views/messages.php" class="btn-contact">
+                            <a href="/Views/messages.php?freelancer=<?php echo $order['freelancer_username']; ?>" class="btn-contact">
                                 <i class="fas fa-envelope"></i>
                                 Contactar Prestador
                             </a>
-                            
-                            <button class="btn-details" onclick="viewOrderDetails(<?php echo $order['order_id']; ?>)">
-                                <i class="fas fa-info-circle"></i>
-                                Ver Detalhes
-                            </button>
                             
                             <?php if ($order['status_'] === 'accepted'): ?>
                                 <button class="btn-add-cart" onclick="addToCart(<?php echo $order['order_id']; ?>)">
@@ -197,24 +196,36 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
             <span class="modal-close" onclick="closeFeedbackModal()">&times;</span>
         </div>
         <div class="modal-body">
-            <form id="feedbackForm">
-                <input type="hidden" id="feedbackOrderId" name="order_id">
+            <form id="feedbackForm" action="/Controllers/feedbackController.php" method="POST">
+                <input type="hidden" name="action" value="create_feedback">
+                <input type="hidden" id="feedbackServiceId" name="service_id">
+                
+                <div class="form-group">
+                    <label>Serviço:</label>
+                    <p id="serviceName" class="service-name-display"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackTitle">Título:</label>
+                    <input type="text" id="feedbackTitle" name="title" required placeholder="Título da sua avaliação">
+                </div>
                 
                 <div class="form-group">
                     <label>Avaliação:</label>
                     <div class="rating-stars">
+                        <span class="star" data-rating="0.5">☆</span>
                         <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="1.5">☆</span>
                         <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="2.5">☆</span>
                         <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="3.5">☆</span>
                         <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="4.5">☆</span>
                         <span class="star" data-rating="5">★</span>
                     </div>
-                    <input type="hidden" id="ratingValue" name="rating" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="feedbackTitle">Título (opcional):</label>
-                    <input type="text" id="feedbackTitle" name="title" placeholder="Resumo da sua experiência">
+                    <input type="hidden" id="ratingValue" name="evaluation" required>
+                    <p class="rating-text">Clique nas estrelas para avaliar</p>
                 </div>
                 
                 <div class="form-group">
@@ -233,8 +244,9 @@ drawHeader("Handee - Os Meus Pedidos", ["/Styles/MyRequest&Items.css"]);
 
 <script>
 // Script para gestão de avaliações
-function openFeedbackModal(orderId) {
-    document.getElementById('feedbackOrderId').value = orderId;
+function openFeedbackModal(serviceId, serviceName) {
+    document.getElementById('feedbackServiceId').value = serviceId;
+    document.getElementById('serviceName').textContent = serviceName;
     document.getElementById('feedbackModal').style.display = 'block';
 }
 
@@ -245,11 +257,12 @@ function closeFeedbackModal() {
     document.querySelectorAll('.star').forEach(star => {
         star.classList.remove('active');
     });
+    document.getElementById('ratingValue').value = '';
 }
 
 function viewOrderDetails(orderId) {
     // Implementar visualização de detalhes do pedido
-    alert('Funcionalidade de detalhes do pedido em desenvolvimento');
+    alert('Funcionalidade de detalhes do pedido em desenvolvimento. Order ID: ' + orderId);
 }
 
 // Gestão das estrelas de avaliação
@@ -259,24 +272,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     stars.forEach(star => {
         star.addEventListener('click', function() {
-            const rating = this.getAttribute('data-rating');
+            const rating = parseFloat(this.getAttribute('data-rating'));
             ratingInput.value = rating;
             
             // Reset all stars
             stars.forEach(s => s.classList.remove('active'));
             
             // Highlight selected stars
-            for (let i = 0; i < rating; i++) {
-                stars[i].classList.add('active');
-            }
+            stars.forEach(s => {
+                if (parseFloat(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('active');
+                }
+            });
+            
+            // Update rating text
+            document.querySelector('.rating-text').textContent = `Avaliação: ${rating} estrela${rating !== 1 ? 's' : ''}`;
         });
         
         star.addEventListener('mouseover', function() {
-            const rating = this.getAttribute('data-rating');
+            const rating = parseFloat(this.getAttribute('data-rating'));
             
             // Highlight stars on hover
-            stars.forEach((s, index) => {
-                if (index < rating) {
+            stars.forEach(s => {
+                if (parseFloat(s.getAttribute('data-rating')) <= rating) {
                     s.classList.add('hover');
                 } else {
                     s.classList.remove('hover');
@@ -288,18 +306,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.rating-stars').addEventListener('mouseleave', function() {
         stars.forEach(s => s.classList.remove('hover'));
     });
-    
-    // Gestão do formulário de feedback
-    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        // Aqui implementaria o envio para o servidor
-        // Por agora, apenas simular sucesso
-        alert('Avaliação enviada com sucesso!');
-        closeFeedbackModal();
-    });
 });
 
 // Fechar modal clicando fora dele
@@ -310,7 +316,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Função corrigida para adicionar ao carrinho usando o serviceController
+// Função para adicionar ao carrinho usando o serviceController
 function addToCart(orderId) {
     // Criar FormData para enviar via POST
     const formData = new FormData();
@@ -334,6 +340,9 @@ function addToCart(orderId) {
             alert('Pedido adicionado ao carrinho com sucesso!');
             // Opcional: atualizar contador do carrinho na interface
             updateCartCounter(result.total);
+            
+            // Remover botão de adicionar ao carrinho após sucesso
+            button.style.display = 'none';
         } else {
             alert('Erro ao adicionar ao carrinho: ' + (result.message || 'Erro desconhecido'));
         }
@@ -343,9 +352,11 @@ function addToCart(orderId) {
         alert('Erro inesperado ao adicionar ao carrinho.');
     })
     .finally(() => {
-        // Restaurar botão
-        button.innerHTML = originalText;
-        button.disabled = false;
+        // Restaurar botão se não foi escondido
+        if (button.style.display !== 'none') {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
     });
 }
 

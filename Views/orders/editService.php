@@ -41,7 +41,7 @@ drawHeader("Handee - Editar Serviço", ["/Styles/product.css"]);
         <h2>Editar Serviço</h2>
         <p>Atualize os detalhes do seu serviço</p>
         <a href="/Views/orders/myServices.php" id="link-back-button">
-            <img src="/Images/site/otherPages/back-icon.png" alt="Voltar" class="back-button">
+            <img src="/Images/site/admin/backArrow.png" alt="Voltar" class="back-button">
         </a>
     </section>
 

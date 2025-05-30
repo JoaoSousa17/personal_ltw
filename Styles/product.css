@@ -1,0 +1,1489 @@
+/******************
+CATEGORIES & PRODUCT - VARIABLES
+******************/
+
+/* Variáveis CSS para páginas de categorias e produtos */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --accent-color: #ff6b6b;
+    --text-color: #333;
+    --light-text: #666;
+    --boxShadow-color: rgba(0, 0, 0, 0.15);
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
+
+/******************
+CATEGORIES PAGE
+******************/
+
+/* Container principal das categorias */
+.categories-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+/* Cabeçalho da página */
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Título principal da página */
+.page-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Subtítulo da página */
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--light-text);
+}
+
+/* Seção de showcase das categorias */
+.categories-showcase {
+    margin-bottom: 4rem;
+}
+
+/* Grid das categorias */
+.categories-grid {
+    margin-bottom: 4rem;
+}
+
+/* Controles de filtro */
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Caixa de pesquisa */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Input da pesquisa */
+.search-box input {
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    width: 250px;
+    transition: all var(--transition-speed);
+}
+
+/* Focus do input de pesquisa */
+.search-box input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.1);
+}
+
+/* Botão da pesquisa */
+.search-box button {
+    position: absolute;
+    right: 0.5rem;
+    border: none;
+    background: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all var(--transition-speed);
+}
+
+/* Hover do botão de pesquisa */
+.search-box button:hover {
+    color: var(--accent-color);
+}
+
+/* Opções de ordenação */
+.sort-options select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    background-color: white;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+/* Focus do select de ordenação */
+.sort-options select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.1);
+}
+
+/* Lista das categorias */
+.categories-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+/* Card da categoria */
+.category-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 3px 10px var(--boxShadow-color);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hover do card de categoria */
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px var(--boxShadow-color);
+}
+
+/* Imagem da categoria */
+.category-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+/* Imagem dentro do container */
+.category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-speed);
+}
+
+/* Hover da imagem */
+.category-card:hover .category-image img {
+    transform: scale(1.05);
+}
+
+/* Detalhes da categoria */
+.category-details {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Título da categoria */
+.category-details h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+/* Contagem de produtos */
+.product-count {
+    color: var(--light-text);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Botão ver categoria */
+.btn-view-category {
+    margin-top: auto;
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    text-align: center;
+    transition: background-color var(--transition-speed);
+}
+
+/* Hover do botão ver categoria */
+.btn-view-category:hover {
+    background-color: #3a5d97;
+}
+
+/* Estado sem categorias */
+.no-categories {
+    grid-column: 1 / -1;
+    background-color: var(--secondary-color);
+    padding: 3rem;
+    text-align: center;
+    border-radius: var(--border-radius);
+}
+
+/* Ícone sem categorias */
+.no-categories i {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+/* Texto sem categorias */
+.no-categories p {
+    font-size: 1.1rem;
+    color: var(--light-text);
+}
+
+/* Paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+/* Botão da paginação */
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+/* Hover do botão de paginação */
+.pagination-btn:hover:not([disabled]) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Botão desabilitado */
+.pagination-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Informação da paginação */
+.pagination-info {
+    font-size: 0.9rem;
+    color: var(--light-text);
+}
+
+/* Produtos em destaque por categoria */
+.featured-by-category {
+    margin-bottom: 3rem;
+}
+
+/* Tabs das categorias */
+.category-tabs {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 10px var(--boxShadow-color);
+    overflow: hidden;
+}
+
+/* Header dos tabs */
+.tabs-header {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    background-color: var(--secondary-color);
+}
+
+/* Botão do tab */
+.tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--light-text);
+    transition: all var(--transition-speed);
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+}
+
+/* Hover do botão tab */
+.tab-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+/* Tab ativo */
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Conteúdo dos tabs */
+.tabs-content {
+    min-height: 300px;
+}
+
+/* Conteúdo individual do tab */
+.tab-content {
+    display: none;
+    padding: 2rem;
+}
+
+/* Tab ativo */
+.tab-content.active {
+    display: block;
+}
+
+/* Placeholder do produto */
+.product-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+}
+
+/* Texto do placeholder */
+.product-placeholder p {
+    color: var(--light-text);
+    font-style: italic;
+}
+
+/******************
+PRODUCT PAGE
+******************/
+
+/* Body da página de produto */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    font-family: 'Montserrat', sans-serif;
+    color: #121638;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Container da página */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+/* Container principal do produto */
+.product-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1800px;
+    height: 400px;
+    padding: 30px;
+    gap: 20px;
+}
+
+/* Imagem do produto */
+.product-image {
+    flex: 0 0 70%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 800px;
+    height: 500px;
+    overflow: hidden;
+}
+
+/* Imagem dentro da caixa */
+.image-box img {
+    width: 100%;
+    height: 100%;
+    width: 800px;
+    height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Botão da imagem */
+.image-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Botão esquerdo */
+.left-btn {
+    left: 10px;
+}
+
+/* Botão direito */
+.right-btn {
+    right: 10px;
+}
+
+/* Hover dos botões de imagem */
+.image-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Informações do produto */
+.product-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botão das informações do produto */
+.product-info button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+    width: 100%;
+    white-space: nowrap;
+    height: 70%;
+}
+
+/* Hover do botão */
+.product-info button:hover {
+    background-color: #3a7bc8;
+    transform: scale(1.05);
+}
+
+/* Estado ativo do botão */
+.product-info button:active {
+    transform: scale(0.98);
+}
+
+/* Espaçamento dos blocos */
+.product-image-side > div + div,
+.product-info-side > div + div {
+    margin-top: 20px;
+}
+
+/* Estilo dos blocos */
+.product-image-side > div,
+.product-info-side > div {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.13);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Categorias */
+.categories {
+    display: flex;
+    gap: 10px;
+}
+
+/* Item de categoria */
+.categories > div {
+    font-size: x-small;
+    border: 1px solid black;
+    padding: 6px 12px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    user-select: none;
+}
+
+/* Descrição do produto */
+.product-description {
+    font-size: small;
+}
+
+/* Subtítulo h6 */
+h6 {
+    font-size: xx-small;
+    color: gray;
+    margin: 0;
+}
+
+/* Anunciante do produto */
+.product-advertiser {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    padding: 8px 0;
+    gap: 8px;
+}
+
+/* Parágrafo do anunciante */
+.product-advertiser p {
+    margin: 0;
+}
+
+/* Ícone do usuário */
+.user-icon {
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ebebeb;
+}
+
+/* Seção de reportar */
+.Report {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+/* Imagem da flag */
+.flag-image {
+    width: 30px;
+    height: auto;
+}
+
+/* Badge de desconto */
+.discount-badge {
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    align-self: flex-end;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* Informações de preço */
+.price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+/* Preço original */
+.original-price {
+    color: gray;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Preço por hora */
+.price-hour {
+    color: #4a90e2;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Duração */
+.duration {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Divisor de informações do produto */
+.product-info > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+/******************
+PRODUCT - MESSAGE POPUP
+******************/
+
+/* Popup de mensagens */
+.message-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    height: 400px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+/* Header do popup */
+.popup-header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    flex-shrink: 0;
+    cursor: default;
+}
+
+/* Botões do popup */
+#minimizeBtn,
+.popup-close-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover dos botões */
+#minimizeBtn:hover,
+.popup-close-btn:hover {
+    color: #757575;
+    transform: scale(1.3);
+}
+
+/* Corpo do popup */
+.popup-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* Lista de mensagens */
+.message-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    gap: 10px;
+    padding-right: 4px;
+}
+
+/* Input de mensagem */
+.message-input {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    flex-shrink: 0;
+    border-top: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Textarea do input */
+.message-input textarea {
+    flex: 1;
+    height: 40px;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    transition: border 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Focus do textarea */
+.message-input textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* Botão do input */
+.message-input button {
+    padding: 6px 12px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover do botão input */
+.message-input button:hover {
+    background-color: #357ac9;
+}
+
+/* Bubble de mensagem */
+.message-bubble {
+    padding: 10px 12px;
+    margin: 6px;
+    border-radius: 12px;
+    max-width: 75%;
+    font-size: 14px;
+    position: relative;
+    word-wrap: break-word;
+    background-color: #e1f0ff;
+    align-self: flex-end;
+    text-align: right;
+}
+
+/* Popup minimizado */
+.message-popup.minimized {
+    width: 250px;
+    height: 40px;
+    overflow: visible;
+    border-radius: 12px 12px 12px 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+/* Elementos ocultos quando minimizado */
+.message-popup.minimized .popup-body,
+.message-popup.minimized .message-input {
+    display: none;
+}
+
+/* Header quando minimizado */
+.message-popup.minimized .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Botão minimizar oculto quando minimizado */
+.message-popup.minimized #minimizeBtn {
+    display: none;
+}
+
+/* Classe para ocultar */
+.hidden {
+    display: none !important;
+}
+
+/* Mensagem enviada */
+.mensagem-enviada {
+    padding: 10px 12px;
+    margin: 6px;
+    border-radius: 12px;
+    max-width: 75%;
+    font-size: 14px;
+    position: relative;
+    word-wrap: break-word;
+    background-color: #e1f0ff;
+    align-self: flex-end;
+    text-align: right;
+}
+
+/* Mensagem recebida */
+.mensagem-recebida {
+    background-color: #b1d7fc;
+    align-self: flex-start;
+    text-align: left;
+}
+
+/* Tempo da mensagem */
+.message-time {
+    display: block;
+    font-size: 9px;
+    color: #767676;
+    margin-top: 5px;
+    text-align: right;
+}
+
+/******************
+CREATE SERVICE FORMS
+******************/
+
+/* Container de criação de serviço */
+.create-service-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Alertas */
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Alerta de sucesso */
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+/* Alerta de erro */
+.alert-error {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+/* Alerta de aviso */
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #856404;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+/* Formulário de criação de serviço */
+.create-service-form {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Seções do formulário */
+.form-sections {
+    padding: 0;
+}
+
+/* Seção individual do formulário */
+.form-section {
+    padding: 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Última seção sem borda */
+.form-section:last-child {
+    border-bottom: none;
+}
+
+/* Título da seção */
+.form-section h3 {
+    color: #4a90e2;
+    font-size: 1.4rem;
+    margin: 0 0 25px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Ícone do título */
+.form-section h3 i {
+    font-size: 1.2rem;
+}
+
+/* Grupo de formulário */
+.form-group {
+    margin-bottom: 25px;
+}
+
+/* Label do grupo */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+/* Inputs do formulário */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* Focus dos inputs */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Texto pequeno do formulário */
+.form-group small {
+    display: block;
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* Textarea */
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+}
+
+/* Layout de duas colunas */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+/* Preview de preços */
+.price-preview {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    border-left: 4px solid #4a90e2;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Título do preview */
+.price-preview h4 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Cálculo de preço */
+.price-calculation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 0;
+}
+
+/* Label do preço */
+.price-label {
+    font-weight: 500;
+    color: #555;
+}
+
+/* Valor do preço */
+.price-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #4a90e2;
+}
+
+/* Valor com desconto */
+.price-value.discount {
+    color: #28a745;
+}
+
+/* Container do checkbox */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Input do checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Checkmark personalizado */
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #ddd;
+    position: relative;
+}
+
+/* Hover do checkbox */
+.checkbox-container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* Checkbox selecionado */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: #4a90e2;
+    border-color: #4a90e2;
+}
+
+/* After do checkmark */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* After quando checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Estilo do after */
+.checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Preview de imagens */
+.image-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+    min-height: 50px;
+}
+
+/* Container da imagem preview */
+.preview-image-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover do container de imagem */
+.preview-image-container:hover {
+    transform: scale(1.05);
+}
+
+/* Imagem de preview */
+.preview-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botão remover imagem */
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Hover do botão remover imagem */
+.remove-image-btn:hover {
+    background: #dc3545;
+    transform: scale(1.1);
+}
+
+/* Input de arquivo estilizado */
+.form-group input[type="file"] {
+    padding: 10px;
+    border: 2px dashed #e1e5e9;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover do input de arquivo */
+.form-group input[type="file"]:hover {
+    border-color: #4a90e2;
+    background-color: rgba(74, 144, 226, 0.05);
+}
+
+/* Focus do input de arquivo */
+.form-group input[type="file"]:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* Contador de imagens */
+.image-count {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Ações do formulário */
+.form-actions {
+    padding: 30px;
+    background-color: #f8f9fa;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Botões de ação */
+.btn-create,
+.btn-cancel {
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 160px;
+    justify-content: center;
+}
+
+/* Botão criar */
+.btn-create {
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+/* Hover do botão criar */
+.btn-create:hover {
+    background: linear-gradient(135deg, #357abd 0%, #2c5aa0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+/* Botão cancelar */
+.btn-cancel {
+    background: transparent;
+    color: #6c757d;
+    border: 2px solid #6c757d;
+}
+
+/* Hover do botão cancelar */
+.btn-cancel:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/******************
+MEDIA QUERIES - Responsividade
+******************/
+
+/* Tablets grandes */
+@media (max-width: 1100px) {
+    /* Container de produto responsivo */
+    .product-container {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 50px 20px 20px;
+        box-sizing: border-box;
+    }
+
+    /* Lados do produto */
+    .product-image-side,
+    .product-info-side {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Imagem e info do produto */
+    .product-image,
+    .product-info {
+        width: 100%;
+        height: auto;
+        flex: none;
+    }
+
+    /* Caixas de imagem e info */
+    .image-box,
+    .product-info > div {
+        height: auto;
+        width: 100%;
+    }
+
+    /* Elementos do lado direito */
+    .product-info-side > div,
+    .product-description,
+    .product-advertiser,
+    .Report {
+        width: 100%;
+    }
+
+    /* Altura mínima da imagem */
+    .product-image {
+        min-height: 200px;
+    }
+
+    /* Caixa de imagem */
+    .image-box {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Elementos do lado da imagem */
+    .product-image-side > div {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+    /* Header das seções */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    /* Controles de filtro */
+    .filter-controls {
+        width: 100%;
+    }
+    
+    /* Caixa de pesquisa */
+    .search-box {
+        flex-grow: 1;
+    }
+    
+    /* Input de pesquisa */
+    .search-box input {
+        width: 100%;
+    }
+
+    /* Container de criação de serviço */
+    .create-service-container {
+        padding: 10px;
+    }
+    
+    /* Seção do formulário */
+    .form-section {
+        padding: 20px;
+    }
+    
+    /* Linha do formulário */
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    /* Ações do formulário */
+    .form-actions {
+        flex-direction: column;
+        padding: 20px;
+    }
+    
+    /* Botões */
+    .btn-create,
+    .btn-cancel {
+        width: 100%;
+    }
+    
+    /* Preview de imagem */
+    .image-preview {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+    }
+    
+    /* Imagem de preview */
+    .preview-image {
+        height: 100px;
+    }
+    
+    /* Preview de preço */
+    .price-preview {
+        padding: 20px;
+    }
+    
+    /* Título da seção */
+    .form-section h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    /* Lista de categorias */
+    .categories-list {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    /* Controles de filtro */
+    .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    /* Opções de ordenação */
+    .sort-options {
+        width: 100%;
+    }
+    
+    /* Select de ordenação */
+    .sort-options select {
+        width: 100%;
+    }
+    
+    /* Header dos tabs */
+    .tabs-header {
+        flex-wrap: nowrap;
+    }
+
+    /* Título da página */
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    /* Título da seção */
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Lista de categorias */
+    .categories-list {
+        grid-template-columns: 1fr;
+    }
+
+    /* Container de criação de serviço */
+    .create-service-container {
+        margin: 1rem;
+        padding: 0;
+    }
+    
+    /* Seção do formulário mobile */
+    .form-section {
+        padding: 15px;
+    }
+    
+    /* Ações do formulário mobile */
+    .form-actions {
+        padding: 15px;
+    }
+    
+    /* Preview de imagem mobile */
+    .image-preview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    /* Imagem de preview mobile */
+    .preview-image {
+        height: 80px;
+    }
+    
+    /* Preview de preço mobile */
+    .price-preview {
+        padding: 15px;
+    }
+    
+    /* Título da seção mobile */
+    .form-section h3 {
+        font-size: 1.1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    /* Inputs mobile */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+}
+
+/* Mobile pequeno */
+@media (max-width: 576px) {
+    /* Título da página muito pequeno */
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    /* Container de serviço */
+    .create-service-container {
+        margin: 0.5rem;
+    }
+    
+    /* Seção do formulário muito pequena */
+    .form-section {
+        padding: 10px;
+    }
+    
+    /* Preview de imagem muito pequeno */
+    .image-preview {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Checkbox container pequeno */
+    .checkbox-container {
+        font-size: 0.9rem;
+    }
+    
+    /* Checkmark pequeno */
+    .checkmark {
+        height: 16px;
+        width: 16px;
+    }
+    
+    /* After pequeno */
+    .checkbox-container .checkmark:after {
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 8px;
+    }
+}

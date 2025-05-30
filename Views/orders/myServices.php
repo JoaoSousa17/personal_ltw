@@ -206,11 +206,6 @@ drawHeader("Handee - Os Meus Serviços", ["/Styles/MyRequest&Items.css"]);
                                 <i class="fas fa-external-link-alt"></i>
                                 Ver Anúncio
                             </a>
-                            
-                            <button class="btn-stats" onclick="viewServiceStats(<?php echo $service['id']; ?>)">
-                                <i class="fas fa-chart-bar"></i>
-                                Estatísticas
-                            </button>
                         </div>
                     </div>
                 <?php endforeach; ?>
