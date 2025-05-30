@@ -69,7 +69,7 @@ drawHeader("Handee - " . $pageTitle, ["/Styles/profile.css"]);
         <h2><?php echo $pageTitle; ?></h2>
         <p><?php echo $isOwnProfile ? 'Atualize as suas informações pessoais' : 'Editar informações do utilizador (Admin)'; ?></p>
         <a href="/Views/profile/profile.php<?php echo $isOwnProfile ? '' : '?id=' . $editUserId; ?>" id="link-back-button">
-            <img src="/Images/site/otherPages/back-icon.png" alt="Go Back" class="back-button">
+            <img src="/Images/site/admin/backArrow.png" alt="Go Back" class="back-button">
         </a>
     </section>
 

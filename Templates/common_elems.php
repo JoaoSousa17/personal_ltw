@@ -135,7 +135,7 @@ function drawHeader($title, $styles){
                             <?php if ($isAdmin): ?>
                                 <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
                                 <a href="/Views/admin/adminPannel.php">
-                                    <i class="fas fa-crown" style="margin-right: 8px;"></i>
+                                    <img src="/Images/site/header/admin-crown.png" style="margin-right: 8px; width: 1em;">
                                     Admin
                                 </a>
                             <?php endif; ?>
