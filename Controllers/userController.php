@@ -793,6 +793,20 @@ function getProfilePhotoUrl($userId) {
 }
 
 /**
+ * Promove um utilizador a administrador.
+ *
+ * @param int $id ID do utilizador.
+ * @return bool True se promovido com sucesso, False caso contrário.
+ */
+function promoteUserToAdmin($id) {
+    $db = getDatabaseConnection();
+    $user = User::findById($db, $id);
+    if (!$user) return false;
+
+    return $user->promoteToAdmin();
+}
+
+/**
  * Processamento de requisições HTTP para atualizações de perfil.
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {

@@ -21,6 +21,22 @@ $processedItems = [];
 // Log para debug
 error_log("Processando " . count($cartItems) . " itens no carrinho");
 
+if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    $total = 0;
+    foreach ($_SESSION['cart'] as $item) {
+        $total += floatval($item['price']);
+    }
+    
+    require_once("../Controllers/distancesCalculationController.php");
+    $currencyInfo = getUserCurrencyInfo();
+    
+    echo '<input type="hidden" name="total" value="' . number_format($total, 2, '.', '') . '">';
+    echo '<input type="hidden" name="total_price" value="' . number_format($total, 2, '.', '') . '">';
+    echo '<input type="hidden" name="amount_paid" value="' . number_format($total / 2, 2, '.', '') . '">';
+    echo '<input type="hidden" name="currency_code" value="' . htmlspecialchars($currencyInfo['code']) . '">';
+    echo '<input type="hidden" name="currency_symbol" value="' . htmlspecialchars($currencyInfo['symbol']) . '">';
+}
+
 // Processar cada item do carrinho
 foreach ($cartItems as $index => $item) {
     try {

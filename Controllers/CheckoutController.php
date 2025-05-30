@@ -1,5 +1,10 @@
 <?php
 session_start();
+require_once(dirname(__FILE__) . '/../Controllers/userController.php');
+require_once(dirname(__FILE__) . '/../Controllers/serviceController.php');
+require_once(dirname(__FILE__) . '/../Controllers/distancesCalculationController.php');
+require_once(dirname(__FILE__) . '/../Controllers/orderProcessingController.php');
+require_once(dirname(__FILE__) . '/../Utils/session.php');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -7,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Validação
+// Validação dos campos obrigatórios
 if (
     empty($_POST['name']) ||
     empty($_POST['email']) ||
@@ -19,23 +24,51 @@ if (
     exit;
 }
 
-// Recolher dados
-$order = [
-    'name'         => $_POST['name'],
-    'email'        => $_POST['email'],
-    'phone'        => $_POST['phone'] ?? '',
-    'address'      => $_POST['address'] ?? '',
-    'services'     => $_POST['services'] ?? [],
-    'total_price'  => floatval($_POST['total_price']),
-    'amount_paid'  => floatval($_POST['amount_paid']),
-    'notes'        => $_POST['notes'] ?? '',
-    'created_at'   => date('Y-m-d H:i:s')
+// Verificar se o utilizador está logado
+if (!isUserLoggedIn()) {
+    $_SESSION['error'] = "Deve fazer login para finalizar a compra.";
+    header("Location: ../Views/auth.php");
+    exit;
+}
+
+$userId = getCurrentUserId();
+
+// Verificar se existe carrinho
+if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+    $_SESSION['error'] = "Carrinho vazio. Adicione itens antes de finalizar a compra.";
+    header("Location: ../Views/cart.php");
+    exit;
+}
+
+// Recolher dados do formulário
+$customerData = [
+    'name' => trim($_POST['name']),
+    'email' => trim($_POST['email']),
+    'phone' => trim($_POST['phone'] ?? ''),
+    'address' => trim($_POST['address'] ?? ''),
+    'total_price' => floatval($_POST['total_price']),
+    'amount_paid' => floatval($_POST['amount_paid']),
+    'currency_code' => $_POST['currency_code'] ?? 'eur',
+    'currency_symbol' => $_POST['currency_symbol'] ?? '€',
+    'notes' => trim($_POST['notes'] ?? '')
 ];
 
-// Limpa o carrinho
-unset($_SESSION['cart']);
+// Processar checkout usando o controller dedicado
+$result = processCheckout($userId, $_SESSION['cart'], $customerData);
 
-// Redireciona com sucesso
-$_SESSION['success'] = "Encomenda recebida com sucesso!";
-header("Location: ../Views/mainPage.php");
-exit;
+if ($result['success']) {
+    // Limpar o carrinho
+    unset($_SESSION['cart']);
+    
+    // Guardar dados para a página de sucesso
+    $_SESSION['checkout_success'] = $result['data'];
+    $_SESSION['success'] = $result['message'];
+    
+    header("Location: ../Views/checkout_success.php");
+    exit;
+} else {
+    $_SESSION['error'] = $result['message'];
+    header("Location: ../Views/checkout.php");
+    exit;
+}
+?>

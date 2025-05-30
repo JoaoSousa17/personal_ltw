@@ -20,16 +20,17 @@ if (!isUserAdmin()) {
 
 // Processar promoção de usuário para admin
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promote_id'])) {
-    $userId = $_POST['promote_id'];
-    $user = getUserById($userId);
+    $userId = intval($_POST['promote_id']);
     
-    if ($user) {
-        // Atualizar o usuário para administrador
-        $updateData = ['is_admin' => true];
-        $result = updateUser($userId, $updateData);
-        
-        // Redirecionar para evitar reenvio do formulário
+    $result = promoteUserToAdmin($userId);
+    
+    if ($result) {
+        $_SESSION['success'] = 'Usuário promovido a administrador com sucesso!';
         header("Location: " . $_SERVER['PHP_SELF'] . "?promoted=1");
+        exit;
+    } else {
+        $_SESSION['error'] = 'Erro ao promover usuário a administrador.';
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit;
     }
 }
