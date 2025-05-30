@@ -70,19 +70,35 @@ if (!$service) {
     exit;
 }
 
+// Debug dos dados do serviço
+error_log("=== DEBUG SERVIÇO ===");
+error_log("ID: " . $service['id']);
+error_log("Título: " . $service['title']);
+error_log("Preço por hora: " . $service['price_per_hour']);
+error_log("Duração (minutos): " . $service['duration']);
+error_log("Promoção: " . $service['promotion']);
+error_log("====================");
+
 // Obter feedbacks do serviço
 $feedbacks = getServiceFeedbacks($serviceId);
 $feedbackStats = getServiceRating($serviceId);
 
 // Processamento de dados do serviço
-$price = $service['price_per_hour'];
-$duration = isset($service['duration']) ? (int)$service['duration'] : 0;
-$discount = $service['promotion'];
-$finalPrice = $price * (1 - $discount / 100.0);
+$pricePerHour = floatval($service['price_per_hour']);
+$duration = intval($service['duration']); // Duração em minutos
+$discount = intval($service['promotion']);
+
+// Calcular preço final com desconto
+$finalPricePerHour = $pricePerHour * (1 - $discount / 100.0);
 $hasDiscount = $discount > 0;
 
-// Formatação de preço e conversão de moeda
-$displayPrice = convertAndFormatPrice($finalPrice, $loggedInUser);
+// Debug do cálculo
+error_log("=== DEBUG CÁLCULOS ===");
+error_log("Preço original por hora: " . $pricePerHour);
+error_log("Desconto: " . $discount . "%");
+error_log("Preço final por hora: " . $finalPricePerHour);
+error_log("Duração em minutos: " . $duration);
+error_log("======================");
 
 // Processamento de imagens
 $images = explode(",", $service['image_paths'] ?? "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png");
@@ -117,14 +133,26 @@ drawHeader("Product", ["../Styles/Categories&Product.css", "../Styles/feedback.c
         <!-- Lado Direito: Informações e Freelancer -->
         <div class="product-info-side">
             <!-- Informações do Produto -->
-            <?php drawProductInfo(
+            <?php 
+            // Debug antes de chamar a função
+            error_log("=== ANTES DE drawProductInfo ===");
+            error_log("Date: " . $date);
+            error_log("Title: " . $title);
+            error_log("Final Price Per Hour: " . $finalPricePerHour);
+            error_log("Service ID: " . $serviceId);
+            error_log("Original Price Per Hour: " . ($hasDiscount ? $pricePerHour : 'null'));
+            error_log("Discount: " . $discount);
+            error_log("Duration (minutes): " . $duration);
+            error_log("================================");
+            
+            drawProductInfo(
                 $date, 
                 $title, 
-                $finalPrice, 
+                $finalPricePerHour, // Preço por hora em EUR
                 $serviceId, 
-                $hasDiscount ? $price : null, 
+                $hasDiscount ? $pricePerHour : null, 
                 $discount, 
-                $duration
+                $duration // Duração em minutos
             ); ?>
             
             <!-- Informações do Anunciante -->
@@ -148,7 +176,7 @@ drawHeader("Product", ["../Styles/Categories&Product.css", "../Styles/feedback.c
 
 <!-- Scripts da Página -->
 <script src="/Scripts/image-slide.js"></script>
-<script src="/Scripts/orders.js"></script>
-<script src="/Scripts/messages.js"></script>
+<script src="/Scripts/order.js"></script>
+<script src="/Scripts/popupMessages.js"></script>
 
 <?php drawFooter(); ?>

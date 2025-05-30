@@ -1,3 +1,27 @@
+-- Apagar tabelas com dependências primeiro
+DROP TABLE IF EXISTS Complaint;
+DROP TABLE IF EXISTS Request;
+DROP TABLE IF EXISTS Message_;
+DROP TABLE IF EXISTS Feedback;
+DROP TABLE IF EXISTS Service_Data;
+DROP TABLE IF EXISTS Service_;
+DROP TABLE IF EXISTS Category;
+DROP TABLE IF EXISTS Media;
+DROP TABLE IF EXISTS Unblock_Appeal;
+DROP TABLE IF EXISTS Reason_Block;
+DROP TABLE IF EXISTS Address_;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Prime;
+DROP TABLE IF EXISTS User_;
+DROP TABLE IF EXISTS Contact;
+DROP TABLE IF EXISTS Newsletter_email;
+DROP TABLE IF EXISTS distances_Porto;
+DROP TABLE IF EXISTS distances_Districts;
+
+-- Eliminar triggers (opcional mas recomendado se existirem conflitos)
+DROP TRIGGER IF EXISTS setExpDate_TablePrime;
+DROP TRIGGER IF EXISTS setFinalPrice_TableService_Data;
+
 /************
    TABLE CREATION
 ************/

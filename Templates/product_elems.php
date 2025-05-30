@@ -51,10 +51,39 @@ function drawProductDescription(string $description, array $categories) { ?>
  * Mostra as informações principais do produto (data, título, preço).
  * @param string $date
  * @param string $title
- * @param float $price
+ * @param float $finalPrice Preço final por hora (já com desconto aplicado, em EUR)
  * @param int $serviceId
+ * @param float|null $originalPrice Preço original por hora (sem desconto, em EUR) 
+ * @param int $discount Percentagem de desconto
+ * @param int $duration Duração em minutos (da base de dados)
  */
-function drawProductInfo(string $date, string $title, float $finalPrice, int $serviceId, ?float $originalPrice = null, int $discount = 0, int $duration = 0) { ?>
+function drawProductInfo(string $date, string $title, float $finalPrice, int $serviceId, ?float $originalPrice = null, int $discount = 0, int $duration = 0) { 
+    // CORRIGIDO: A duração vem em minutos da BD, converter para horas
+    $durationHours = $duration / 60.0;
+    
+    // Calcular preço total baseado na duração em horas
+    $totalPrice = $finalPrice * $durationHours;
+    
+    // Log para debug
+    error_log("Duration (minutes): " . $duration);
+    error_log("Duration (hours): " . $durationHours);
+    error_log("Price per hour: " . $finalPrice);
+    error_log("Total price: " . $totalPrice);
+    
+    // Obter informações da moeda do utilizador para conversão
+    require_once(dirname(__FILE__)."/../Controllers/distancesCalculationController.php");
+    $currencyInfo = getUserCurrencyInfo();
+    
+    // Converter preços para a moeda do utilizador
+    $finalPriceConverted = convertCurrency($finalPrice, $currencyInfo['code']);
+    $totalPriceConverted = convertCurrency($totalPrice, $currencyInfo['code']);
+    
+    $originalPriceConverted = null;
+    if ($originalPrice !== null) {
+        $originalPriceConverted = convertCurrency($originalPrice, $currencyInfo['code']);
+    }
+    
+    ?>
   <div class="product-info">
     <div>
       <h6>Publicado a <?= htmlspecialchars($date) ?></h6>
@@ -64,26 +93,36 @@ function drawProductInfo(string $date, string $title, float $finalPrice, int $se
         <div class="discount-badge"><?= $discount ?>% OFF</div>
       <?php endif; ?>
 
-
       <div class="price-info">
-        <?php if ($originalPrice !== null && $discount > 0): ?>
-          <p class="original-price"><s><?= number_format($originalPrice, 2, ',', '') ?>€</s></p>
+        <?php if ($originalPriceConverted !== null && $discount > 0): ?>
+          <p class="original-price">
+            <s><?= $currencyInfo['symbol'] ?><?= number_format($originalPriceConverted, 2, ',', '') ?></s>
+          </p>
         <?php endif; ?>
-        <h3 class="price-hour"><?= number_format($finalPrice, 2, ',', '') ?>€/h</h3>
-        <p class="duration"><?= $duration ?> hrs</p>
+        <h3 class="price-hour">
+          <?= $currencyInfo['symbol'] ?><?= number_format($finalPriceConverted, 2, ',', '') ?>/h
+        </h3>
+        <p class="duration">
+          <?= $duration ?> min (<?= number_format($durationHours, 1) ?> hrs)
+        </p>
+        <p class="total-price">
+          <strong>Total: <?= $currencyInfo['symbol'] ?><?= number_format($totalPriceConverted, 2, ',', '') ?></strong>
+        </p>
       </div>
 
-
       <button onclick="openPopup()">Enviar mensagem</button>
-      <?php
-        $totalPrice = ($finalPrice / 60) * $duration;
-      ?>
+      
+      <!-- CORRIGIDO: Passar o preço total em EUR (base) calculado corretamente -->
       <button 
         id="orderBtn" 
         data-id="<?= htmlspecialchars($serviceId) ?>" 
-        data-price="<?= number_format($totalPrice, 2, ',', '') ?>"
+        data-price="<?= number_format($totalPrice, 2, '.', '') ?>"
+        data-currency="eur"
+        data-debug-duration="<?= $duration ?>"
+        data-debug-hours="<?= $durationHours ?>"
+        data-debug-price-hour="<?= $finalPrice ?>"
       >
-        Encomendar
+        Encomendar (<?= $currencyInfo['symbol'] ?><?= number_format($totalPriceConverted, 2, ',', '') ?>)
       </button>
     </div>
   </div>
@@ -96,7 +135,9 @@ function drawProductInfo(string $date, string $title, float $finalPrice, int $se
  * @param int|null $profilePhotoId
  */
 function drawAdvertiserInfo(string $username, ?int $profilePhotoId) {
-    $profilePhotoUrl = $profilePhotoId ? getProfilePhotoUrl($profilePhotoId) : null;
+    // Função para obter URL da foto de perfil
+    
+    $profilePhotoUrl = getProfilePhotoUrl($profilePhotoId);
     ?>
     <div class="product-advertiser">
         <p>Utilizador</p>
@@ -115,7 +156,7 @@ function drawAdvertiserInfo(string $username, ?int $profilePhotoId) {
 
 /**
  * Função para desenhar o Popup
- * @param int $receiverName
+ * @param string $receiverName
  */
 function drawMessagePopup(string $receiverName) { ?>
   <div id="messagePopup" class="message-popup hidden">

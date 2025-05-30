@@ -157,82 +157,82 @@ INSERT INTO Service_ (id, freelancer_id, name_, description_, duration, price_pe
 /************
    Joana Silva (id 3) services populate
 ************/
-(1, 3, 'Limpeza Doméstica Completa', 'Serviço completo de limpeza de casas incluindo todas as divisões, aspiração, lavagem e desinfecção.', 3, 15.0, 0, 1),
-(2, 3, 'Limpeza de Escritórios', 'Limpeza profissional de espaços comerciais com produtos ecológicos e equipamento especializado.', 2, 18.0, 10, 1),
-(3, 3, 'Limpeza Pós-Obra', 'Serviço especializado para remoção de resíduos e limpeza profunda após obras ou renovações.', 4, 20.0, 0, 1),
-(4, 3, 'Limpeza de Condomínios', 'Serviço regular ou pontual de limpeza de áreas comuns em condomínios e prédios.', 3, 17.0, 5, 1),
+(1, 3, 'Limpeza Doméstica Completa', 'Serviço completo de limpeza de casas incluindo todas as divisões, aspiração, lavagem e desinfecção.', 30, 15.0, 0, 1),
+(2, 3, 'Limpeza de Escritórios', 'Limpeza profissional de espaços comerciais com produtos ecológicos e equipamento especializado.', 20, 18.0, 10, 1),
+(3, 3, 'Limpeza Pós-Obra', 'Serviço especializado para remoção de resíduos e limpeza profunda após obras ou renovações.', 40, 20.0, 0, 1),
+(4, 3, 'Limpeza de Condomínios', 'Serviço regular ou pontual de limpeza de áreas comuns em condomínios e prédios.', 30, 17.0, 5, 1),
 
 /************
    Manuel Costa (id 4) services populate
 ************/
-(5, 4, 'Reparações Elétricas', 'Resolução de problemas elétricos, instalação de lâmpadas, interruptores e tomadas.', 2, 25.0, 0, 2),
-(6, 4, 'Montagem de Móveis', 'Montagem profissional de móveis de qualquer marca, incluindo IKEA, Conforama, etc.', 3, 22.0, 15, 2),
-(7, 4, 'Reparações de Canalizações', 'Resolução de fugas, substituição de torneiras, desentupimentos e instalações.', 2, 28.0, 0, 2),
-(8, 4, 'Pinturas de Interiores', 'Serviço de pintura de interiores com tintas de qualidade e acabamento profissional.', 6, 20.0, 0, 2),
+(5, 4, 'Reparações Elétricas', 'Resolução de problemas elétricos, instalação de lâmpadas, interruptores e tomadas.', 20, 25.0, 0, 2),
+(6, 4, 'Montagem de Móveis', 'Montagem profissional de móveis de qualquer marca, incluindo IKEA, Conforama, etc.', 30, 22.0, 15, 2),
+(7, 4, 'Reparações de Canalizações', 'Resolução de fugas, substituição de torneiras, desentupimentos e instalações.', 20, 28.0, 0, 2),
+(8, 4, 'Pinturas de Interiores', 'Serviço de pintura de interiores com tintas de qualidade e acabamento profissional.', 60, 20.0, 0, 2),
 
 /************
    Sofia Martins (id 5) services populate
 ************/
-(9, 5, 'Manutenção de Jardins', 'Serviço completo de tratamento, corte de relva, poda e manutenção de jardins.', 4, 18.0, 0, 3),
-(10, 5, 'Instalação de Sistemas de Rega', 'Instalação de sistemas automáticos de rega para jardins e espaços verdes.', 5, 22.0, 0, 3),
-(11, 5, 'Paisagismo', 'Design e implementação de projetos de paisagismo para espaços exteriores.', 8, 30.0, 10, 3),
-(12, 5, 'Limpeza de Exteriores', 'Limpeza de pátios, terraços e áreas exteriores com equipamento de pressão.', 3, 19.0, 0, 3),
+(9, 5, 'Manutenção de Jardins', 'Serviço completo de tratamento, corte de relva, poda e manutenção de jardins.', 40, 18.0, 0, 3),
+(10, 5, 'Instalação de Sistemas de Rega', 'Instalação de sistemas automáticos de rega para jardins e espaços verdes.', 50, 22.0, 0, 3),
+(11, 5, 'Paisagismo', 'Design e implementação de projetos de paisagismo para espaços exteriores.', 80, 30.0, 10, 3),
+(12, 5, 'Limpeza de Exteriores', 'Limpeza de pátios, terraços e áreas exteriores com equipamento de pressão.', 300, 19.0, 0, 3),
 
 /************
    António Ferreira (id 6) services populate
 ************/
-(13, 6, 'Explicações de Matemática', 'Aulas particulares de matemática para alunos do ensino básico e secundário.', 1, 20.0, 0, 4),
-(14, 6, 'Curso de Programação', 'Introdução à programação com Python, Java ou C++ para iniciantes.', 2, 25.0, 5, 4),
-(15, 6, 'Aulas de Inglês', 'Aulas individuais de inglês para todos os níveis, com foco em conversação.', 1, 22.0, 0, 4),
-(16, 6, 'Preparação para Exames', 'Sessões intensivas de preparação para exames nacionais de várias disciplinas.', 2, 28.0, 0, 4),
+(13, 6, 'Explicações de Matemática', 'Aulas particulares de matemática para alunos do ensino básico e secundário.', 10, 20.0, 0, 4),
+(14, 6, 'Curso de Programação', 'Introdução à programação com Python, Java ou C++ para iniciantes.', 20, 25.0, 5, 4),
+(15, 6, 'Aulas de Inglês', 'Aulas individuais de inglês para todos os níveis, com foco em conversação.', 10, 22.0, 0, 4),
+(16, 6, 'Preparação para Exames', 'Sessões intensivas de preparação para exames nacionais de várias disciplinas.', 20, 28.0, 0, 4),
 
 /************
    Ana Rodrigues (id 7) services populate
 ************/
 (17, 7, 'Design de Websites', 'Criação de websites responsivos e modernos para empresas e particulares.', 10, 35.0, 0, 5),
-(18, 7, 'Suporte Informático', 'Resolução de problemas informáticos, instalação de software e otimização.', 2, 25.0, 10, 5),
-(19, 7, 'Design Gráfico', 'Criação de logotipos, cartões de visita, flyers e material promocional.', 5, 30.0, 0, 5),
-(20, 7, 'Gestão de Redes Sociais', 'Gestão profissional de contas de redes sociais para empresas.', 5, 28.0, 15, 5),
+(18, 7, 'Suporte Informático', 'Resolução de problemas informáticos, instalação de software e otimização.', 20, 25.0, 10, 5),
+(19, 7, 'Design Gráfico', 'Criação de logotipos, cartões de visita, flyers e material promocional.', 50, 30.0, 0, 5),
+(20, 7, 'Gestão de Redes Sociais', 'Gestão profissional de contas de redes sociais para empresas.', 50, 28.0, 15, 5),
 
 /************
    João Oliveira (id 8) services populate
 ************/
-(21, 8, 'Manicure e Pedicure', 'Tratamento completo de unhas, incluindo verniz gel e decorações.', 2, 20.0, 0, 6),
-(22, 8, 'Corte e Styling de Cabelo', 'Serviços de cabeleireiro com as últimas tendências de corte e penteado.', 1, 25.0, 5, 6),
-(23, 8, 'Maquilhagem Profissional', 'Maquilhagem para eventos especiais, casamentos ou sessões fotográficas.', 1, 30.0, 0, 6),
-(24, 8, 'Massagem Terapêutica', 'Massagem relaxante ou terapêutica para alívio de stress e tensão muscular.', 1, 35.0, 10, 6),
+(21, 8, 'Manicure e Pedicure', 'Tratamento completo de unhas, incluindo verniz gel e decorações.', 20, 20.0, 0, 6),
+(22, 8, 'Corte e Styling de Cabelo', 'Serviços de cabeleireiro com as últimas tendências de corte e penteado.', 10, 25.0, 5, 6),
+(23, 8, 'Maquilhagem Profissional', 'Maquilhagem para eventos especiais, casamentos ou sessões fotográficas.', 10, 30.0, 0, 6),
+(24, 8, 'Massagem Terapêutica', 'Massagem relaxante ou terapêutica para alívio de stress e tensão muscular.', 10, 35.0, 10, 6),
 
 /************
    Mariana Santos (id 9) services populate
 ************/
-(25, 9, 'Transporte de Mercadorias', 'Serviço de transporte de mercadorias pequenas e médias dentro da cidade.', 2, 22.0, 0, 7),
-(26, 9, 'Mudanças Residenciais', 'Serviço completo de mudanças incluindo embalagem, transporte e montagem.', 5, 30.0, 5, 7),
-(27, 9, 'Entregas Urgentes', 'Serviço de entregas rápidas para documentos e encomendas pequenas.', 1, 18.0, 0, 7),
-(28, 9, 'Transporte de Móveis', 'Transporte especializado de móveis e objetos delicados ou volumosos.', 3, 25.0, 0, 7),
+(25, 9, 'Transporte de Mercadorias', 'Serviço de transporte de mercadorias pequenas e médias dentro da cidade.', 20, 22.0, 0, 7),
+(26, 9, 'Mudanças Residenciais', 'Serviço completo de mudanças incluindo embalagem, transporte e montagem.', 50, 30.0, 5, 7),
+(27, 9, 'Entregas Urgentes', 'Serviço de entregas rápidas para documentos e encomendas pequenas.', 10, 18.0, 0, 7),
+(28, 9, 'Transporte de Móveis', 'Transporte especializado de móveis e objetos delicados ou volumosos.', 30, 25.0, 0, 7),
 
 /************
    Ricardo Sousa (id 10) services populate
 ************/
-(29, 10, 'Chef ao Domicílio', 'Serviço de chef privado para jantares especiais e eventos em casa.', 4, 40.0, 0, 8),
-(30, 10, 'Aulas de Culinária', 'Aulas práticas de culinária internacional em sua casa.', 2, 30.0, 10, 8),
-(31, 10, 'Catering para Eventos', 'Serviço de catering completo para festas e eventos até 50 pessoas.', 6, 35.0, 5, 8),
-(32, 10, 'Preparação de Refeições Semanais', 'Preparação de refeições saudáveis para toda a semana, prontas a aquecer.', 3, 28.0, 0, 8),
+(29, 10, 'Chef ao Domicílio', 'Serviço de chef privado para jantares especiais e eventos em casa.', 40, 40.0, 0, 8),
+(30, 10, 'Aulas de Culinária', 'Aulas práticas de culinária internacional em sua casa.', 20, 30.0, 10, 8),
+(31, 10, 'Catering para Eventos', 'Serviço de catering completo para festas e eventos até 50 pessoas.', 60, 35.0, 5, 8),
+(32, 10, 'Preparação de Refeições Semanais', 'Preparação de refeições saudáveis para toda a semana, prontas a aquecer.', 30, 28.0, 0, 8),
 
 /************
    Teresa Gomes (id 11) services populate
 ************/
-(33, 11, 'Passeio de Cães', 'Serviço de passeio diário para cães com duração à escolha.', 1, 15.0, 0, 9),
-(34, 11, 'Pet Sitting', 'Cuidado de animais em sua casa durante ausências dos donos.', 2, 18.0, 5, 9),
-(35, 11, 'Treino Básico de Obediência', 'Sessões de treino para cães com foco em comandos básicos.', 1, 25.0, 0, 9),
-(36, 11, 'Grooming para Animais', 'Serviço completo de banho, corte de pelo e arranjo para cães e gatos.', 2, 30.0, 10, 9),
+(33, 11, 'Passeio de Cães', 'Serviço de passeio diário para cães com duração à escolha.', 10, 15.0, 0, 9),
+(34, 11, 'Pet Sitting', 'Cuidado de animais em sua casa durante ausências dos donos.', 20, 18.0, 5, 9),
+(35, 11, 'Treino Básico de Obediência', 'Sessões de treino para cães com foco em comandos básicos.', 10, 25.0, 0, 9),
+(36, 11, 'Grooming para Animais', 'Serviço completo de banho, corte de pelo e arranjo para cães e gatos.', 20, 30.0, 10, 9),
 
 /************
    Category 10 services populate
 ************/
-(37, 3, 'Organização de Documentos', 'Organização e classificação de documentos para empresas e particulares.', 3, 20.0, 0, 10),
-(38, 7, 'Criação de Apresentações', 'Desenvolvimento de apresentações profissionais para reuniões e eventos.', 4, 25.0, 5, 10),
-(39, 10, 'Gestão de Emails', 'Organização e resposta a emails para profissionais ocupados.', 2, 22.0, 0, 10),
-(40, 11, 'Transcrição de Áudio', 'Transcrição profissional de entrevistas, reuniões e outros conteúdos de áudio.', 3, 18.0, 0, 10);
+(37, 3, 'Organização de Documentos', 'Organização e classificação de documentos para empresas e particulares.', 30, 20.0, 0, 10),
+(38, 7, 'Criação de Apresentações', 'Desenvolvimento de apresentações profissionais para reuniões e eventos.', 40, 25.0, 5, 10),
+(39, 10, 'Gestão de Emails', 'Organização e resposta a emails para profissionais ocupados.', 20, 22.0, 0, 10),
+(40, 11, 'Transcrição de Áudio', 'Transcrição profissional de entrevistas, reuniões e outros conteúdos de áudio.', 30, 18.0, 0, 10);
 
 /************
    MEDIA populate - Services Photos

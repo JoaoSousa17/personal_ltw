@@ -17,7 +17,7 @@ function drawCartHeader($itemCount) { ?>
 /**
  * Mostra os itens no carrinho ou uma mensagem caso esteja vazio.
  *
- * @param array $cartItems Lista dos itens no carrinho (já com conversão aplicada).
+ * @param array $cartItems Lista dos itens no carrinho.
  * @param array $currencyInfo Informações da moeda do utilizador.
  */
 function drawCartItems($cartItems, $currencyInfo = null) { 
@@ -33,23 +33,39 @@ function drawCartItems($cartItems, $currencyInfo = null) {
             </div>
         <?php else: ?>
             <?php foreach ($cartItems as $item):
-                $id = md5($item['title'] . $item['price'] . $item['seller']);
-                $displayPrice = isset($item['price_converted']) ? $item['price_converted'] : $item['price'];
+                // Usar o preço já convertido ou converter se necessário
+                $displayPrice = isset($item['price_converted']) ? $item['price_converted'] : 
+                               (isset($item['price']) ? floatval($item['price']) : 0);
+                
+                // Usar o símbolo da moeda do item ou da configuração global
                 $currencySymbol = isset($item['currency_symbol']) ? $item['currency_symbol'] : $currencyInfo['symbol'];
+                
+                // Garantir que temos um ID válido
+                $itemId = isset($item['id']) ? htmlspecialchars($item['id']) : 
+                         (isset($item['order_id']) ? htmlspecialchars($item['order_id']) : 'unknown');
             ?>
             <div class="product-item clickable"
-     data-id="<?= htmlspecialchars($item['id']) ?>"
-     data-link="../Views/product.php?id=<?= urlencode($item['id']) ?>">
+                 data-id="<?= $itemId ?>"
+                 data-price="<?= number_format($displayPrice, 2, '.', '') ?>"
+                 data-link="../Views/product.php?id=<?= urlencode($item['id']) ?>">
                 <img src="<?= htmlspecialchars($item['image']) ?>" alt="Produto" />
                 <div class="description">
                     <h2><?= htmlspecialchars($item['title']) ?></h2>
-                    <h3><?= $currencySymbol ?><?= number_format($displayPrice, 2, ',', '') ?></h3>
+                    <h3 class="item-price" data-price="<?= number_format($displayPrice, 2, '.', '') ?>">
+                        <?= $currencySymbol ?><?= number_format($displayPrice, 2, ',', '') ?>
+                    </h3>
                     <div class="vendedor-info">
                         <h5>Vendido por </h5>
                         <h5><?= htmlspecialchars($item['seller']) ?></h5>
                     </div>
+                    <?php if (isset($item['type']) && $item['type'] === 'order'): ?>
+                        <div class="order-details">
+                            <small>Data: <?= htmlspecialchars($item['date_'] ?? '') ?></small>
+                            <small>Hora: <?= htmlspecialchars($item['time_'] ?? '') ?></small>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <button class="remove-btn" data-id="<?= htmlspecialchars($item['id']) ?>">
+                <button class="remove-btn" data-id="<?= $itemId ?>">
                     <img src="../../Images/site/staticPages/trash.png" alt="Remover" />
                 </button>
             </div>
@@ -61,19 +77,22 @@ function drawCartItems($cartItems, $currencyInfo = null) {
 /**
  * Mostra o resumo de preços e o botão de checkout.
  *
- * @param float $total Total da compra (já convertido).
- * @param array $cartItems Itens no carrinho (já com conversão aplicada).
+ * @param float $total Total da compra.
+ * @param array $cartItems Itens no carrinho.
  * @param array $currencyInfo Informações da moeda do utilizador.
  */
 function drawCartSummary($total, $cartItems, $currencyInfo = null) { 
     if (!$currencyInfo) {
         $currencyInfo = ['symbol' => '€', 'code' => 'eur'];
     }
+    
+    // Garantir que o total é um número válido
+    $validTotal = is_numeric($total) ? floatval($total) : 0;
     ?>
     <div class="price-container">
         <div class="subtotal">
             <h4>Subtotal</h4>
-            <h4><?= $currencyInfo['symbol'] ?><?= number_format($total, 2, ',', '') ?></h4>
+            <h4 class="subtotal-value"><?= $currencyInfo['symbol'] ?><?= number_format($validTotal, 2, ',', '') ?></h4>
         </div>
 
         <div class="custos-deslocação">
@@ -83,24 +102,27 @@ function drawCartSummary($total, $cartItems, $currencyInfo = null) {
 
         <div class="total">
             <h1>Total</h1>
-            <h1 class="Preco-final"><?= $currencyInfo['symbol'] ?><?= number_format($total, 2, ',', '') ?></h1>
+            <h1 class="Preco-final"><?= $currencyInfo['symbol'] ?><?= number_format($validTotal, 2, ',', '') ?></h1>
         </div>
 
         <form method="post" action="/Views/checkout.php">
-            <input type="hidden" name="total" value="<?= $total ?>">
-            <input type="hidden" name="currency_code" value="<?= $currencyInfo['code'] ?>">
-            <input type="hidden" name="currency_symbol" value="<?= $currencyInfo['symbol'] ?>">
+            <input type="hidden" name="total" value="<?= number_format($validTotal, 2, '.', '') ?>">
+            <input type="hidden" name="currency_code" value="<?= htmlspecialchars($currencyInfo['code']) ?>">
+            <input type="hidden" name="currency_symbol" value="<?= htmlspecialchars($currencyInfo['symbol']) ?>">
 
             <?php foreach ($cartItems as $item): ?>
                 <input type="hidden" name="services[]" value="<?= htmlspecialchars($item['title']) ?>">
             <?php endforeach; ?>
 
-            <button type="submit" id="comprar-btn">Comprar</button>
+            <button type="submit" id="comprar-btn" <?= $validTotal <= 0 ? 'disabled' : '' ?>>
+                Comprar
+            </button>
         </form>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Tornar os itens clicáveis (exceto o botão de remover)
             document.querySelectorAll(".product-item.clickable").forEach(function (item) {
                 item.addEventListener("click", function (e) {
                     if (e.target.closest(".remove-btn")) return;
@@ -111,3 +133,4 @@ function drawCartSummary($total, $cartItems, $currencyInfo = null) {
         });
     </script>
 <?php }
+?>
